@@ -27,6 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Salary)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VatNumber)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -34,7 +37,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <img src="@item.ImageFullPath" alt="Image" style="width:50px;height:50px;max-width:50%;height:auto">
+                <img src="@item.ImageFullPath" alt="Image" style="width:50px;height:50px;max-width:100%;height:auto">
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
@@ -47,6 +50,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Salary)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VatNumber)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

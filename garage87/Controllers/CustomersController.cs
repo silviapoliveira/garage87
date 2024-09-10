@@ -1,8 +1,9 @@
 ﻿using garage87.Data.Entities;
 using garage87.Data.Repositories;
+using garage87.Helpers;
 using garage87.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using Vereyon.Web;
@@ -12,13 +13,19 @@ namespace garage87.Controllers
     public class CustomersController : Controller
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IImageHelper _imageHelper;
+        private readonly IConverterHelper _converterHelper;
         private readonly IFlashMessage _flashMessage;
 
         public CustomersController
             (ICustomerRepository customerRepository,
+            IImageHelper imageHelper,
+            IConverterHelper converterHelper,
             IFlashMessage flashMessage)
         {
             _customerRepository = customerRepository;
+            _imageHelper = imageHelper;
+            _converterHelper = converterHelper;
             _flashMessage = flashMessage;
         }
 
@@ -132,24 +139,33 @@ namespace garage87.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer)
+        public async Task<IActionResult> Create(CustomerViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var path = string.Empty;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "customers");
+                    }
+
+                    var customer = _converterHelper.ToCustomer(model, path, true);
+
                     await _customerRepository.CreateAsync(customer);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    _flashMessage.Danger("This customer already exists.");
+                    _flashMessage.Danger("This customer already exists. Please remember VAT number must be unique.");
                 }
 
-                return View(customer);
+                return View(model);
             }
 
-            return View(customer);
+            return View(model);
         }
 
         // GET: Customers/Edit/5
@@ -165,7 +181,10 @@ namespace garage87.Controllers
             {
                 return NotFound();
             }
-            return View(customer);
+
+            var model = _converterHelper.ToCustomerViewModel(customer);
+
+            return View(model);
         }
 
         // POST: Customers/Edit/5
@@ -173,15 +192,33 @@ namespace garage87.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Customer customer)
+        public async Task<IActionResult> Edit(CustomerViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await _customerRepository.UpdateAsync(customer);
+                try
+                {
+                    var path = model.ImageUrl;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "customers");
+                    }
+
+                    var customer = _converterHelper.ToCustomer(model, path, false);
+
+                    await _customerRepository.UpdateAsync(customer);
+                }
+                catch (Exception ex)
+                {
+                    _flashMessage.Danger("Error! Please check the information. Remember VAT number must be unique.");
+                    return View(model);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
 
-            return View();
+            return View(model);
         }
 
         // GET: Customers/Delete/5

@@ -33,6 +33,12 @@ namespace garage87.Data.Entities
         public decimal Salary { get; set; }
 
 
+        [Required]
+        [MaxLength(15, ErrorMessage = "The field {0} can only contain {1} charaters.")]
+        [Display(Name = "VAT Number")]
+        public string VatNumber { get; set; }
+
+
         [Display(Name = "Full Name")]
         public string FullName => $"{FirstName} {LastName}";
 
@@ -54,10 +60,10 @@ namespace garage87.Data.Entities
             {
                 if (string.IsNullOrEmpty(ImageUrl))
                 {
-                    return "https://localhost:44361/images/employees/noimage.jpg";
+                    return "https://localhost:44331/images/employees/noimage.jpg";
                 }
 
-                return $"https://localhost:44361{ImageUrl.Substring(1)}";
+                return $"https://localhost:44331{ImageUrl.Substring(1)}";
             }
         }
     }

@@ -81,10 +81,10 @@ namespace garage87.Data.Entities
             {
                 if (string.IsNullOrEmpty(ImageUrl))
                 {
-                    return "https://localhost:44361/images/customers/noimage.jpg";
+                    return "https://localhost:44331/images/customers/noimage.jpg";
                 }
 
-                return $"https://localhost:44361{ImageUrl.Substring(1)}";
+                return $"https://localhost:44331{ImageUrl.Substring(1)}";
             }
         }
     }

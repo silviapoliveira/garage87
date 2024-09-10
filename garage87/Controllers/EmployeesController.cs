@@ -11,19 +11,26 @@ using Microsoft.AspNetCore.Authorization;
 using Vereyon.Web;
 using garage87.Data.Repositories;
 using garage87.Models;
+using garage87.Helpers;
 
 namespace garage87.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IImageHelper _imageHelper;
+        private readonly IConverterHelper _converterHelper;
         private readonly IFlashMessage _flashMessage;
 
         public EmployeesController
             (IEmployeeRepository employeeRepository,
+            IImageHelper imageHelper,
+            IConverterHelper converterHelper,
             IFlashMessage flashMessage)
         {
             _employeeRepository = employeeRepository;
+            _imageHelper = imageHelper;
+            _converterHelper = converterHelper;
             _flashMessage = flashMessage;
         }
 
@@ -131,24 +138,33 @@ namespace garage87.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create(EmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var path = string.Empty;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "employees");
+                    }
+
+                    var employee = _converterHelper.ToEmployee(model, path, true);
+
                     await _employeeRepository.CreateAsync(employee);
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    _flashMessage.Danger("This employee already exists.");
+                    _flashMessage.Danger("This employee already exists. Please remember VAT number must be unique.");
                 }
 
-                return View(employee);
+                return View(model);
             }
 
-            return View(employee);
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -164,20 +180,39 @@ namespace garage87.Controllers
                 return NotFound();
             }
 
-            return View(employee);
+            var model = _converterHelper.ToEmployeeViewModel(employee);
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Employee employee)
+        public async Task<IActionResult> Edit(EmployeeViewModel model)
         {
             if (ModelState.IsValid)
             {
-                await _employeeRepository.UpdateAsync(employee);
+                try
+                {
+                    var path = model.ImageUrl;
+
+                    if (model.ImageFile != null && model.ImageFile.Length > 0)
+                    {
+                        path = await _imageHelper.UploadImageAsync(model.ImageFile, "employees");
+                    }
+
+                    var employee = _converterHelper.ToEmployee(model, path, false);
+
+                    await _employeeRepository.UpdateAsync(employee);
+                }
+                catch (Exception ex)
+                {
+                    _flashMessage.Danger("Error! Please check the information. Remember VAT number must be unique.");
+                    return View(model);
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-
-            return View();
+            return View(model);
         }
 
         public async Task<IActionResult> Delete(int? id)

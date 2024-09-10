@@ -54,7 +54,7 @@ namespace garage87.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Vat")] Service service)
+        public async Task<IActionResult> Create(Service service)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace garage87.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Vat")] Service service)
+        public async Task<IActionResult> Edit(int id, Service service)
         {
             if (id != service.Id)
             {

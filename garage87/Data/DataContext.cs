@@ -29,6 +29,10 @@ namespace garage87.Data
                 .IsUnique();
 
             modelBuilder.Entity<Employee>()
+                .HasIndex(c => c.VatNumber)
+                .IsUnique();
+
+            modelBuilder.Entity<Employee>()
                 .Property(p => p.Salary)
                 .HasColumnType("decimal(18,2)");
 
