@@ -57,7 +57,7 @@ namespace garage87.Data.Repositories
         {
             return _context.Customers
                 .Include(c => c.Vehicles)
-                .OrderBy(c => c.FullName);
+                .OrderBy(c => c.FirstName);
         }
 
         public async Task<Customer> GetCustomerWithVehiclesAsync(int id)

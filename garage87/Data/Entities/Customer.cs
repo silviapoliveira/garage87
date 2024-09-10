@@ -19,6 +19,9 @@ namespace garage87.Data.Entities
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+        [Display(Name = "")]
+        public string ImageUrl { get; set; }
+
 
         [Required]
         [MaxLength(200, ErrorMessage = "The field {0} can only contain {1} charaters.")]
@@ -71,5 +74,18 @@ namespace garage87.Data.Entities
 
         [Display(Name = "Number of Vehicles")]
         public int NumberVehicles => Vehicles == null ? 0 : Vehicles.Count;
+
+        public string ImageFullPath
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ImageUrl))
+                {
+                    return "https://localhost:44361/images/customers/noimage.jpg";
+                }
+
+                return $"https://localhost:44361{ImageUrl.Substring(1)}";
+            }
+        }
     }
 }

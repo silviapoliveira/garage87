@@ -1,10 +1,12 @@
 using garage87.Data;
+using garage87.Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Vereyon.Web;
 
 namespace garage87
 {
@@ -24,6 +26,16 @@ namespace garage87
             {
                 cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+
+
+
+            services.AddFlashMessage();
+
+
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
 
             services.AddControllersWithViews();
         }

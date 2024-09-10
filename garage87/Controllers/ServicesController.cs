@@ -1,30 +1,31 @@
-﻿using garage87.Data;
-using garage87.Data.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
+using garage87.Data;
+using garage87.Data.Entities;
 
 namespace garage87.Controllers
 {
-    public class VehiclesController : Controller
+    public class ServicesController : Controller
     {
         private readonly DataContext _context;
 
-        public VehiclesController(DataContext context)
+        public ServicesController(DataContext context)
         {
             _context = context;
         }
 
-        // GET: Vehicles
+        // GET: Services
         public async Task<IActionResult> Index()
         {
-            var dataContext = _context.Vehicles.Include(v => v.Customer);
-            return View(await dataContext.ToListAsync());
+            return View(await _context.Services.ToListAsync());
         }
 
-        // GET: Vehicles/Details/5
+        // GET: Services/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,42 +33,39 @@ namespace garage87.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Customer)
+            var service = await _context.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
+            if (service == null)
             {
                 return NotFound();
             }
 
-            return View(vehicle);
+            return View(service);
         }
 
-        // GET: Vehicles/Create
+        // GET: Services/Create
         public IActionResult Create()
         {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address");
             return View();
         }
 
-        // POST: Vehicles/Create
+        // POST: Services/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Type,Brand,Model,Registration,Year,Month,CustomerId")] Vehicle vehicle)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Vat")] Service service)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vehicle);
+                _context.Add(service);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", vehicle.CustomerId);
-            return View(vehicle);
+            return View(service);
         }
 
-        // GET: Vehicles/Edit/5
+        // GET: Services/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,23 +73,22 @@ namespace garage87.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles.FindAsync(id);
-            if (vehicle == null)
+            var service = await _context.Services.FindAsync(id);
+            if (service == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", vehicle.CustomerId);
-            return View(vehicle);
+            return View(service);
         }
 
-        // POST: Vehicles/Edit/5
+        // POST: Services/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Type,Brand,Model,Registration,Year,Month,CustomerId")] Vehicle vehicle)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Vat")] Service service)
         {
-            if (id != vehicle.Id)
+            if (id != service.Id)
             {
                 return NotFound();
             }
@@ -100,12 +97,12 @@ namespace garage87.Controllers
             {
                 try
                 {
-                    _context.Update(vehicle);
+                    _context.Update(service);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!VehicleExists(vehicle.Id))
+                    if (!ServiceExists(service.Id))
                     {
                         return NotFound();
                     }
@@ -116,11 +113,10 @@ namespace garage87.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", vehicle.CustomerId);
-            return View(vehicle);
+            return View(service);
         }
 
-        // GET: Vehicles/Delete/5
+        // GET: Services/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,31 +124,30 @@ namespace garage87.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Customer)
+            var service = await _context.Services
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
+            if (service == null)
             {
                 return NotFound();
             }
 
-            return View(vehicle);
+            return View(service);
         }
 
-        // POST: Vehicles/Delete/5
+        // POST: Services/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = await _context.Vehicles.FindAsync(id);
-            _context.Vehicles.Remove(vehicle);
+            var service = await _context.Services.FindAsync(id);
+            _context.Services.Remove(service);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool VehicleExists(int id)
+        private bool ServiceExists(int id)
         {
-            return _context.Vehicles.Any(e => e.Id == id);
+            return _context.Services.Any(e => e.Id == id);
         }
     }
 }
