@@ -1,9 +1,10 @@
 ﻿using garage87.Data.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace garage87.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public DbSet<Customer> Customers { get; set; }
 
@@ -12,6 +13,10 @@ namespace garage87.Data
         public DbSet<Employee> Employees { get; set; }
 
         public DbSet<Service> Services { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<City> Cities { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
@@ -39,6 +44,21 @@ namespace garage87.Data
             modelBuilder.Entity<Service>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
+
+            modelBuilder.Entity<Country>()
+                .HasIndex(c => c.Name)
+                .IsUnique();
+
+            //// Habilitar a regra de apagar em cascata(Cascade Delete Rule)
+            //var cascadeFKs = modelBuilder.Model
+            //    .GetEntityTypes()
+            //    .SelectMany(t => t.GetForeignKeys())
+            //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            //foreach (var fk in cascadeFKs)
+            //{
+            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
+            //}
 
             base.OnModelCreating(modelBuilder);
         }

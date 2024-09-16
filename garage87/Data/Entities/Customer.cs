@@ -23,23 +23,19 @@ namespace garage87.Data.Entities
         public string ImageUrl { get; set; }
 
 
-        [Required]
         [MaxLength(200, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         public string Address { get; set; }
 
 
-        [Required]
         [MaxLength(20, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
 
 
-        [Required]
         [MaxLength(100, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         public string City { get; set; }
 
 
-        [Required]
         [MaxLength(100, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         public string Country { get; set; }
 
@@ -49,7 +45,6 @@ namespace garage87.Data.Entities
         public string Email { get; set; }
 
 
-        [Required]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
@@ -74,6 +69,9 @@ namespace garage87.Data.Entities
 
         [Display(Name = "Number of Vehicles")]
         public int NumberVehicles => Vehicles == null ? 0 : Vehicles.Count;
+
+
+        public User User { get; set; }
 
         public string ImageFullPath
         {

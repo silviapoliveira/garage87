@@ -28,12 +28,10 @@ namespace garage87.Data.Entities
         public string Function { get; set; }
 
 
-        [Required]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal Salary { get; set; }
 
 
-        [Required]
         [MaxLength(15, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         [Display(Name = "VAT Number")]
         public string VatNumber { get; set; }
@@ -53,6 +51,9 @@ namespace garage87.Data.Entities
 
         [Display(Name = "Number of Services")]
         public int NumberServices => Services == null ? 0 : Services.Count;
+
+
+        public User User { get; set; }
 
         public string ImageFullPath
         {

@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace garage87.Data.Entities
 {
@@ -32,14 +32,12 @@ namespace garage87.Data.Entities
         public int Month { get; set; }
 
 
-        [Display(Name = "Vehicle With Registration")]
-        public string VehicleWithRegistration => $"{Brand} {Model} {Registration}";
-
-
-        // Foreign key to associate the vehicle with the customer
-        [ForeignKey("Customer")]
         [Required]
         public int CustomerId { get; set; }
         public Customer Customer { get; set; }
+
+
+        [Display(Name = "Vehicle With Registration")]
+        public string VehicleWithRegistration => $"{Brand} {Model} {Registration}";
     }
 }

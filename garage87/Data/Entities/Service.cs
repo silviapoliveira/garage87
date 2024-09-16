@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace garage87.Data.Entities
 {
@@ -21,5 +22,10 @@ namespace garage87.Data.Entities
         [Required]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal Vat { get; set; }
+
+
+        [Required]
+        public int EmployeeId { get; set; }
+        public Employee Employee { get; set; }
     }
 }
