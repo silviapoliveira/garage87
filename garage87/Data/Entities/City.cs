@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Principal;
 
 namespace garage87.Data.Entities
 {
@@ -10,6 +12,14 @@ namespace garage87.Data.Entities
         [Required]
         [Display(Name = "City")]
         [MaxLength(50, ErrorMessage = "The field {0} can only contain {1} characters.")]
+
+
         public string Name { get; set; }
+        [Display(Name = "Country")]
+        public int? CountryId { get; set; }
+
+
+        [ForeignKey("CountryId")]
+        public virtual Country Country { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Principal;
 
 namespace garage87.Data.Entities
 {
@@ -20,7 +22,8 @@ namespace garage87.Data.Entities
         public int CityId { get; set; }
 
 
-        public City City { get; set; }
+        [ForeignKey("CityId")]
+        public virtual City City { get; set; }
 
 
         [Display(Name = "Full Name")]

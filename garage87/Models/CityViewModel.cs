@@ -4,6 +4,8 @@ namespace garage87.Models
 {
     public class CityViewModel
     {
+        [Required]
+        [Display(Name = "Country")]
         public int CountryId { get; set; }
 
 

@@ -11,7 +11,7 @@ namespace garage87.Data.Repositories
     {
         IQueryable GetCountriesWithCities();
 
-
+        IQueryable<City> GetCities();
         Task<Country> GetCountryWithCitiesAsync(int id);
 
 
@@ -24,7 +24,7 @@ namespace garage87.Data.Repositories
         Task<int> UpdateCityAsync(City city);
 
 
-        Task<int> DeleteCityAsync(City city);
+        Task<bool> DeleteCityAsync(City city);
 
         IEnumerable<SelectListItem> GetComboCountries();
 

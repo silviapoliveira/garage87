@@ -9,28 +9,28 @@ namespace garage87.Data.Repositories
 {
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
-        IQueryable GetEmployeesWithServices();
+        // IQueryable GetEmployeesWithServices();
 
 
-        Task<Employee> GetEmployeeWithServicesAsync(int id);
+        //Task<Employee> GetEmployeeWithServicesAsync(int id);
 
 
-        Task<Service> GetServiceAsync(int id);
+        //Task<Service> GetServiceAsync(int id);
 
 
-        Task AddServiceAsync(ServiceViewModel model);
+        //Task AddServiceAsync(ServiceViewModel model);
 
 
-        Task<int> UpdateServiceAsync(Service service);
+        //Task<int> UpdateServiceAsync(Service service);
 
 
-        Task<int> DeleteServiceAsync(Service service);
+        // Task<int> DeleteServiceAsync(Service service);
 
         IEnumerable<SelectListItem> GetComboEmployees();
 
         IEnumerable<SelectListItem> GetComboServices(int employeeId);
 
 
-        Task<Employee> GetEmployeeAsync(Service service);
+        //Task<Employee> GetEmployeeAsync(Service service);
     }
 }

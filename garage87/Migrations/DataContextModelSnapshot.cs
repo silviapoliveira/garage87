@@ -179,6 +179,10 @@ namespace garage87.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -198,6 +202,9 @@ namespace garage87.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AddedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address")
                         .HasMaxLength(200)
@@ -260,15 +267,17 @@ namespace garage87.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("AddedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("Function")
+                    b.Property<int?>("Function")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -306,8 +315,8 @@ namespace garage87.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -321,8 +330,6 @@ namespace garage87.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("Name")
                         .IsUnique();
@@ -454,6 +461,39 @@ namespace garage87.Migrations
                     b.ToTable("Vehicles");
                 });
 
+            modelBuilder.Entity("garage87.Data.Entities.VehicleServiceAssignment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TaskDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("VehicleServiceAssignment");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -507,9 +547,11 @@ namespace garage87.Migrations
 
             modelBuilder.Entity("garage87.Data.Entities.City", b =>
                 {
-                    b.HasOne("garage87.Data.Entities.Country", null)
+                    b.HasOne("garage87.Data.Entities.Country", "Country")
                         .WithMany("Cities")
                         .HasForeignKey("CountryId");
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.Customer", b =>
@@ -528,17 +570,6 @@ namespace garage87.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("garage87.Data.Entities.Service", b =>
-                {
-                    b.HasOne("garage87.Data.Entities.Employee", "Employee")
-                        .WithMany("Services")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.User", b =>
@@ -563,6 +594,27 @@ namespace garage87.Migrations
                     b.Navigation("Customer");
                 });
 
+            modelBuilder.Entity("garage87.Data.Entities.VehicleServiceAssignment", b =>
+                {
+                    b.HasOne("garage87.Data.Entities.Employee", "Employee")
+                        .WithMany("VehicleServiceAssignment")
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("garage87.Data.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId");
+
+                    b.HasOne("garage87.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany("VehicleServiceAssignment")
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Service");
+
+                    b.Navigation("Vehicle");
+                });
+
             modelBuilder.Entity("garage87.Data.Entities.Country", b =>
                 {
                     b.Navigation("Cities");
@@ -575,7 +627,12 @@ namespace garage87.Migrations
 
             modelBuilder.Entity("garage87.Data.Entities.Employee", b =>
                 {
-                    b.Navigation("Services");
+                    b.Navigation("VehicleServiceAssignment");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Vehicle", b =>
+                {
+                    b.Navigation("VehicleServiceAssignment");
                 });
 #pragma warning restore 612, 618
         }

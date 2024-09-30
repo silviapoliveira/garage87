@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Principal;
 
 namespace garage87.Data.Entities
 {
@@ -34,10 +36,14 @@ namespace garage87.Data.Entities
 
         [Required]
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+
+        [ForeignKey("CustomerId")]
+        public virtual Customer Customer { get; set; }
 
 
         [Display(Name = "Vehicle With Registration")]
         public string VehicleWithRegistration => $"{Brand} {Model} {Registration}";
+
+        public ICollection<VehicleServiceAssignment> VehicleServiceAssignment { get; set; }
     }
 }

@@ -13,6 +13,11 @@ namespace garage87.Data.Entities
         public string Name { get; set; }
 
 
+        [Required]
+        [Display(Name = "Country Code")]
+        public string CountryCode { get; set; }
+
+
         public ICollection<City> Cities { get; set; }
 
 

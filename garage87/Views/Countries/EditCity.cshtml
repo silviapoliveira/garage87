@@ -1,27 +1,74 @@
 ﻿@model garage87.Data.Entities.City
+@using Syncfusion.EJ2
 @{
     ViewData["Title"] = "EditCity";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h4>City</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="EditCity">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Cities</h1>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="Index" class="btn btn-success">Back to List</a>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Cities","Countries")">Cities</a></li>
+                    <li class="breadcrumb-item active">Update</li>
+                </ol>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="card">
+            <div style="background-color:#4b545c;" class="card-header">
+                <p style="font-size:larger;color:white" class="text-left">Update City</p>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditCity" method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CountryId" class="control-label"></label>
+                        @{
+                            IDictionary<string, object> customAttribute = new Dictionary<string, object>()
+                        {
+                        { "data-filter-columns", "name,countryCode" },
+
+                        };
+                        }
+                        <ejs-combobox ejs-for="@Model.CountryId" placeholder="Select a Country" cssClass="e-multi-column" htmlAttributes="customAttribute"
+                                      headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Country Name</th><th class='wp-33 text-wrap'>Country Code</th></tr></table>")"
+                                      itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${name}</td><td class='wp-33 text-wrap'>${countryCode}</td></tr> </tbody></table>")">
+                            <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("Dropdown", "Countries")" crossDomain="true"></e-data-manager>
+                            <e-combobox-fields value="id" text="name"></e-combobox-fields>
+                        </ejs-combobox>
+                        <span asp-validation-for="CountryId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right">
+                            <a class="btn btn-warning" type="button" asp-action="Cities" asp-controller="Countries" class="btn btn-comfly-secondary" style="width: 120px;">Back</a>
+                            <button type="submit" class="btn" style="background-color:#4b545c;color:white; width: 120px;" id="btnSave" name="Save">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 @section Scripts {
     @{

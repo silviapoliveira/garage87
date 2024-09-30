@@ -64,8 +64,11 @@ namespace garage87.Helpers
                 LastName = employee.LastName,
                 ImageUrl = employee.ImageUrl,
                 Function = employee.Function,
-                Salary= employee.Salary,
-                VatNumber= employee.VatNumber
+                Salary = employee.Salary,
+                VatNumber = employee.VatNumber,
+                CityId = employee.User.CityId,
+                Email = employee.User.Email,
+                PhoneNo = employee.User.PhoneNumber,
             };
         }
     }

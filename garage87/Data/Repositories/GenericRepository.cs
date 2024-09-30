@@ -1,6 +1,8 @@
 ﻿using garage87.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace garage87.Data.Repositories
@@ -19,13 +21,24 @@ namespace garage87.Data.Repositories
             return _context.Set<T>().AsNoTracking();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        //public async Task<T> GetByIdAsync(int id)
+        //{
+        //    return await _context.Set<T>()
+        //        .AsNoTracking()
+        //        .FirstOrDefaultAsync(e => e.Id == id);
+        //}
+        public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
         {
-            return await _context.Set<T>()
-                .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == id);
-        }
+            IQueryable<T> query = _context.Set<T>().AsNoTracking();
 
+            // Apply the includes
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return await query.FirstOrDefaultAsync(e => e.Id == id);
+        }
         public async Task CreateAsync(T entity)
         {
             await _context.Set<T>().AddAsync(entity);
@@ -38,10 +51,10 @@ namespace garage87.Data.Repositories
             await SaveAllAsync();
         }
 
-        public async Task DeleteAsync(T entity)
+        public async Task<bool> DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
-            await SaveAllAsync();
+            return await SaveAllAsync();
         }
 
         public async Task<bool> ExistAsync(int id)

@@ -1,0 +1,130 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Garage 87</title>
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png" />
+    <link rel="stylesheet" href="~/Customer/plugin/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="~/Customer/plugin/bootstrap/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="~/Customer/fonts/poppins/poppins.css">
+    <link rel="stylesheet" href="~/Customer/plugin/fonts/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/Customer/plugin/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/Customer/plugin/process-bar/tox-progress.css">
+    <link rel="stylesheet" href="~/Customer/plugin/owl-carouse/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/Customer/plugin/owl-carouse/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/Customer/plugin/animsition/css/animate.css">
+    <link rel="stylesheet" href="~/Customer/plugin/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="~/Customer/plugin/mediaelement/mediaelementplayer.css">
+    <link rel="stylesheet" href="~/Customer/plugin/datetimepicker/bootstrap-datepicker3.css">
+    <link rel="stylesheet" href="~/Customer/plugin/datetimepicker/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="~/Customer/plugin/lightgallery/lightgallery.css">
+    <link rel="stylesheet" href="~/Customer/css/style.css">
+</head>
+<body>
+
+    <!--load page-->
+    <div class="load-page">
+        <div class="sk-wave">
+            <div class="sk-rect sk-rect1"></div>
+            <div class="sk-rect sk-rect2"></div>
+            <div class="sk-rect sk-rect3"></div>
+            <div class="sk-rect sk-rect4"></div>
+            <div class="sk-rect sk-rect5"></div>
+        </div>
+    </div>
+
+
+    <div class="uni-home-3">
+        <div id="wrapper-container" class="site-wrapper-container">
+            <header>
+                <div class="uni-medicare-header sticky-menu">
+
+
+                    <div class="uni-medicare-header-main-home-3">
+                        <div class="container">
+                            <div class="uni-medicare-header-main">
+                                <!--MENU TEXT-->
+                                <div class="uni-main-menu">
+                                    <nav class="main-navigation uni-menu-text">
+                                        <div class="cssmenu">
+                                            <ul>
+                                                <li><a href="@Url.Action("Index","Home")">Home</a></li>
+                                                <li><a href="@Url.Action("Services","Home")">Services</a></li>
+
+                                            </ul>
+                                        </div>
+                                    </nav>
+                                </div>
+
+                                <!--SEARCH-->
+                                <div class="uni-search-yop-home-3">
+                                    <div id="custom-search-input">
+                                        <ul style="margin-top:20px;">
+
+                                            <li><a href="@Url.Action("Login","Account")" style="color:white">Login</a></li>
+
+
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div id="main-content" class="site-main-content">
+                @RenderBody()
+            </div>
+
+            <footer class="site-footer footer-default">
+
+                <div class="copyright-area">
+                    <div class="container">
+                        <div class="copyright-content">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="copyright-text"> <a href="@Url.Action("Index","Home")">Garage 87</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="~/Customer/plugin/jquery/jquery-2.0.2.min.js"></script>
+    <script src="~/Customer/plugin/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/Customer/plugin/bootstrap/js/bootstrap.js"></script>
+    <script src="~/Customer/plugin/process-bar/tox-progress.js"></script>
+    <script src="~/Customer/plugin/waypoint/jquery.waypoints.min.js"></script>
+    <script src="~/Customer/plugin/counterup/jquery.counterup.min.js"></script>
+    <script src="~/Customer/plugin/owl-carouse/owl.carousel.min.js"></script>
+    <script src="~/Customer/plugin/jquery-ui/jquery-ui.min.js"></script>
+    <script src="~/Customer/plugin/mediaelement/mediaelement-and-player.js"></script>
+    <script src="~/Customer/plugin/masonry/masonry.pkgd.min.js"></script>
+    <script src="~/Customer/plugin/datetimepicker/moment.min.js"></script>
+    <script src="~/Customer/plugin/datetimepicker/bootstrap-datepicker.min.js"></script>
+    <script src="~/Customer/plugin/datetimepicker/bootstrap-datepicker.tr.min.js"></script>
+    <script src="~/Customer/plugin/datetimepicker/bootstrap-datetimepicker.js"></script>
+    <script src="~/Customer/plugin/datetimepicker/bootstrap-datetimepicker.fr.js"></script>
+
+    <script src="~/Customer/plugin/lightgallery/picturefill.min.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lightgallery.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lg-pager.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lg-autoplay.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lg-fullscreen.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lg-zoom.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lg-hash.js"></script>
+    <script src="~/Customer/plugin/lightgallery/lg-share.js"></script>
+    <script src="~/Customer/plugin/sticky/jquery.sticky.js"></script>
+
+    <script src="~/Customer/js/main.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

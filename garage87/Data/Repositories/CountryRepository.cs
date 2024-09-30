@@ -30,19 +30,28 @@ namespace garage87.Data.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<int> DeleteCityAsync(City city)
+        public async Task<bool> DeleteCityAsync(City city)
         {
-            var country = await _context.Countries
-                .Where(c => c.Cities.Any(ci => ci.Id == city.Id))
+            var country = await _context.Cities
+                .Where(ci => ci.Id == city.Id)
                 .FirstOrDefaultAsync();
+
             if (country == null)
             {
-                return 0;
+                return false;
+            }
+            var hasRelatedData = await _context.Users.AnyAsync(o => o.CityId == city.Id);
+
+            if (hasRelatedData)
+            {
+
+                return false;
             }
 
             _context.Cities.Remove(city);
             await _context.SaveChangesAsync();
-            return country.Id;
+
+            return true;
         }
 
         public IQueryable GetCountriesWithCities()
@@ -50,6 +59,10 @@ namespace garage87.Data.Repositories
             return _context.Countries
                 .Include(c => c.Cities)
                 .OrderBy(c => c.Name);
+        }
+        public IQueryable<City> GetCities()
+        {
+            return _context.Cities.Include(c => c.Country);
         }
 
         public async Task<Country> GetCountryWithCitiesAsync(int id)
@@ -78,6 +91,7 @@ namespace garage87.Data.Repositories
         {
             return await _context.Cities.FindAsync(id);
         }
+
 
         public async Task<Country> GetCountryAsync(City city)
         {

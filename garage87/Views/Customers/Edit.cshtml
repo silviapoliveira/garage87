@@ -1,34 +1,108 @@
 ﻿@model garage87.Models.CustomerViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "EditCustomer";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h1>Edit Customer</h1>
-
-<hr />
-<flash dismissable="true" />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            
-            <partial name="_Customers" />
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Customers</h1>
             </div>
-        </form>
-    </div>
-    <div div class="col-md-4">
-        <img src="@Url.Content(Model.ImageFullPath)" alt="Image" style="width:300px;height:450px;max-width:100%;height:auto" />
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Customers")">Customer</a></li>
+                    <li class="breadcrumb-item active">Update</li>
+                </ol>
+            </div>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="col-md-12">
+    <div class="card">
+        <div style="background-color:#4b545c;" class="card-header">
+            <p style="font-size:larger;color:white" class="text-left">Update Customer</p>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" enctype="multipart/form-data" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" placeholder="First Name" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" placeholder="Last Name" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" type="email" readonly placeholder="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="PhoneNumber" class="control-label"></label>
+                        <input asp-for="PhoneNumber" type="number" placeholder="Phone No" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="VatNumber" class="control-label"></label>
+                        <input asp-for="VatNumber" placeholder="Vat Number" class="form-control" />
+                        <span asp-validation-for="VatNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Country" class="control-label"></label>
+                        <input asp-for="Country" placeholder="Enter Your Country" class="form-control" />
+                        <span asp-validation-for="Country" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="City" class="control-label"></label>
+                        <input asp-for="City" placeholder="Enter your City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-5">
+                        <label asp-for="ZipCode" class="control-label"></label>
+                        <input asp-for="ZipCode" placeholder="Zip Code" class="form-control" />
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label asp-for="ImageFile" class="control-label"></label>
+                        <input asp-for="ImageFile" class="form-control" type="file" />
+                        <span asp-validation-for="ImageFile" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <img class="mt-30" src="@Model.ImageFullPath" style="height:70px;width:100px" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="text-right">
+                        <a class="btn btn-warning" type="button" asp-action="Index" asp-controller="Customers" class="btn btn-comfly-secondary" style="width: 120px;">Back</a>
+                        <button type="submit" class="btn" style="background-color:#4b545c;color:white; width: 120px;" id="btnSave" name="Save">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+
+
 
 @section Scripts {
     @{

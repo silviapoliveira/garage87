@@ -7,4 +7,11 @@
     <p>
         Thank you for confirming your email. You can now log into the system.
     </p>
+    @if (ViewBag.IsEmployee == true || ViewBag.IsCustomer == true) // Check if the user is either an employee or a customer
+    {
+        <p>
+            Please change your password before proceeding.
+            <a href="/Account/ChangePassword" style="font-weight: bold; color: blue;">Change Password</a>
+        </p>
+    }
 </div>

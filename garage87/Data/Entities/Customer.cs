@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace garage87.Data.Entities
 {
@@ -71,7 +72,15 @@ namespace garage87.Data.Entities
         public int NumberVehicles => Vehicles == null ? 0 : Vehicles.Count;
 
 
-        public User User { get; set; }
+        public string AddedBy { get; set; }
+
+
+        public string UserId { get; set; }
+
+
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
+
 
         public string ImageFullPath
         {

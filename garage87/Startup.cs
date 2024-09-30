@@ -80,23 +80,29 @@ namespace garage87
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IServiceRepository, ServiceRepository>();
 
 
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/NotAuthorized";
+                options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
 
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                 .AddNewtonsoftJson(options =>
+                 {
+                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                 });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1NDaF5cWWtCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXZcdnRXR2JYVENyXkU=");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

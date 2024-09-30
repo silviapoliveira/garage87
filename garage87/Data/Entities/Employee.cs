@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Principal;
 
 namespace garage87.Data.Entities
 {
@@ -24,8 +26,7 @@ namespace garage87.Data.Entities
 
 
         [Required]
-        [MaxLength(200, ErrorMessage = "The field {0} can only contain {1} charaters.")]
-        public string Function { get; set; }
+        public int? Function { get; set; }
 
 
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
@@ -46,14 +47,22 @@ namespace garage87.Data.Entities
 
 
         // List of services associated to the employee
-        public ICollection<Service> Services { get; set; }
+        //public ICollection<Service> Services { get; set; }
 
 
-        [Display(Name = "Number of Services")]
-        public int NumberServices => Services == null ? 0 : Services.Count;
+        //[Display(Name = "Number of Services")]
+        //public int NumberServices => Services == null ? 0 : Services.Count;
 
 
-        public User User { get; set; }
+        public string AddedBy { get; set; }
+
+
+        public string UserId { get; set; }
+
+
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
+
 
         public string ImageFullPath
         {
@@ -67,5 +76,7 @@ namespace garage87.Data.Entities
                 return $"https://localhost:44331{ImageUrl.Substring(1)}";
             }
         }
+
+        public ICollection<VehicleServiceAssignment> VehicleServiceAssignment { get; set; }
     }
 }

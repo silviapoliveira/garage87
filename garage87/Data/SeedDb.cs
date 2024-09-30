@@ -28,6 +28,7 @@ namespace garage87.Data
 
             await _userHelper.CheckRoleAsync("Admin");
             await _userHelper.CheckRoleAsync("Customer");
+            await _userHelper.CheckRoleAsync("Employee");
 
             if (!_context.Countries.Any())
             {
@@ -39,7 +40,8 @@ namespace garage87.Data
                 _context.Countries.Add(new Country
                 {
                     Cities = cities,
-                    Name = "Portugal"
+                    Name = "Portugal",
+                    CountryCode = "351",
                 });
 
                 await _context.SaveChangesAsync();
@@ -87,13 +89,13 @@ namespace garage87.Data
                 await _context.SaveChangesAsync();
             }
 
-            if (!_context.Employees.Any())
-            {
-                AddEmployee("Pedro", "Oliveira", "Mecânico", user);
-                AddEmployee("Artur", "Couto", "Mecânico", user);
-                AddEmployee("Tânia", "Justo", "Recepcionista", user);
-                await _context.SaveChangesAsync();
-            }
+            //if (!_context.Employees.Any())
+            //{
+            //    AddEmployee("Pedro", "Oliveira", "Mecânico", user);
+            //    AddEmployee("Artur", "Couto", "Mecânico", user);
+            //    AddEmployee("Tânia", "Justo", "Recepcionista", user);
+            //    await _context.SaveChangesAsync();
+            //}
         }
 
         private void AddCustomer(string firstName, string lastName, string email, string vatNumber, User user)
@@ -108,15 +110,15 @@ namespace garage87.Data
             });
         }
 
-        private void AddEmployee(string firstName, string lastName, string function, User user)
-        {
-            _context.Employees.Add(new Entities.Employee
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Function = function,
-                User = user
-            });
-        }
+        //private void AddEmployee(string firstName, string lastName, int function, User user)
+        //{
+        //    _context.Employees.Add(new Entities.Employee
+        //    {
+        //        FirstName = firstName,
+        //        LastName = lastName,
+        //        Function = function,
+        //        User = user
+        //    });
+        //}
     }
 }

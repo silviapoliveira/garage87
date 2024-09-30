@@ -56,7 +56,18 @@ namespace garage87.Controllers
                     {
                         return Redirect(this.Request.Query["ReturnUrl"].First());
                     }
+                    var user = await _userHelper.GetUserByEmailAsync(model.Username);
+                    bool isAdmin = await _userHelper.IsUserInRoleAsync(user, "Admin");
+                    bool isEmployee = await _userHelper.IsUserInRoleAsync(user, "Employee");
 
+                    if (isAdmin)
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else if (isEmployee)
+                    {
+                        return RedirectToAction("EmployeeDashboard", "Employee");
+                    }
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -284,6 +295,13 @@ namespace garage87.Controllers
             }
 
             var result = await _userHelper.ConfirmEmailAsync(user, token);
+            // Check the user's role after successful email confirmation
+            var isEmployee = await _userHelper.IsUserInRoleAsync(user, "Employee");
+            var isCustomer = await _userHelper.IsUserInRoleAsync(user, "Customer");
+
+            // Pass the role information to the view
+            ViewBag.IsEmployee = isEmployee;
+            ViewBag.IsCustomer = isCustomer;
             if (!result.Succeeded)
             {
 
