@@ -77,6 +77,6 @@ namespace garage87.Data.Entities
             }
         }
 
-        public ICollection<VehicleServiceAssignment> VehicleServiceAssignment { get; set; }
+        public ICollection<VehicleAssignment> VehicleAssignment { get; set; }
     }
 }

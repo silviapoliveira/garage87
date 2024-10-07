@@ -12,7 +12,7 @@ namespace garage87.Data.Entities
         public decimal ServiceCost { get; set; }
 
 
-        public int? ReairId { get; set; }
+        public int? RepairId { get; set; }
 
 
         [ForeignKey("RepairId")]

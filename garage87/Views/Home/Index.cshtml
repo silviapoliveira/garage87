@@ -74,160 +74,148 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4 col-sm-6">
-                        <div class="uni-shortcode-icons-box-5-default">
-                            <div class="item-icons-title">
-                                <div class="col-md-4 uni-clear-padding">
-                                    <div class="item-icons">
-                                        <img src="images/icons_box/icon_4/icon-5.png" alt="">
+                    @foreach (var item in Model.Services)
+                    {
+                        <div class="col-md-4 col-sm-6">
+                            <div class="uni-shortcode-icons-box-5-default">
+                                <div class="item-icons-title" style="height:80px">
+                                    @*  <div class="col-md-4 uni-clear-padding">
+                                <div class="item-icons">
+                                <img src="@item.ImageFullPath" alt="">
+                                </div>
+                                </div> *@
+                                    <div class="col-md-8 uni-clear-padding">
+                                        <div class="item-title">
+                                            <h4>@item.Name</h4>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8 uni-clear-padding">
-                                    <div class="item-title">
-                                        <h4>Oil Change</h4>
-                                    </div>
+                                <div class="item-caption" style="padding:0px">
+                                    <img style="height: 200px;width:100%;" src="@item.ImageFullPath" alt="">
                                 </div>
-                            </div>
-                            <div class="item-caption">
-                                <p>
-                                    Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                    fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                    ultricies eget...
-                                </p>
-                                <a href="#" class="readmore">Read more</a>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="uni-shortcode-icons-box-5-default">
-                            <div class="item-icons-title">
-                                <div class="col-md-4 uni-clear-padding">
-                                    <div class="item-icons">
-                                        <img src="images/icons_box/icon_4/icon-4.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-md-8 uni-clear-padding">
-                                    <div class="item-title">
-                                        <h4>Breaks Repair</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item-caption">
-                                <p>
-                                    Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                    fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                    ultricies eget...
-                                </p>
-                                <a href="#" class="readmore">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="uni-shortcode-icons-box-5-default">
-                            <div class="item-icons-title">
-                                <div class="col-md-4 uni-clear-padding">
-                                    <div class="item-icons">
-                                        <img src="images/icons_box/icon_4/icon-3.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-md-8 uni-clear-padding">
-                                    <div class="item-title">
-                                        <h4>Battery Replacement</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item-caption">
-                                <p>
-                                    Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                    fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                    ultricies eget...
-                                </p>
-                                <a href="#" class="readmore">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="uni-shortcode-icons-box-5-default">
-                            <div class="item-icons-title">
-                                <div class="col-md-4 uni-clear-padding">
-                                    <div class="item-icons">
-                                        <img src="images/icons_box/icon_4/icon-2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-md-8 uni-clear-padding">
-                                    <div class="item-title">
-                                        <h4> Transmission Repair</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item-caption">
-                                <p>
-                                    Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                    fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                    ultricies eget...
-                                </p>
-                                <a href="#" class="readmore">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="uni-shortcode-icons-box-5-default">
-                            <div class="item-icons-title">
-                                <div class="col-md-4 uni-clear-padding">
-                                    <div class="item-icons">
-                                        <img src="images/icons_box/icon_4/icon-1.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-md-8 uni-clear-padding">
-                                    <div class="item-title">
-                                        <h4>Engine Diagnostics</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item-caption">
-                                <p>
-                                    Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                    fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                    ultricies eget...
-                                </p>
-                                <a href="#" class="readmore">Read more</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-sm-6">
-                        <div class="uni-shortcode-icons-box-5-default">
-                            <div class="item-icons-title">
-                                <div class="col-md-4 uni-clear-padding">
-                                    <div class="item-icons">
-                                        <img src="images/icons_box/icon_4/icon.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="col-md-8 uni-clear-padding">
-                                    <div class="item-title">
-                                        <h4>Tire Rotation</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="item-caption">
-                                <p>
-                                    Pellentesque habitant morbi tristique senectus et netus et malesuada
-                                    fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae,
-                                    ultricies eget...
-                                </p>
-                                <a href="#" class="readmore">Read more</a>
-                            </div>
-                        </div>
-                    </div>
+                    }
+
+
                 </div>
 
                 <div class="btn-all-services">
-                    <a href="#">All services +</a>
+                    <a href="@Url.Action("Services","")">All services +</a>
                 </div>
 
             </div>
         </div>
     </div>
+    <!--HOME 2 COUNTER-->
+    <div class="uni-home-2-counter">
+        <div class="uni-shortcode-counter-2 uni-background-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        <div class="uni-shortcode-counter-default">
+                            <ul>
+                                <li class="counter-icons"><i class="fa fa-user-md" aria-hidden="true"></i></li>
+                                <li class="counter-number counter"> @ViewBag.mechanics </li>
+                                <li class="counter-text"> mechanics</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="uni-shortcode-counter-default">
+                            <ul>
+                                <li class="counter-icons"><i class="fa fa-smile-o" aria-hidden="true"></i></li>
+                                <li class="counter-number counter"> @ViewBag.Customers </li>
+                                <li class="counter-text"> happy customers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-4">
+                        <div class="uni-shortcode-counter-default">
+                            <ul>
+                                <li class="counter-icons"><i class="fa fa-lightbulb-o" aria-hidden="true"></i></li>
+                                <li class="counter-number counter"> 10 </li>
+                                <li class="counter-text"> years of experience </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+
+    <div class="uni-services-de-test-hours" style="padding: 60px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+
+                    <div class="wprt-headings style-1 clearfix">
+                        <h2 class="heading clearfix">LONG TERM WARRANTIES AND COMPETITIVE PRICES</h2>
+                        <div class="sep clearfix"></div>
+                    </div><!-- /.wprt-headings -->
+
+                    <div class="wprt-spacer clearfix" data-desktop="20" data-mobi="20" data-smobi="20" style="height:20px"></div>
+
+                    <p>Why do we consider ourselves to be the best car garage? It’s simple, really. We know that honesty and transparency, coupled with reliable and friendly customer service, is what really builds customer trust.</p>
+                    <p>Trust the experts at our AutoService Shop for quality tune-ups. Our professionals will perform diagnostic tests, fluid flush and fills, engine replacement, oil changes, and total vehicle overhauls. We offer competitive pricing and long-term warranties that give you peace of mind.</p>
+
+                    <p>We take pride in using the latest technology and tools to ensure that your car is maintained to the highest standard. Whether you're here for a routine checkup or a more complex repair, our trained technicians are committed to getting you back on the road as quickly as possible.</p>
+                    <p>In addition to our expertise, we also offer flexible payment plans and special promotions that allow you to get the best service without breaking the bank. So why settle for less when you can experience top-notch care and unbeatable value at our shop?</p>
+
+                    <div class="wprt-spacer clearfix" data-desktop="20" data-mobi="10" data-smobi="10" style="height:20px"></div>
+
+                    <div style="background-color: #3f97da;padding: 20px;color: white;width: 30%;font-size: large;">
+                        <a style="color:white" href="@Url.Action("Services","Home")">Check Services</a>
+                    </div>
+
+                </div>
+
+
+                <!--OPENING HOURS-->
+                <div class="col-md-4" ">
+                    <div class="uni-services-opinging-hours">
+                        <div class="uni-services-opinging-hours-title">
+                            <div class="icon">
+                                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            </div>
+                            <h4>Opening Hours</h4>
+                        </div>
+                        <div class="uni-services-opinging-hours-content">
+                            <table class="table">
+                                <tr>
+                                    <td>Monday</td>
+                                    <td>8:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Tuesday</td>
+                                    <td>8:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Wednesday</td>
+                                    <td>8:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Thursday</td>
+                                    <td>8:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Friday</td>
+                                    <td>8:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Saturday</td>
+                                    <td>8:00 - 12:00</td>
+                                </tr>
+                            </table>
+                            <a href="@Url.Action("Contact", "Home")" class="book-appointment">Consult Our Team</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
     <!--HOME 3 OUR Mechanics-->
     <div class="uni-home-3-our-doctor">
@@ -238,35 +226,27 @@
                     <div class="uni-underline"></div>
                 </div>
                 <div class="uni-owl-four-item owl-carousel owl-theme ">
-                    @foreach (var item in Model.Mechanics)
-                    {
+                @foreach (var item in Model.Mechanics)
+                {
                         <div class="item ">
                             <div class="uni-team-default">
                                 <div class="item-img">
                                     <img src="@item.ImageFullPath" alt="" style="height:200px" class="img-responsive">
                                 </div>
-                                <div class="item-caption">
-                                    <div class="col-md-3 col-sm-3 col-xs-3 uni-clear-padding">
-                                        <div class="item-icons">
-                                            <img src="images/icons_box/icon_4/icon-5.png" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-9 col-sm-9 col-xs-9 uni-clear-padding">
-                                        <div class="item-title">
-                                            <h4>@item.FullName</h4>
-
-                                        </div>
+                                <div class="item-caption" style="background-color:#333333;padding-top:10px;">
+                                    <div class="item-title">
+                                        <h4 style="color:white">@item.FullName</h4>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    }
+                }
                 </div>
             </div>
         </div>
     </div>
 
-    <!--HOME 2 GAllery-->
+    <!--HOME 2 Gallery-->
     <div class="uni-home-2-latest-post">
         <div class="container">
             <div class="uni-home-title">
@@ -281,11 +261,11 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/download (1).jpeg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img src="/Customer/images/1st.jpg" alt="" style="height: 200px" title="" class="img-responsive">
                                         </a>
-                                    </div>
-                                </div>
 
+                                    </div>
+                                </div>
                             </div>
                         </article>
                     </div>
@@ -297,7 +277,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/download.jpeg" alt="" style="height: 200px" title="" class="img-responsive">
+                                            <img src="~/customer/images/home1/lastestpost/dep2.png" alt="" style="height: 200px" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -312,7 +292,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/images (1).jpeg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img src="~/customer/images/home1/lastestpost/Gallery3.jpeg" style="height: 200px" alt="" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -330,7 +310,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/images (2).jpeg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img src="~/customer/images/home1/lastestpost/Gallery4.jpeg" style="height: 200px" alt="" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -346,7 +326,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/images.jpeg" alt="" style="height: 200px" title="" class="img-responsive">
+                                            <img src="~/customer/images/home1/lastestpost/Gallery5.jpeg" alt="" style="height: 200px" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -361,7 +341,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/banner/banner2.jpg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img src="~/customer/images/home1/lastestpost/Gallery6.jpg" style="height: 200px" alt="" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -378,8 +358,3 @@
 </section>
 
 
-@* <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
- *@

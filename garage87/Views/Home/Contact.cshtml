@@ -1,0 +1,164 @@
+﻿@model garage87.Data.Entities.Message
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<section class="site-content-area">
+
+    <div class="uni-banner-default uni-background-1">
+        <div class="container">
+            <!-- Page title -->
+            <div class="page-title">
+                <div class="page-title-inner">
+                    <h1>Contact Us</h1>
+                </div>
+            </div>
+            <!-- End page title -->
+            <!-- Breadcrumbs -->
+            <ul class="breadcrumbs">
+                <li><a href="@Url.Action("Index","Home")">Home</a></li>
+                <li><a href="@Url.Action("Contact","Home")">Contact Us</a></li>
+            </ul>
+            <!-- End breadcrumbs -->
+        </div>
+    </div>
+
+    <div class="uni-contact-us-body">
+        <!--MAP-->
+        @*   <div class="uni-about-map">
+        <iframe class="map" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2520.355677596112!2d-0.13052618407551403!3d50.82457546821709!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4875859878db2cc7%3A0xff129250121f260d!2s45+Queen's+Park+Rd%2C+Brighton+BN2+0GJ%2C+V%C6%B0%C6%A1ng+Qu%E1%BB%91c+Anh!5e0!3m2!1svi!2s!4v1514436176997" height="700" style="border:0"></iframe>
+        </div> *@
+
+        <div class="uni-contact-us-body-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="uni-send-a-message">
+                            <div class="uni-contact-title">
+                                <h3>Send a message</h3>
+                                <div class="uni-line"></div>
+                            </div>
+                            <div class="uni-send-a-message-body">
+                                <form action="contact" method="post">
+
+                                    <div class="form-group">
+                                        <label style="text-align: left; display: block; margin-bottom: 5px;">Name</label>
+                                        <input type="text" asp-for="Name" class="form-control" placeholder="Enter Your Name">
+                                        <span asp-validation-for="Name" class="field-validation-error"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="text-align: left; display: block; margin-bottom: 5px;">Phone No</label>
+                                        <input type="tel" asp-for=Phone class="form-control" placeholder="Enter Your Phone">
+                                        <span asp-validation-for="Phone" class="field-validation-error"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="text-align: left; display: block; margin-bottom: 5px;">Email</label>
+                                        <input type="email" asp-for="Email" class="form-control" placeholder="Enter Your Email">
+                                        <span asp-validation-for="Email" class="field-validation-error"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="text-align: left; display: block; margin-bottom: 5px;">Message</label>
+                                        <textarea id="message" asp-for="MessageDetail" style="height:150px" class="form-control" placeholder="Enter you query"></textarea>
+                                        <span asp-validation-for="MessageDetail" class="field-validation-error"></span>
+                                    </div>
+
+                                    <button type="submit" class="vk-btn vk-btn-send">Send</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="uni-contact-info">
+                            <div class="uni-contact-title">
+                                <h3>Contact us</h3>
+                                <div class="uni-line"></div>
+                            </div>
+                            <div class="uni-contact-info-body">
+                                <div class="item">
+                                    <div class="icon-holder">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="text-holder">
+                                        <p>Rua Ada Lovelace, 7</p>
+                                        <span>Portugal</span>
+                                    </div>
+                                </div>
+
+                                <!--Receive records-->
+                                <div class="uni-receive-records">
+                                    <div class="uni-contact-info-title">
+                                        <h4>Receive records</h4>
+                                        <div class="uni-divider"></div>
+                                    </div>
+
+                                    <div class="item">
+                                        <div class="icon-holder">
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="text-holder">
+                                            <p>Call Us</p>
+                                            <span>912345678</span>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="icon-holder">
+                                            <i class="fa fa-envelope" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="text-holder">
+                                            <p>Send A Message</p>
+                                            <span>contact@garage87.com</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="uni-contact-us-hours">
+                            <div class="uni-contact-us-title">
+                                <div class="icon">
+                                    <i class="fa fa-clock-o" aria-hidden="true"></i>
+                                </div>
+                                <h4>opening hours</h4>
+                            </div>
+                            <div class="uni-contact-us-hours-content">
+                                <table class="table">
+                                    <tr>
+                                        <td>monday</td>
+                                        <td>8:00 - 17:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>tuesday</td>
+                                        <td>8:00 - 17:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>wednesday</td>
+                                        <td>8:00 - 17:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>thursday</td>
+                                        <td>8:00 - 17:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>friday</td>
+                                        <td>8:00 - 17:00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>saturday</td>
+                                        <td>8:00 - 12:00</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>

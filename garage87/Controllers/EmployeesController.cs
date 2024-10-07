@@ -9,17 +9,18 @@ using garage87.Data;
 using garage87.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Vereyon.Web;
-using garage87.Data.Repositories;
 using garage87.Models;
 using garage87.Helpers;
 using Syncfusion.EJ2.Base;
 using Microsoft.AspNetCore.Identity;
+using garage87.Data.Repositories.IRepository;
 
 namespace garage87.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IMessageRepository _messageRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IFlashMessage _flashMessage;
@@ -30,7 +31,7 @@ namespace garage87.Controllers
             (IEmployeeRepository employeeRepository,
             IImageHelper imageHelper,
             IConverterHelper converterHelper,
-            IFlashMessage flashMessage, IUserHelper userHelper, IMailHelper mailHelper, UserManager<User> userManager)
+            IFlashMessage flashMessage, IUserHelper userHelper, IMailHelper mailHelper, UserManager<User> userManager, IMessageRepository messageRepository)
         {
             _employeeRepository = employeeRepository;
             _imageHelper = imageHelper;
@@ -39,103 +40,27 @@ namespace garage87.Controllers
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _userManager = userManager;
+            _messageRepository = messageRepository;
         }
         public IActionResult EmployeeDashboard()
         {
             return View();
         }
 
-        #region Services
-        //public async Task<IActionResult> DeleteService(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var service = await _employeeRepository.GetServiceAsync(id.Value);
-        //    if (service == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var employeeId = await _employeeRepository.DeleteServiceAsync(service);
-        //    return this.RedirectToAction($"Details", new { id = employeeId });
-        //}
-
-        //public async Task<IActionResult> EditService(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var service = await _employeeRepository.GetServiceAsync(id.Value);
-        //    if (service == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(service);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> EditService(Service service)
-        //{
-        //    if (this.ModelState.IsValid)
-        //    {
-        //        var employeeId = await _employeeRepository.UpdateServiceAsync(service);
-        //        if (employeeId != 0)
-        //        {
-        //            return this.RedirectToAction($"Details", new { id = employeeId });
-        //        }
-        //    }
-
-        //    return this.View(service);
-        //}
-
-        //public async Task<IActionResult> AddService(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var employee = await _employeeRepository.GetByIdAsync(id.Value);
-        //    if (employee == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var model = new ServiceViewModel { EmployeeId = employee.Id };
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddService(ServiceViewModel model)
-        //{
-        //    if (this.ModelState.IsValid)
-        //    {
-        //        await _employeeRepository.AddServiceAsync(model);
-        //        return RedirectToAction("Details", new { id = model.EmployeeId });
-        //    }
-
-        //    return this.View(model);
-        //}
-        #endregion
-
 
         #region Employee Crud
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
-            return View();
+            var obj = _employeeRepository.GetAll();
+            return View(obj);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeViewModel model)
@@ -165,7 +90,14 @@ namespace garage87.Controllers
 
                     var result = await _userHelper.AddUserAsync(user, model.Password);
                     if (result.Succeeded)
-                        await _userManager.AddToRoleAsync(user, "Employee");
+                        if (model.Function == (int)Enums.EmployeeFunctionEnum.Mechanic)
+                        {
+                            await _userManager.AddToRoleAsync(user, "Mechanic");
+                        }
+                        else
+                        {
+                            await _userManager.AddToRoleAsync(user, "Employee");
+                        }
 
                     if (result != IdentityResult.Success)
                     {
@@ -203,7 +135,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -222,7 +154,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EmployeeViewModel model)
@@ -239,6 +171,8 @@ namespace garage87.Controllers
                     }
 
                     var employee = _converterHelper.ToEmployee(model, path, false);
+                    employee.UserId = model.UserId;
+                    employee.AddedBy = model.AddedBy;
                     var existingUser = await _userManager.FindByEmailAsync(model.Email);
                     if (existingUser != null)
                     {
@@ -275,6 +209,7 @@ namespace garage87.Controllers
             }
             return View(model);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(int id)
         {
@@ -300,6 +235,12 @@ namespace garage87.Controllers
                 return Json(new { success = false, message = "An error occurred while deleting the Employee. Please try again." });
             }
         }
+
+        public IActionResult Messages()
+        {
+            return View();
+        }
+
         #region API method
         public IActionResult GetEmployeesList([FromBody] DataManagerRequest dm)
         {
@@ -328,6 +269,60 @@ namespace garage87.Controllers
             }
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
+        }
+        public IActionResult GetMessages([FromBody] DataManagerRequest dm)
+        {
+            IQueryable<Message> Data = _messageRepository.GetAll();
+            DataOperations operation = new DataOperations();
+            var count = Data.Count();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                Data = operation.PerformSearching(Data, dm.Search);
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0)
+            {
+                Data = operation.PerformSorting(Data, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0)
+            {
+                Data = operation.PerformFiltering(Data, dm.Where, dm.Where[0].Operator);
+            }
+            if (dm.Skip != 0)
+            {
+                Data = operation.PerformSkip(Data, dm.Skip);
+            }
+            if (dm.Take != 0)
+            {
+                Data = operation.PerformTake(Data, dm.Take);
+            }
+            var list = Data.ToList();
+            return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteMessage(int id)
+        {
+            try
+            {
+                var getData = await _messageRepository.GetByIdAsync(id);
+                if (getData != null)
+                {
+                    var success = await _messageRepository.DeleteAsync(getData);
+                    if (success == true)
+                        return Json(new { success = true, message = "Query deleted successfully" });
+                    else
+                        return Json(new { success = false, message = "The query cannot be deleted. Try again later." });
+
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error! The query cannot be deleted. Try again later." });
+                }
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = "An error occurred while deleting the query. Please try again." });
+            }
         }
         #endregion
         #endregion

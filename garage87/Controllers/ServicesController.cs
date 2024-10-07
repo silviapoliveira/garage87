@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using garage87.Data;
 using garage87.Data.Entities;
-using garage87.Data.Repositories;
 using garage87.Models;
 using garage87.Helpers;
+using garage87.Data.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace garage87.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ServicesController : Controller
     {
 

@@ -1,0 +1,166 @@
+﻿@model garage87.Models.RepairVM
+@{
+    ViewData["Title"] = "Repair Invoice";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Repairs</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Indes","Repair")">Repairs</a></li>
+                    <li class="breadcrumb-item active">Add</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div>
+        <div class="card">
+            <div style="background-color:#4b545c;" class="card-header">
+                <p style="font-size:larger;color:white" class="text-left">Add Repair Invoice</p>
+            </div>
+            <div class="card-body">
+                <form asp-action="AddRepairInvoice" method="post">
+                    <input asp-for="Id" hidden id="RepairId" class="form-control" />
+                    <input asp-for="VehicleAssignmentId" hidden class="form-control" />
+                    <input asp-for="VehicleId" hidden  class="form-control" />
+                    <input asp-for="EmployeeId" hidden  class="form-control" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label asp-for="RepairDate" class="control-label"></label>
+                            <input asp-for="RepairDate" type="date" placeholder="Select Date" class="form-control" />
+                            <span asp-validation-for="RepairDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label asp-for="LabourHours" class="control-label"></label>
+                            <input asp-for="LabourHours" placeholder="Enter Labour Hours" type="number" class="form-control" />
+                            <span asp-validation-for="LabourHours" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label asp-for="Total" class="control-label"></label>
+                            <input asp-for="Total" type="number" placeholder="Enter total bill Amount" class="form-control" />
+                            <span asp-validation-for="Total" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Detail" class="control-label"></label>
+                                <textarea class="col-md-12 form-control" type="text" asp-for="Detail" placeholder="Enter Repair Details"></textarea>
+                                <span asp-validation-for="Detail" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Select Services</label>
+                            <select name="ServiceId" id="servicedd" asp-items="@ViewBag.Services" class="form-control">
+                                <option selected disabled value="">Select service</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    @Html.Hidden("itemIndex", Model.RepairDetail.Count)
+                    <div class="row ">
+                        <div class="col-md-12 ">
+                            <table id="repair-details" class="table">
+                                <thead>
+                                    <tr class="bg-info">
+                                        <th>Service Name</th>
+                                        <th>Cost</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.RepairDetail != null && Model.RepairDetail.Any())
+                                    {
+                                        foreach (var item in Model.RepairDetail)
+                                        {
+                                            @Html.Partial("_RepairDetail", item)
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+
+                    <div class="form-group">
+                        <div class="text-right">
+                            <a class="btn btn-warning" type="button" asp-action="Index" asp-controller="Customers" class="btn btn-comfly-secondary" style="width: 120px;">Back</a>
+                            <button type="submit" class="btn" style="background-color:#4b545c;color:white; width: 120px;" id="btnSave" name="Save">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#servicedd').change(function (e) {
+                var selectedOption = $(this).find(":selected");
+                var selectedServiceId = selectedOption.val();
+                var selectedServiceName = selectedOption.text();
+
+                // Check for duplicates before proceeding
+                var isDuplicate = false;
+                $('#repair-details tbody tr').each(function () {
+                    var serviceId = $(this).find("input[name*='ServiceId']").val();
+                    var isDeleted = $(this).find("input[name*='IsDeleted']").val();
+
+                    // Only check for duplicates if the service is not marked as deleted
+                    if (isDeleted !== "true" && serviceId == selectedServiceId) {
+                        isDuplicate = true; // Duplicate found
+                        return false; // Exit the loop
+                    }
+                });
+
+                if (isDuplicate) {
+                    toastr.warning('This service has already been added.');
+                    $('#servicedd').val(''); // Clear selection
+                    return;
+                }
+
+                // Proceed to call the server to add the selected service to the list
+                $.ajax({
+                    url: '@Url.Action("AddDetail", "Repair")',
+                    type: 'GET',
+                    data: {
+                        ind: $('#itemIndex').val(),
+                        serviceId: selectedServiceId,
+                        servicename: selectedServiceName,
+                        RepairId: $('#RepairId').val()
+                    },
+                    success: function (response) {
+                        $('#repair-details tbody').append(response);
+                        $('#servicedd').val('');
+
+                        // Update itemIndex after appending the new row
+                        $('#itemIndex').val($('#repair-details tbody tr').length); // Update itemIndex
+                    },
+                    error: function () {
+                        alert('Failed to add service.');
+                    }
+                });
+            });
+        });
+
+    </script>
+}

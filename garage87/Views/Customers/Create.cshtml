@@ -43,40 +43,51 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label asp-for="Email" class="control-label"></label>
                             <input asp-for="Email" type="email" placeholder="Email" class="form-control" />
                             <span asp-validation-for="Email" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label asp-for="PhoneNumber" class="control-label"></label>
                             <input asp-for="PhoneNumber" type="number" placeholder="Phone No" class="form-control" />
                             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-4">
-                            <label asp-for="VatNumber" class="control-label"></label>
-                            <input asp-for="VatNumber" placeholder="Vat Number" class="form-control" />
-                            <span asp-validation-for="VatNumber" class="text-danger"></span>
-                        </div>
+
                     </div>
                     <div class="row">
+
                         <div class="form-group col-md-6">
-                            <label asp-for="Country" class="control-label"></label>
-                            <input asp-for="Country" placeholder="Function" class="form-control" />
-                            <span asp-validation-for="Country" class="text-danger"></span>
+                            <label asp-for="CityId" class="control-label"></label>
+                            @{
+                                IDictionary<string, object> customAttribute = new Dictionary<string, object>()
+                            {
+                            { "data-filter-columns", "name" },
+
+                            };
+                            }
+                            <ejs-combobox name="CityId" id="cityComboBox" placeholder="Select City" cssClass="e-multi-column form-control " htmlAttributes="customAttribute"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>City Name</th><th class='wp-33 text-wrap'>Country</th><th class='wp-33 text-wrap'>Country Code</th></tr></table>")"
+                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${name}</td><td class='wp-33 text-wrap'>${country.name}</td><td class='wp-33 text-wrap'>${country.countryCode}</td></tr> </tbody></table>")">
+                                <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("CitiesDropdown", "Customers")" crossDomain="true"></e-data-manager>
+                                <e-combobox-fields value="id" text="name"></e-combobox-fields>
+                            </ejs-combobox>
+                            <span asp-validation-for="CityId" class="text-danger"></span>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label asp-for="City" class="control-label"></label>
-                            <input asp-for="City" placeholder="Vat Number" class="form-control" />
-                            <span asp-validation-for="City" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="form-group col-md-6">
                             <label asp-for="ZipCode" class="control-label"></label>
                             <input asp-for="ZipCode" placeholder="Zip Code" class="form-control" />
                             <span asp-validation-for="ZipCode" class="text-danger"></span>
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="VatNumber" class="control-label"></label>
+                            <input asp-for="VatNumber" placeholder="Vat Number" class="form-control" />
+                            <span asp-validation-for="VatNumber" class="text-danger"></span>
+                        </div>
+
                         <div class="form-group col-md-6">
                             <label asp-for="ImageFile" class="control-label"></label>
                             <input asp-for="ImageFile" class="form-control" type="file" />
@@ -86,14 +97,22 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label asp-for="Password" class="control-label"></label>
-                            <input asp-for="Password" type="password" placeholder="Password" class="form-control" />
+                            <input asp-for="Password" required type="password" placeholder="Password" class="form-control" />
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="ConfirmPassword" class="control-label"></label>
-                            <input asp-for="ConfirmPassword" type="password" placeholder="Confirm Password" class="form-control" />
+                            <input asp-for="ConfirmPassword" required type="password" placeholder="Confirm Password" class="form-control" />
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="Address" class="control-label"></label>
+                            <input asp-for="Address" type="text" placeholder="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
                     </div>
                     <div class="form-group">
                         <div class="text-right">

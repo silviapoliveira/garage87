@@ -1,5 +1,13 @@
-﻿<!doctype html>
+﻿@using Microsoft.AspNetCore.Identity
+@using garage87.Data.Entities
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!doctype html>
 <html lang="en">
+
+<!-- 01_03_home_3.html  [XR&CO'2014], Tue, 22 Oct 2019 11:54:52 GMT -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -22,6 +30,18 @@
     <link rel="stylesheet" href="~/Customer/plugin/datetimepicker/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="~/Customer/plugin/lightgallery/lightgallery.css">
     <link rel="stylesheet" href="~/Customer/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.2.43/fluent.css" />
+    <script src="https://cdn.syncfusion.com/ej2/20.2.43/dist/ej2.min.js"></script>
+    <link href="~/admin/dist/js/toastr/toastr.min.css" rel="stylesheet" />
+    <script src="~/js/ej2/ej2.min.js"></script>
+    <style>
+        .field-validation-error {
+            color: red;
+            text-align: start;
+            display: block;
+        }
+    </style>
 </head>
 <body>
 
@@ -41,7 +61,51 @@
         <div id="wrapper-container" class="site-wrapper-container">
             <header>
                 <div class="uni-medicare-header sticky-menu">
-
+                    <div class="uni-header-top">
+                        <div class="container">
+                            <div class="uni-header-top-left">
+                                <!--LOGO-->
+                                <div class="wrapper-logo" style="min-height:0px">
+                                    <a class="logo-default" href="#"><img src="~/Customer/images/logo2.png" style="height:70px;width:100px" alt="" class="img-responsive"></a>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="uni-header-top-right" style="padding-top:10px;padding-bottom:0px;">
+                                <ul>
+                                    <li>
+                                        <div class="uni-header-top-icons">
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="uni-header-top-text">
+                                            <span>Rua Ada Lovelace, 7</span>
+                                            <h4>Portugal</h4>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                    <li>
+                                        <div class="uni-header-top-icons">
+                                            <i class="fa fa-phone" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="uni-header-top-text">
+                                            <span>Call us</span>
+                                            <h4>912345678</h4>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                    <li>
+                                        <div class="uni-header-top-icons">
+                                            <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        </div>
+                                        <div class="uni-header-top-text">
+                                            <span>Send a message</span>
+                                            <h4>contact@garage87.com</h4>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="uni-medicare-header-main-home-3">
                         <div class="container">
@@ -53,7 +117,11 @@
                                             <ul>
                                                 <li><a href="@Url.Action("Index","Home")">Home</a></li>
                                                 <li><a href="@Url.Action("Services","Home")">Services</a></li>
-
+                                                <li><a href="@Url.Action("Contact","Home")">Contact</a></li>
+                                                @if (User.IsInRole("Customer"))
+                                                {
+                                                    <li><a href="@Url.Action("RepairHistory","Home")">Repair History</a></li>
+                                                }
                                             </ul>
                                         </div>
                                     </nav>
@@ -61,13 +129,21 @@
 
                                 <!--SEARCH-->
                                 <div class="uni-search-yop-home-3">
-                                    <div id="custom-search-input">
-                                        <ul style="margin-top:20px;">
-
-                                            <li><a href="@Url.Action("Login","Account")" style="color:white">Login</a></li>
-
-
-                                        </ul>
+                                    <div id="custom-search-input" style="margin-top:15px">
+                                        @*   <partial name="_LoginPartial" /> *@
+                                        @if (User.IsInRole("Customer") || User.IsInRole("Employee") || User.IsInRole("Admin") || User.IsInRole("Mechanic"))
+                                        {
+                                            <div class="row align-items-center justify-content-between">
+                                                <a id="manage" class="nav-link text-dark" asp-controller="Account" asp-action="ChangeUser" title="Manage">
+                                                    Hello @UserManager.GetUserName(User)
+                                                </a>
+                                                <a asp-controller="Account" asp-action="Logout" class="text-white">Logout</a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Account" asp-action="Login" style="color:white">Login</a>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -80,20 +156,22 @@
                 @RenderBody()
             </div>
 
-            <footer class="site-footer footer-default">
+            @*<footer class="site-footer footer-default" style="position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa;">
+            <div class="copyright-area">
+            <div class="container">
+            <div class="copyright-content">
+            <div class="row">
+            <div class="col-sm-12" style="display: flex; justify-content: center; align-items: center;">
+            <p class="copyright-text" style="margin: 0; text-align: center;">
+            <a href="@Url.Action("Index","Home")">© 2024 - Garage 87 </a>
+            </p>
+            </div>
 
-                <div class="copyright-area">
-                    <div class="container">
-                        <div class="copyright-content">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <p class="copyright-text"> <a href="@Url.Action("Index","Home")">Garage 87</a></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
+            </div>
+            </div>
+            </div>
+            </div>
+            </footer>*@
         </div>
     </div>
     <script src="~/Customer/plugin/jquery/jquery-2.0.2.min.js"></script>
@@ -111,7 +189,6 @@
     <script src="~/Customer/plugin/datetimepicker/bootstrap-datepicker.tr.min.js"></script>
     <script src="~/Customer/plugin/datetimepicker/bootstrap-datetimepicker.js"></script>
     <script src="~/Customer/plugin/datetimepicker/bootstrap-datetimepicker.fr.js"></script>
-
     <script src="~/Customer/plugin/lightgallery/picturefill.min.js"></script>
     <script src="~/Customer/plugin/lightgallery/lightgallery.js"></script>
     <script src="~/Customer/plugin/lightgallery/lg-pager.js"></script>
@@ -121,9 +198,12 @@
     <script src="~/Customer/plugin/lightgallery/lg-hash.js"></script>
     <script src="~/Customer/plugin/lightgallery/lg-share.js"></script>
     <script src="~/Customer/plugin/sticky/jquery.sticky.js"></script>
-
+    <script src="~/js/notify/notify.min.js"></script>
     <script src="~/Customer/js/main.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @RenderSection("SyncfusionScripts", required: false)
+    <ejs-scripts></ejs-scripts>
+    @await Component.InvokeAsync("Notyf")
 
 </body>
 

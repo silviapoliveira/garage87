@@ -33,7 +33,7 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Name" class="control-label"></label>
-                        <input asp-for="Name" class="form-control" />
+                        <input asp-for="Name" placeholder="Enter City Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -45,7 +45,7 @@
 
                         };
                         }
-                        <ejs-combobox id="countryComboBox" placeholder="Select a Country" cssClass="e-multi-column" htmlAttributes="customAttribute"
+                        <ejs-combobox id="countryComboBox" name="CountryId" placeholder="Select a Country" cssClass="e-multi-column" htmlAttributes="customAttribute"
                                       headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Country Name</th><th class='wp-33 text-wrap'>Country Code</th></tr></table>")"
                                       itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${name}</td><td class='wp-33 text-wrap'>${countryCode}</td></tr> </tbody></table>")">
                             <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("Dropdown", "Countries")" crossDomain="true"></e-data-manager>

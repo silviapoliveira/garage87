@@ -1,8 +1,13 @@
 ﻿using garage87.Data;
 using garage87.Data.Entities;
+using garage87.Data.Repositories;
+using garage87.Data.Repositories.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.EJ2.Base;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,64 +15,36 @@ namespace garage87.Controllers
 {
     public class VehiclesController : Controller
     {
-        private readonly DataContext _context;
-
-        public VehiclesController(DataContext context)
+        private readonly IVehicleRepository _vehicleRepository;
+        public VehiclesController(IVehicleRepository vehicleRepository)
         {
-            _context = context;
+            _vehicleRepository = vehicleRepository;
         }
 
-        // GET: Vehicles
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Employee")]
+        public IActionResult Index()
         {
-            var dataContext = _context.Vehicles.Include(v => v.Customer);
-            return View(await dataContext.ToListAsync());
-        }
-
-        // GET: Vehicles/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
-            {
-                return NotFound();
-            }
-
-            return View(vehicle);
-        }
-
-        // GET: Vehicles/Create
-        public IActionResult Create()
-        {
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address");
             return View();
         }
-
-        // POST: Vehicles/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Employee")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+
         public async Task<IActionResult> Create(Vehicle vehicle)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(vehicle);
-                await _context.SaveChangesAsync();
+                await _vehicleRepository.CreateAsync(vehicle);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", vehicle.CustomerId);
             return View(vehicle);
         }
-
-        // GET: Vehicles/Edit/5
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -75,18 +52,14 @@ namespace garage87.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicles.FindAsync(id);
+            var vehicle = await _vehicleRepository.GetByIdAsync((int)id);
             if (vehicle == null)
             {
                 return NotFound();
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", vehicle.CustomerId);
             return View(vehicle);
         }
-
-        // POST: Vehicles/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Vehicle vehicle)
@@ -100,8 +73,7 @@ namespace garage87.Controllers
             {
                 try
                 {
-                    _context.Update(vehicle);
-                    await _context.SaveChangesAsync();
+                    await _vehicleRepository.UpdateAsync(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,43 +88,93 @@ namespace garage87.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CustomerId"] = new SelectList(_context.Customers, "Id", "Address", vehicle.CustomerId);
             return View(vehicle);
         }
 
-        // GET: Vehicles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Roles = "Employee")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteVehicle(int id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
-            }
+                var getData = await _vehicleRepository.GetByIdAsync(id);
+                if (getData != null)
+                {
+                    var success = await _vehicleRepository.DeleteAsync(getData);
+                    if (success == true)
+                        return Json(new { success = true, message = "Vehicle deleted successfully" });
+                    else
+                        return Json(new { success = false, message = "The Vehicle cannot be deleted because it is associated with other records." });
 
-            var vehicle = await _context.Vehicles
-                .Include(v => v.Customer)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (vehicle == null)
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error! Vehicle not deleted" });
+                }
+            }
+            catch (Exception e)
             {
-                return NotFound();
+                return Json(new { success = false, message = "An error occurred while deleting the Vehicle. Please try again." });
             }
-
-            return View(vehicle);
         }
-
-        // POST: Vehicles/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var vehicle = await _context.Vehicles.FindAsync(id);
-            _context.Vehicles.Remove(vehicle);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool VehicleExists(int id)
         {
-            return _context.Vehicles.Any(e => e.Id == id);
+            return _vehicleRepository.GetAll().Any(e => e.Id == id);
         }
+
+
+        #region Vechicle API methods
+        public ActionResult VehiclesDropdown([FromBody] DataManagerRequest dm)
+        {
+            var Data = _vehicleRepository.GetAll();
+            var count = Data.Count();
+            DataOperations operation = new DataOperations();
+            if (dm.Where != null && dm.Where.Count > 0)
+            {
+                // Perform filtering only if there are conditions
+                Data = operation.PerformFiltering(Data, dm.Where, dm.Where[0].Operator);
+            }
+
+            if (dm.Skip != 0)
+            {
+                Data = operation.PerformSkip(Data, dm.Skip);
+            }
+            if (dm.Take != 0)
+            {
+                Data = operation.PerformTake(Data, dm.Take);
+            }
+            var list = Data.ToList();
+            return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
+        }
+        public IActionResult GetList([FromBody] DataManagerRequest dm)
+        {
+            IQueryable<Vehicle> Data = _vehicleRepository.GetAll().Include(x => x.Customer);
+            DataOperations operation = new DataOperations();
+            var count = Data.Count();
+            if (dm.Search != null && dm.Search.Count > 0)
+            {
+                Data = operation.PerformSearching(Data, dm.Search);
+            }
+            if (dm.Sorted != null && dm.Sorted.Count > 0)
+            {
+                Data = operation.PerformSorting(Data, dm.Sorted);
+            }
+            if (dm.Where != null && dm.Where.Count > 0)
+            {
+                Data = operation.PerformFiltering(Data, dm.Where, dm.Where[0].Operator);
+            }
+            if (dm.Skip != 0)
+            {
+                Data = operation.PerformSkip(Data, dm.Skip);
+            }
+            if (dm.Take != 0)
+            {
+                Data = operation.PerformTake(Data, dm.Take);
+            }
+            var list = Data.ToList();
+            return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
+        }
+
+        #endregion
     }
 }

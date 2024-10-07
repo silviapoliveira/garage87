@@ -1,0 +1,107 @@
+﻿@model IEnumerable<garage87.Data.Entities.Service>
+@{
+    ViewData["Title"] = "Services Page";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+
+<section class="site-content-area">
+
+    <!--BANNER-->
+    <div class="uni-banner">
+        <div class="uni-owl-one-item owl-carousel owl-theme">
+            <div class="item">
+                <div class="uni-banner-img uni-background-7"></div>
+                <div class="content animated" data-animation="flipInX" data-delay="0.9s">
+                    <div class="container">
+                        <div class="caption">
+                            <h1>Keeping You on the Road, Safely</h1>
+                            <p>
+                                Quality Repairs, Exceptional Service!
+                                <br>
+                                Your Trusted Partner for Reliable Vehicle Care!
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="uni-banner-img uni-background-6"></div>
+                <div class="content animated" data-animation="flipInX" data-delay="0.9s">
+                    <div class="container">
+                        <div class="caption">
+                            <h1>Keeping You on the Road, Safely</h1>
+                            <p>
+                                Quality Repairs, Exceptional Service!
+                                <br>
+                                Your Trusted Partner for Reliable Vehicle Care!
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="uni-banner-img uni-background-5"></div>
+                <div class="content animated" data-animation="flipInX" data-delay="0.9s">
+                    <div class="container">
+                        <div class="caption">
+                            <h1>Keeping You on the Road, Safely</h1>
+                            <p>
+                                Quality Repairs, Exceptional Service!
+                                <br>
+                                Your Trusted Partner for Reliable Vehicle Care!
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!--HOME 2 OURSERVICES-->
+    <div class="uni-home-our-services">
+        <div class="uni-shortcode-icons-box-5">
+            <div class="container">
+                <div class="uni-home-title">
+                    <h3>Our Services</h3>
+                    <div class="uni-underline"></div>
+                </div>
+
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-md-4 col-sm-6">
+                            <div class="uni-shortcode-icons-box-5-default">
+                                <div class="item-icons-title" style="height:80px">
+                                    <div class="col-md-8 uni-clear-padding">
+                                        <div class="item-title">
+                                            <h4>@item.Name</h4>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Item Image -->
+                                <div class="item-caption" style="padding:0px">
+                                    <img style="height: 200px;width:100%;" src="@item.ImageFullPath" alt="">
+                                </div>
+
+                                <!-- Price Section -->
+                                <div class="item-price" style="text-align:center; padding-top:10px;">
+                                    <h5 style="color:#333; font-weight:bold;"><span>Price: </span>@item.Price</h5>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+

@@ -6,7 +6,7 @@
 <script id="actionColumn" type="text/x-template">
        <div class="btn-group">
 
-    <a class=" btn btn-warning mr-2" href="@Url.Action("EditCity")/${id}"><i class="fa fa-pen"></i></a>
+    <a class=" btn btn-warning mr-2" href="@Url.Action("EditCity")/${id}"><i class="fa fa-pencil"></i></a>
              <a class="btn-remove-redirect btn btn-danger" onclick="Delete(${id})"><i class="fa fa-trash"></i></a>
 
            </div>
@@ -51,7 +51,7 @@
                             <e-grid-searchsettings fields="@(new string[] { "Name"})"></e-grid-searchsettings>
                             <e-grid-columns>
                                 <e-grid-column field="Name" headerText="Name" allowSearching="true" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column field="Country Name" allowSearching="false" allowSorting="true" width="auto"></e-grid-column>
+                                <e-grid-column field="country.name" headerText="Country" allowSearching="false" allowSorting="true" width="auto"></e-grid-column>
                                 <e-grid-column headerText="Action" freeze="Right" allowFiltering="false" allowSorting="false" allowSearching="false" textAlign="Center" width="150" template="#actionColumn"></e-grid-column>
                             </e-grid-columns>
                         </ejs-grid>

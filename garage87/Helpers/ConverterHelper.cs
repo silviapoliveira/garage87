@@ -15,8 +15,7 @@ namespace garage87.Helpers
                 ImageUrl = path,
                 Address = model.Address,
                 ZipCode = model.ZipCode,
-                City = model.City,
-                Country = model.Country,
+                CityId = model.CityId,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
                 VatNumber = model.VatNumber
@@ -33,8 +32,7 @@ namespace garage87.Helpers
                 ImageUrl = customer.ImageUrl,
                 Address = customer.Address,
                 ZipCode = customer.ZipCode,
-                City = customer.City,
-                Country = customer.Country,
+                CityId = customer.CityId,
                 Email = customer.Email,
                 PhoneNumber = customer.PhoneNumber,
                 VatNumber = customer.VatNumber

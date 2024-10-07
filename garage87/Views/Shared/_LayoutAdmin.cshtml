@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -10,7 +11,6 @@
     <link rel="stylesheet" href="~/Admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <link rel="stylesheet" href="~/Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="~/Admin/dist/css/adminlte.min.css">
-    <link rel="stylesheet" href="~/Admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <link rel="stylesheet" href="~/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="~/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
@@ -27,9 +27,21 @@
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
                 </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link">Home</a>
+                </li>
             </ul>
 
             <ul class="navbar-nav ml-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-comments"></i>
+                        <span class="badge badge-danger navbar-badge"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    </div>
+                </li>
                 <partial name="_LoginPartial" />
 
             </ul>
@@ -81,16 +93,38 @@
                                     </p>
                                 </a>
                             </li>
-
                             <li class="nav-item">
-                                <a class="nav-link" asp-action="RepairTypes" asp-controller="Admin">
-                                    <i class="nav-icon fas fa-wrench"></i>
+                                <a class="nav-link" asp-action="Index" asp-controller="Customers">
+                                    <i class="nav-icon fas fa-users"></i>
                                     <p>
-                                        Manage Repaire Types
+                                        Manage Customers
                                     </p>
                                 </a>
                             </li>
-
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Services">
+                                    <i class="nav-icon fas fa-wrench"></i>
+                                    <p>
+                                        Manage Services
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Messages" asp-controller="Employees">
+                                    <i class="nav-icon fa fa-envelope"></i>
+                                    <p>
+                                        Manage Queries
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Email">
+                                    <i class="nav-icon fa fa-envelope"></i>
+                                    <p>
+                                        Send Email
+                                    </p>
+                                </a>
+                            </li>
 
                         }
                         else if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Employee"))
@@ -114,14 +148,73 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-action="Index" asp-controller="Vehicles">
-                                    <i class="nav-icon fas fa-wrench"></i>
+                                    <i class="nav-icon fas fa-car"></i>
                                     <p>
                                         Manage Vehicles
                                     </p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="VehicleAssignment">
+                                    <i class="nav-icon fas fa-wrench"></i>
+                                    <p>
+                                        Manage Repair Tasks
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="CompletedRepairs" asp-controller="VehicleAssignment">
+                                    <i class="nav-icon fas fa-wrench"></i>
+                                    <p>
+                                        Completed Repairs
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Repair">
+                                    <i class="nav-icon fas fa-money"></i>
+                                    <p>
+                                        Manage Repair Invoices
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Messages" asp-controller="Employees">
+                                    <i class="nav-icon fa fa-envelope"></i>
+                                    <p>
+                                        Manage Queries
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Email">
+                                    <i class="nav-icon fa fa-envelope"></i>
+                                    <p>
+                                        Send Email
+                                    </p>
+                                </a>
+                            </li>
                         }
+                        else if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Mechanic"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Mechanic">
+                                    <i class="nav-icon fas fa-home"></i>
+                                    <p>
+                                        Dashboard
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="MyTasks" asp-controller="Mechanic">
+                                    <i class="nav-icon fas fa-wrench"></i>
+                                    <p>
+                                        Manage Tasks
+                                    </p>
+                                </a>
+                            </li>
 
+                        }
                     </ul>
                 </nav>
 
@@ -151,7 +244,6 @@
 
     <script src="~/Admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script src="~/Admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- DataTables  & Plugins -->
     <script src="~/Admin/plugins/datatables/jquery.dataTables.min.js"></script>
 
@@ -163,8 +255,69 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="~/admin/dist/js/toastr/toastr.js"></script>
     <ejs-scripts></ejs-scripts>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Function to fetch notifications
+            function fetchNotifications() {
+                $.ajax({
+                    url: '@Url.Action("GetNotifications", "Notification")',
+                    method: 'GET',
+                    success: function (data) {
+                        $('.dropdown-menu').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (index, item) {
+                                $('.dropdown-menu').append(
+                                    `<div style="margin:5px">
+                                                                <div class="media-body">
+                                                                    <p class="text-sm">${item.message}</p>
+                                                                             <p class="text-sm text-muted">
+                                                                        <i class="far fa-check mr-1"></i>
+                                                                        <a href="#" class="mark-as-read text-end" style="color:red;" data-id="${item.id}">Mark as Read</a>
+                                                                    </p>
+                                                                </div>
+                                                        </div>
+                                                        <div class="dropdown-divider"></div>`
+                                );
+                            });
+                        } else {
+                            $('.dropdown-menu').append('<p class="text-center">No notifications.</p>');
+                        }
+                    },
+                    error: function () {
+                        console.error('Failed to fetch notifications.');
+                    }
+                });
+            }
+            $(document).on('click', '.mark-as-read', function (e) {
+                e.preventDefault();
+                const notificationId = $(this).data('id');
+
+                $.ajax({
+                    url: '@Url.Action("MarkAsRead", "Notification")',
+                    method: 'POST',
+                    data: { id: notificationId },
+                    success: function (response) {
+                        fetchNotifications();
+                    },
+                    error: function () {
+                        console.error('Failed to mark notification as read.');
+                    }
+                });
+            });
+            // Fetch notifications on page load
+            fetchNotifications();
+
+            // Optionally, set an interval to fetch notifications every few seconds
+            // setInterval(fetchNotifications, 30000); // Fetch every 30 seconds
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("SyncfusionScripts", required: false)
+    @await Component.InvokeAsync("Notyf")
+    ;
 </body>
 
 </html>

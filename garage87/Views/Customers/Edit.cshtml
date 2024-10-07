@@ -30,6 +30,7 @@
             <form asp-action="Edit" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UserId" />
 
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -45,39 +46,47 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label asp-for="Email" class="control-label"></label>
                         <input asp-for="Email" type="email" readonly placeholder="Email" class="form-control" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-6">
                         <label asp-for="PhoneNumber" class="control-label"></label>
                         <input asp-for="PhoneNumber" type="number" placeholder="Phone No" class="form-control" />
                         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                     </div>
-                    <div class="form-group col-md-4">
-                        <label asp-for="VatNumber" class="control-label"></label>
-                        <input asp-for="VatNumber" placeholder="Vat Number" class="form-control" />
-                        <span asp-validation-for="VatNumber" class="text-danger"></span>
-                    </div>
+
                 </div>
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <label asp-for="Country" class="control-label"></label>
-                        <input asp-for="Country" placeholder="Enter Your Country" class="form-control" />
-                        <span asp-validation-for="Country" class="text-danger"></span>
+                        <label asp-for="CityId" class="control-label"></label>
+                        @{
+                            IDictionary<string, object> customAttribute = new Dictionary<string, object>()
+                        {
+                        { "data-filter-columns", "name" },
+
+                        };
+                        }
+                        <ejs-combobox ejs-for="CityId" placeholder="Select City" cssClass="e-multi-column form-control " htmlAttributes="customAttribute"
+                                      headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>City Name</th><th class='wp-33 text-wrap'>Country</th><th class='wp-33 text-wrap'>Country Code</th></tr></table>")"
+                                      itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${name}</td><td class='wp-33 text-wrap'>${country.name}</td><td class='wp-33 text-wrap'>${country.countryCode}</td></tr> </tbody></table>")">
+                            <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("CitiesDropdown", "Customers")" crossDomain="true"></e-data-manager>
+                            <e-combobox-fields value="id" text="name"></e-combobox-fields>
+                        </ejs-combobox>
+                        <span asp-validation-for="CityId" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-6">
-                        <label asp-for="City" class="control-label"></label>
-                        <input asp-for="City" placeholder="Enter your City" class="form-control" />
-                        <span asp-validation-for="City" class="text-danger"></span>
+                        <label asp-for="ZipCode" class="control-label"></label>
+                        <input asp-for="ZipCode" placeholder="Zip Code" class="form-control" />
+                        <span asp-validation-for="ZipCode" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-5">
-                        <label asp-for="ZipCode" class="control-label"></label>
-                        <input asp-for="ZipCode" placeholder="Zip Code" class="form-control" />
-                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                        <label asp-for="VatNumber" class="control-label"></label>
+                        <input asp-for="VatNumber" placeholder="Vat Number" class="form-control" />
+                        <span asp-validation-for="VatNumber" class="text-danger"></span>
                     </div>
                     <div class="form-group col-md-5">
                         <label asp-for="ImageFile" class="control-label"></label>
@@ -88,7 +97,14 @@
                         <img class="mt-30" src="@Model.ImageFullPath" style="height:70px;width:100px" />
                     </div>
                 </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" type="text" placeholder="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
 
+                </div>
                 <div class="form-group">
                     <div class="text-right">
                         <a class="btn btn-warning" type="button" asp-action="Index" asp-controller="Customers" class="btn btn-comfly-secondary" style="width: 120px;">Back</a>

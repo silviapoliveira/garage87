@@ -1,17 +1,37 @@
 ﻿@{
     ViewData["Title"] = "Confirm Email";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
-<div>
-    <p>
-        Thank you for confirming your email. You can now log into the system.
-    </p>
-    @if (ViewBag.IsEmployee == true || ViewBag.IsCustomer == true) // Check if the user is either an employee or a customer
-    {
-        <p>
-            Please change your password before proceeding.
-            <a href="/Account/ChangePassword" style="font-weight: bold; color: blue;">Change Password</a>
-        </p>
-    }
-</div>
+
+<section class="site-content-area">
+
+    <div class="uni-contact-us-body-content">
+        <div class="container">
+            <div class="row" style="display: flex; justify-content: center; align-items: center;margin-top:100px;">
+                <div class="col-md-8">
+                    <div class="uni-send-a-message" style="text-align: center;">
+                        <div class="uni-contact-title">
+                            <h3>Recover Your Password</h3>
+                            <div class="uni-line"></div>
+                        </div>
+                        <div class="uni-send-a-message-body">
+                            <div>
+                                <p>
+                                    Thank you for confirming your email. You can now log into the system.
+                                </p>
+                                @if (ViewBag.IsEmployee == true || ViewBag.IsCustomer == true || ViewBag.IsMechanic == true) // Check if the user is either an employee or a customer
+                                {
+                                    <p>
+                                        Please change your password before proceeding.
+                                        <a href="/Account/ChangePassword" style="font-weight: bold; color: blue;">Change Password</a>
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

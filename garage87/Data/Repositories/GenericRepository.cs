@@ -1,4 +1,5 @@
 ﻿using garage87.Data.Entities;
+using garage87.Data.Repositories.IRepository;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;

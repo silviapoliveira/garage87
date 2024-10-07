@@ -18,6 +18,16 @@ namespace garage87.Data
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<VehicleAssignment> VehicleAssignment { get; set; }
+
+        public DbSet<Repair> Repair { get; set; }
+
+        public DbSet<RepairDetail> RepairDetail { get; set; }
+
+        public DbSet<Message> Message { get; set; }
+
+        public DbSet<Notifications> Notifications { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 

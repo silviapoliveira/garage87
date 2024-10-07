@@ -29,6 +29,7 @@ namespace garage87.Data
             await _userHelper.CheckRoleAsync("Admin");
             await _userHelper.CheckRoleAsync("Customer");
             await _userHelper.CheckRoleAsync("Employee");
+            await _userHelper.CheckRoleAsync("Mechanic");
 
             if (!_context.Countries.Any())
             {
@@ -41,7 +42,7 @@ namespace garage87.Data
                 {
                     Cities = cities,
                     Name = "Portugal",
-                    CountryCode = "351",
+                    CountryCode = "PT"
                 });
 
                 await _context.SaveChangesAsync();
@@ -79,46 +80,6 @@ namespace garage87.Data
             {
                 await _userHelper.AddUserToRoleAsync(user, "Admin");
             }
-
-            if (!_context.Customers.Any())
-            {
-                AddCustomer("Miguel", "Petiz", "miguelpetiz@yopmail.com", "123456789", user);
-                AddCustomer("Alice", "Castro", "alicecastro@yopmail.com", "987654321", user);
-                AddCustomer("Rui", "Fonseca", "ruifonseca@yopmail.com", "192837465", user);
-                AddCustomer("Paula", "Dias", "pauladias@yopmail.com", "918273645", user);
-                await _context.SaveChangesAsync();
-            }
-
-            //if (!_context.Employees.Any())
-            //{
-            //    AddEmployee("Pedro", "Oliveira", "Mecânico", user);
-            //    AddEmployee("Artur", "Couto", "Mecânico", user);
-            //    AddEmployee("Tânia", "Justo", "Recepcionista", user);
-            //    await _context.SaveChangesAsync();
-            //}
         }
-
-        private void AddCustomer(string firstName, string lastName, string email, string vatNumber, User user)
-        {
-            _context.Customers.Add(new Entities.Customer
-            {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                VatNumber = vatNumber,
-                User = user
-            });
-        }
-
-        //private void AddEmployee(string firstName, string lastName, int function, User user)
-        //{
-        //    _context.Employees.Add(new Entities.Employee
-        //    {
-        //        FirstName = firstName,
-        //        LastName = lastName,
-        //        Function = function,
-        //        User = user
-        //    });
-        //}
     }
 }

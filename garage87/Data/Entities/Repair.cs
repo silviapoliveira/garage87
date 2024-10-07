@@ -18,7 +18,7 @@ namespace garage87.Data.Entities
         public int? VehicleId { get; set; }
 
 
-        public int? VehicleServiceAssignmentId { get; set; }
+        public int? VehicleAssignmentId { get; set; }
 
 
         public decimal Total { get; set; }
@@ -38,8 +38,8 @@ namespace garage87.Data.Entities
         public virtual Vehicle Vehicle { get; set; }
 
 
-        [ForeignKey("VehicleServiceAssignmentId")]
-        public virtual VehicleServiceAssignment VehicleServiceAssignment { get; set; }
+        [ForeignKey("VehicleAssignmentId")]
+        public virtual VehicleAssignment VehicleAssignment { get; set; }
 
 
         public ICollection<RepairDetail> RepairDetail { get; set; }

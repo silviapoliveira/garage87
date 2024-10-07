@@ -1,0 +1,111 @@
+﻿@using garage87.Enums
+@model garage87.Models.VehicleAssignmentListVM
+
+@{
+    ViewData["Title"] = "Completedepairs";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var repairStatuses = EnumHelper.GetModelList(typeof(RepairStatusEnum));
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Dashboard</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("EmployeeDashboard","Employees")">Home</a></li>
+                    <li class="breadcrumb-item active">Completed Repairs</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12">
+            <div>
+                <form action="CompletedRepairs">
+                    <div class="row">
+
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Employee</label>
+
+                            <select asp-for="EmployeeId" asp-items="@ViewBag.Employees" class="form-control">
+                                <option value="">Select Employee</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Date</label>
+                            <input asp-for="Date" type="date" class="form-control" placeholder="Select Date for Repair" />
+                        </div>
+                        <div class="form-group col-md-3">
+                            <div class="text-left">
+                                <button type="submit" class="btn btn-sm btn-warning" style="background-color:#4b545c;color:white; width: 120px;margin-top:35px;" id="btnSave" name="Save">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title" style="float: left">List of Completed Repairs</h3>
+              
+                </div>
+                <div class="card-body">
+
+                    <table id="holidayTable" width="100%" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Employee</th>
+                                <th>Vehicle</th>
+                                <th>Repair Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.VehicleAssignment)
+                            {
+                                <tr>
+                                    <td>@item.Vehicle.Customer.FullName</td>
+                                    <td>@item.Employee.FullName</td>
+                                    <td>@item.Vehicle.Registration</td>
+                                    <td>@item.TaskDate</td>
+                                    <td>
+
+                                        <a asp-action="AddRepairInvoice" asp-controller="Repair" asp-route-assignid="@item.Id" class="btn btn-info btn-sm"><i class="fa fa-money"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $('#holidayTable').DataTable({
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: ['_all'],
+                    className: 'mdc-data-table__cell',
+                },
+            ],
+
+        });
+
+
+    </script>
+}

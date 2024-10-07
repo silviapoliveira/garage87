@@ -11,10 +11,12 @@ using Syncfusion.EJ2.Base;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Syncfusion.EJ2.Linq;
 using Microsoft.EntityFrameworkCore;
+using garage87.Data.Repositories.IRepository;
+using Microsoft.Data.SqlClient;
 
 namespace garage87.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class CountriesController : Controller
     {
         private readonly ICountryRepository _countryRepository;
@@ -46,19 +48,31 @@ namespace garage87.Controllers
             {
                 try
                 {
+                    var countries = _countryRepository.GetAll();
+                    bool exists = countries.Any(c => c.Name.ToLower() == country.Name.ToLower() ||
+                                    c.CountryCode.ToLower() == country.CountryCode.ToLower());
+
+                    if (exists)
+                    {
+                        ModelState.AddModelError("Name", "A country with the same name or code already exists.");
+                        return View(country);
+                    }
                     await _countryRepository.CreateAsync(country);
                     return RedirectToAction(nameof(Index));
                 }
+                catch (SqlException ex) when (ex.Number == 2601 || ex.Number == 2627) // SQL error codes for unique constraint violations
+                {
+                    ModelState.AddModelError("Name", "This country already exists.");
+                }
                 catch (Exception ex)
                 {
-                    _flashMessage.Danger("This country already exists.");
+                    ModelState.AddModelError("", "An unexpected error occurred.");
                 }
-
-                return View(country);
             }
 
             return View(country);
         }
+
 
         public async Task<IActionResult> Edit(int? id)
         {
@@ -186,13 +200,19 @@ namespace garage87.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCity(CityViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (model.CountryId <= 0)
             {
-                await _countryRepository.AddCityAsync(model);
-                return RedirectToAction("Details", new { id = model.CountryId });
+                ModelState.AddModelError("CountryId", "Please Select Country.");
+                return View(model);
             }
 
-            return this.View(model);
+            if (ModelState.IsValid)
+            {
+                await _countryRepository.AddCityAsync(model);
+                return RedirectToAction("Cities", "Countries");
+            }
+
+            return View(model);
         }
         public async Task<IActionResult> EditCity(int? id)
         {
@@ -213,16 +233,21 @@ namespace garage87.Controllers
         [HttpPost]
         public async Task<IActionResult> EditCity(City city)
         {
-            if (this.ModelState.IsValid)
+            if (city.CountryId <= 0)
+            {
+                ModelState.AddModelError("CountryId", "Please Select Country.");
+                return View(city);
+            }
+            if (ModelState.IsValid)
             {
                 var countryId = await _countryRepository.UpdateCityAsync(city);
                 if (countryId != 0)
                 {
-                    return this.RedirectToAction($"Details", new { id = countryId });
+                    return RedirectToAction("Cities", "Countries");
                 }
             }
 
-            return this.View(city);
+            return View(city);
         }
         [HttpPost]
         public async Task<IActionResult> DeleteCity(int id)

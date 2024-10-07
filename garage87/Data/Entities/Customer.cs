@@ -20,6 +20,7 @@ namespace garage87.Data.Entities
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
+
         [Display(Name = "")]
         public string ImageUrl { get; set; }
 
@@ -30,15 +31,15 @@ namespace garage87.Data.Entities
 
         [MaxLength(20, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         [Display(Name = "Zip Code")]
-        public string ZipCode { get; set; }
+        public string? ZipCode { get; set; }
 
 
-        [MaxLength(100, ErrorMessage = "The field {0} can only contain {1} charaters.")]
-        public string City { get; set; }
+        [Display(Name = "City")]
+        public int CityId { get; set; }
 
 
-        [MaxLength(100, ErrorMessage = "The field {0} can only contain {1} charaters.")]
-        public string Country { get; set; }
+        [ForeignKey("CityId")]
+        public virtual City City { get; set; }
 
 
         [Required]
@@ -61,7 +62,7 @@ namespace garage87.Data.Entities
 
 
         [Display(Name = "Full Address")]
-        public string FullAddress => $"{Address}<br>{ZipCode} {City}<br>{Country}";
+        public string FullAddress => $"{Address}<br>{ZipCode} {City}";
 
 
         // List of vehicles associated to the customer

@@ -1,0 +1,50 @@
+﻿@model RepairDetailVM
+@{
+    var rowId = string.Format("RepairDetail-{0}", Model.Index);
+    var isDeletedCtrlId = string.Format("DetailIsDeleted-{0}", Model.Index);
+}
+
+<tr id="@rowId">
+    <td>
+        <div>
+            @Html.TextBox(
+                     string.Format("RepairDetail[{0}].ServiceName", Model.Index),
+                     Model.ServiceName,
+                     new { @class = "form-control", @readonly = "readonly" }
+                     )
+        </div>
+    </td>
+
+    <td>
+        @Html.TextBox(
+                 string.Format("RepairDetail[{0}].ServiceCost", Model.Index),
+                 Model.ServiceCost,
+                 new { @class = "form-control", @readonly = "readonly" }
+                 )
+    </td>
+
+    <td class="text-center">
+        @Html.Hidden(string.Format("RepairDetail[{0}].IsDeleted", Model.Index), Model.IsDeleted, new { @id = isDeletedCtrlId })
+        <a href="#" class="text-danger remove-row" data-target="@rowId" data-is-deleted-ctrl="@isDeletedCtrlId"><i class="fa fa-trash"></i></a>
+
+        @Html.Hidden(string.Format("RepairDetail[{0}].Index", Model.Index), Model.Index)
+        @Html.Hidden(string.Format("RepairDetail[{0}].ServiceId", Model.Index), Model.ServiceId)
+        @Html.Hidden(string.Format("RepairDetail[{0}].RepairId", Model.Index), Model.RepairId)
+        @Html.Hidden(string.Format("RepairDetail[{0}].Id", Model.Index), Model.Id)
+    </td>
+</tr>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+
+    $(document).on('click', '.remove-row', function (e) {
+        e.preventDefault();
+        var rowId = $(this).data('target');
+        var isDeletedCtrlId = $(this).data('is-deleted-ctrl');
+
+        // Set the IsDeleted hidden field to true
+        $('#' + isDeletedCtrlId).val(true);
+
+        // Hide the row
+        $('#' + rowId).hide();
+    });
+</script>

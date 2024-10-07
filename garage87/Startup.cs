@@ -1,7 +1,10 @@
+using AspNetCoreHero.ToastNotification;
 using garage87.Data;
 using garage87.Data.Entities;
 using garage87.Data.Repositories;
+using garage87.Data.Repositories.IRepository;
 using garage87.Helpers;
+using garage87.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -81,7 +84,14 @@ namespace garage87
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IServiceRepository, ServiceRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IVehicleAssignmentRepository, VehicleAssignmentRepository>();
+            services.AddScoped<IRepairRepository, RepairRepository>();
+            services.AddScoped<IRepairDetailRepository, RepairDetailRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<INotificationRepository, NotificationRepository>();
 
+            services.AddHostedService<NotificationService>();
 
 
             services.ConfigureApplicationCookie(options =>
@@ -90,7 +100,12 @@ namespace garage87
                 options.AccessDeniedPath = "/Account/NotAuthorized";
             });
 
-
+            services.AddNotyf(config =>
+            {
+                config.DurationInSeconds = 10;
+                config.IsDismissable = true;
+                config.Position = NotyfPosition.BottomRight;
+            });
 
             services.AddControllersWithViews()
                  .AddNewtonsoftJson(options =>

@@ -1,22 +1,12 @@
-﻿@model IEnumerable<garage87.Data.Entities.Employee>
+﻿@using garage87.Enums
+@model IEnumerable<garage87.Data.Entities.Employee>
 
 @{
     ViewData["Title"] = "Employees";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var function = EnumHelper.GetModelList(typeof(EmployeeFunctionEnum));
 }
 
-<script id="actionColumn" type="text/x-template">
-       <div class="btn-group">
-
-    <a class=" btn btn-warning mr-2" href="@Url.Action("Edit")/${id}"><i class="fa fa-pen"></i></a>
-              <a class="btn-remove-redirect btn btn-danger" onclick="Delete(${id})"><i class="fa fa-trash"></i></a>
-           </div>
-</script>
-<script id="Imagetemplate" type="text/x-template">
-    <div class="image">
-        <img src="imageFullPath" alt="Image" style="width:50px;height:50px;max-width:100%;height:auto"/>
-    </div>
-</script>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -25,7 +15,14 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="@Url.Action("Index","Admin")">Home</a></li>
+                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Admin"))
+                    {
+                        <li class="breadcrumb-item"><a href="@Url.Action("Index","Admin")">Home</a></li>
+                    }
+                    else
+                    {
+                        <li class="breadcrumb-item"><a href="@Url.Action("EmployeeDashboard","Employees")">Home</a></li>
+                    }
                     <li class="breadcrumb-item active">Employees</li>
                 </ol>
             </div><!-- /.col -->
@@ -33,36 +30,52 @@
     </div><!-- /.container-fluid -->
 </div>
 
-<div class="container-fluid">
+<div class="container">
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title" style="float: left">List of Employees</h3>
-                        <a asp-action="Create" style="float: right;" class="btn btn-info btn-sm"><i class="fa fa-plus mr-2"></i>Add New</a>
+                        <h3 class="card-title" style="float: left">List of Customers</h3>
+                        <a asp-action="Create" style="float: right;" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>Add New</a>
                     </div>
                     <div class="card-body">
-                        <ejs-grid id="Grid"
-                                  allowPaging="true"
-                                  allowSorting="true"
-                                  allowResizing="true"
-                                  allowFiltering="true"
-                                  showColumnMenu="true"
-                                  toolbar="@(new List<string>() {"Search" })">
-                            <e-grid-filtersettings type="Excel"></e-grid-filtersettings>
+                        <table id="holidayTable" width="100%" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Name</th>
+                                    <th>Vat Number</th>
+                                    <th>Function</th>
+                                    <th>Salary</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
 
-                            <e-data-manager url="@Url.Action("GetEmployeesList","Employees")" crossdomain="true" adaptor="UrlAdaptor"></e-data-manager>
-                            <e-grid-searchsettings fields="@(new string[] { "Name","CountryCode"})"></e-grid-searchsettings>
-                            <e-grid-columns>
-                                <e-grid-column headerText="Employee Image" template="#Imagetemplate" width="150"></e-grid-column>
-                                <e-grid-column field="FullName" headerText="Full Name" allowSearching="true" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column field="VatNumber" headerText="Vat Number" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column field="Function" headerText="Function" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column field="Salary" headerText="Salary" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column headerText="Action" freeze="Right" allowFiltering="false" allowSorting="false" allowSearching="false" textAlign="Center" width="150" template="#actionColumn"></e-grid-column>
-                            </e-grid-columns>
-                        </ejs-grid>
+                                        <td><img src="@item.ImageFullPath" style="height:70px;width:70px" /></td>
+                                        <td>@item.FullName</td>
+                                        <td>@item.VatNumber</td>
+                                        <td>
+                                            @{
+                                                var statusHeading = function.FirstOrDefault(s => s.Id == item.Function)?.Heading;
+                                            }
+                                            @statusHeading
+                                        </td>
+                                        <td>@item.Salary</td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                            <a href="javascript:void(0)" onclick="Delete(@item.Id)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+
+                        </table>
                     </div>
                 </div>
             </div>
@@ -70,8 +83,22 @@
     </div>
 </div>
 
-@* <img src="@item.ImageFullPath" alt="Image" style="width:50px;height:50px;max-width:100%;height:auto"> *@
+
+
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $('#holidayTable').DataTable({
+            autoWidth: false,
+            columnDefs: [
+                {
+                    targets: ['_all'],
+                    className: 'mdc-data-table__cell',
+                },
+            ],
+
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function Delete(id) {

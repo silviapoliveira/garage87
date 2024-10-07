@@ -1,0 +1,101 @@
+﻿@model garage87.Models.VehicleAssignmentVM
+
+@{
+    ViewData["Title"] = "EditVehicleAssignment";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Repair Assignment</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index","VehicleAssignment")">Repair Assignment</a></li>
+                    <li class="breadcrumb-item active">Update</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div>
+        <div class="card">
+            <div style="background-color:#4b545c;" class="card-header">
+                <p style="font-size:larger;color:white" class="text-left">Update Repair Assignment</p>
+            </div>
+            <div class="card-body">
+                <form asp-action="EditVehicleAssignment" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Status" hidden class="form-control" value="@( (int)garage87.Enums.RepairStatusEnum.NotStarted )" />
+                    <input asp-for="Id" hidden class="form-control" />
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label asp-for="VehicleId" class="control-label"></label>
+                            @{
+                                IDictionary<string, object> vehicleAttribute = new Dictionary<string, object>()
+                            {
+                            { "data-filter-columns", "type,brand,model" },
+
+                            };
+                            }
+                            <ejs-combobox ejs-for="VehicleId" placeholder="Select Vehicle" cssClass="e-multi-column form-control" htmlAttributes="vehicleAttribute"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-33 text-wrap'>Customer</th><th class='wp-34 text-wrap'>Type</th><th class='wp-33 text-wrap'>Brand</th><th class='wp-33 text-wrap'>Model</th></th><th class='wp-33 text-wrap'>Registration</th></tr></table>")"
+                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${customer.fullName}</td><td class='wp-34 text-wrap'>${type}</td><td class='wp-33 text-wrap'>${brand}</td><td class='wp-33 text-wrap'>${model}</td><td class='wp-33 text-wrap'>${registration}</td></tr> </tbody></table>")">
+                                <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("VehicleDropdown", "VehicleAssignment")" crossDomain="true"></e-data-manager>
+                                <e-combobox-fields value="id" text="registration"></e-combobox-fields>
+                            </ejs-combobox>
+                            <span asp-validation-for="VehicleId" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label asp-for="EmployeeId" class="control-label"></label>
+                            @{
+                                IDictionary<string, object> employeeAttribute = new Dictionary<string, object>()
+                            {
+                            { "data-filter-columns", "fullName" },
+
+                            };
+                            }
+                            <ejs-combobox ejs-for="EmployeeId" placeholder="Select Employee" cssClass="e-multi-column form-control" htmlAttributes="employeeAttribute"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone No</th></tr></table>")"
+                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-33 text-wrap'>${user.email}</td><td class='wp-33 text-wrap'>${user.phoneNumber}</td></tr> </tbody></table>")">
+                                <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("EmployeeDropdown", "VehicleAssignment")" crossDomain="true"></e-data-manager>
+                                <e-combobox-fields value="id" text="fullName"></e-combobox-fields>
+                            </ejs-combobox>
+                            <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-md-6">
+                            <label asp-for="TaskDate" class="control-label"></label>
+                            <input asp-for="TaskDate" type="date" class="form-control" placeholder="Select Date for Repair" />
+                            <span asp-validation-for="TaskDate" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="text-right">
+                            <a class="btn btn-warning" type="button" asp-action="Index" asp-controller="VehicleAssignment" class="btn btn-comfly-secondary" style="width: 120px;">Back</a>
+                            <button type="submit" class="btn" style="background-color:#4b545c;color:white; width: 120px;" id="btnSave" name="Save">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

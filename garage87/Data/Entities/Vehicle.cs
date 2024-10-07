@@ -37,6 +37,7 @@ namespace garage87.Data.Entities
         [Required]
         public int CustomerId { get; set; }
 
+
         [ForeignKey("CustomerId")]
         public virtual Customer Customer { get; set; }
 
@@ -44,6 +45,7 @@ namespace garage87.Data.Entities
         [Display(Name = "Vehicle With Registration")]
         public string VehicleWithRegistration => $"{Brand} {Model} {Registration}";
 
-        public ICollection<VehicleServiceAssignment> VehicleServiceAssignment { get; set; }
+
+        public ICollection<VehicleAssignment> VehicleAssignment { get; set; }
     }
 }

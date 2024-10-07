@@ -1,7 +1,9 @@
 ﻿using garage87.Data.Entities;
 using garage87.Data.Repositories;
+using garage87.Data.Repositories.IRepository;
 using garage87.Helpers;
 using garage87.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +18,7 @@ namespace garage87.Controllers
     public class CustomersController : Controller
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly ICountryRepository _countryRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
         private readonly IFlashMessage _flashMessage;
@@ -29,7 +32,8 @@ namespace garage87.Controllers
             IFlashMessage flashMessage,
             IUserHelper userHelper,
             IMailHelper mailHelper,
-             UserManager<User> userManager)
+             UserManager<User> userManager,
+             ICountryRepository countryRepository)
         {
             _customerRepository = customerRepository;
             _imageHelper = imageHelper;
@@ -38,10 +42,11 @@ namespace garage87.Controllers
             _userHelper = userHelper;
             _mailHelper = mailHelper;
             _userManager = userManager;
+            _countryRepository = countryRepository;
 
         }
 
-
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> DeleteVehicle(int? id)
         {
             if (id == null)
@@ -58,7 +63,7 @@ namespace garage87.Controllers
             var customerId = await _customerRepository.DeleteVehicleAsync(vehicle);
             return this.RedirectToAction($"Details", new { id = customerId });
         }
-
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> EditVehicle(int? id)
         {
             if (id == null)
@@ -74,7 +79,7 @@ namespace garage87.Controllers
 
             return View(vehicle);
         }
-
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         public async Task<IActionResult> EditVehicle(Vehicle vehicle)
         {
@@ -89,7 +94,7 @@ namespace garage87.Controllers
 
             return this.View(vehicle);
         }
-
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> AddVehicle(int? id)
         {
             if (id == null)
@@ -105,7 +110,7 @@ namespace garage87.Controllers
             var model = new VehicleViewModel { CustomerId = customer.Id };
             return View(model);
         }
-
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         public async Task<IActionResult> AddVehicle(VehicleViewModel model)
         {
@@ -121,17 +126,19 @@ namespace garage87.Controllers
 
 
         #region Customer Crud
-
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Index()
         {
-            return View();
+            var customer = _customerRepository.GetAll().Include(x => x.City);
+            return View(customer);
         }
+        [Authorize(Roles = "Admin,Employee")]
         public IActionResult Create()
         {
             return View();
         }
 
-
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerViewModel model)
@@ -201,7 +208,7 @@ namespace garage87.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin,Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -220,7 +227,7 @@ namespace garage87.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CustomerViewModel model)
@@ -237,7 +244,7 @@ namespace garage87.Controllers
                     }
 
                     var customer = _converterHelper.ToCustomer(model, path, false);
-
+                    customer.UserId = model.UserId;
                     var existingUser = await _userManager.FindByEmailAsync(model.Email);
                     if (existingUser != null)
                     {
@@ -245,6 +252,7 @@ namespace garage87.Controllers
                         existingUser.FirstName = model.FirstName;
                         existingUser.LastName = model.LastName;
                         existingUser.PhoneNumber = model.PhoneNumber;
+                        existingUser.Address = model.Address;
 
                         var updateResult = await _userManager.UpdateAsync(existingUser);
                         if (updateResult.Succeeded)
@@ -274,7 +282,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
-
+        [Authorize(Roles = "Admin,Employee")]
         [HttpPost]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
@@ -303,7 +311,7 @@ namespace garage87.Controllers
         #region API method
         public IActionResult GetCustomersList([FromBody] DataManagerRequest dm)
         {
-            IQueryable<Customer> Data = _customerRepository.GetAll();
+            IQueryable<Customer> Data = _customerRepository.GetAll().Include(x => x.City);
             DataOperations operation = new DataOperations();
             var count = Data.Count();
             if (dm.Search != null && dm.Search.Count > 0)
@@ -318,6 +326,51 @@ namespace garage87.Controllers
             {
                 Data = operation.PerformFiltering(Data, dm.Where, dm.Where[0].Operator);
             }
+            if (dm.Skip != 0)
+            {
+                Data = operation.PerformSkip(Data, dm.Skip);
+            }
+            if (dm.Take != 0)
+            {
+                Data = operation.PerformTake(Data, dm.Take);
+            }
+            var list = Data.ToList();
+            return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
+        }
+
+        public ActionResult Dropdown([FromBody] DataManagerRequest dm)
+        {
+            var Data = _customerRepository.GetAll();
+            var count = Data.Count();
+            DataOperations operation = new DataOperations();
+            if (dm.Where != null && dm.Where.Count > 0)
+            {
+                // Perform filtering only if there are conditions
+                Data = operation.PerformFiltering(Data, dm.Where, dm.Where[0].Operator);
+            }
+
+            if (dm.Skip != 0)
+            {
+                Data = operation.PerformSkip(Data, dm.Skip);
+            }
+            if (dm.Take != 0)
+            {
+                Data = operation.PerformTake(Data, dm.Take);
+            }
+            var list = Data.ToList();
+            return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
+        }
+        public ActionResult CitiesDropdown([FromBody] DataManagerRequest dm)
+        {
+            var Data = _countryRepository.GetCities();
+            var count = Data.Count();
+            DataOperations operation = new DataOperations();
+            if (dm.Where != null && dm.Where.Count > 0)
+            {
+                // Perform filtering only if there are conditions
+                Data = operation.PerformFiltering(Data, dm.Where, dm.Where[0].Operator);
+            }
+
             if (dm.Skip != 0)
             {
                 Data = operation.PerformSkip(Data, dm.Skip);

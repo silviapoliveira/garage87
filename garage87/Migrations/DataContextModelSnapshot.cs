@@ -210,13 +210,8 @@ namespace garage87.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("City")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -251,6 +246,8 @@ namespace garage87.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("UserId");
 
@@ -306,6 +303,127 @@ namespace garage87.Migrations
                         .HasFilter("[VatNumber] IS NOT NULL");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("MessageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MessageDetail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Notifications", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AssignId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("MessageDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Repair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Detail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LabourHours")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RepairDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("VehicleAssignmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VehicleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("VehicleAssignmentId");
+
+                    b.HasIndex("VehicleId");
+
+                    b.ToTable("Repair");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.RepairDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("RepairId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("ServiceCost")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ServiceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RepairId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("RepairDetail");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.Service", b =>
@@ -461,7 +579,7 @@ namespace garage87.Migrations
                     b.ToTable("Vehicles");
                 });
 
-            modelBuilder.Entity("garage87.Data.Entities.VehicleServiceAssignment", b =>
+            modelBuilder.Entity("garage87.Data.Entities.VehicleAssignment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -487,11 +605,9 @@ namespace garage87.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ServiceId");
-
                     b.HasIndex("VehicleId");
 
-                    b.ToTable("VehicleServiceAssignment");
+                    b.ToTable("VehicleAssignment");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -556,9 +672,17 @@ namespace garage87.Migrations
 
             modelBuilder.Entity("garage87.Data.Entities.Customer", b =>
                 {
+                    b.HasOne("garage87.Data.Entities.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("garage87.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("City");
 
                     b.Navigation("User");
                 });
@@ -570,6 +694,44 @@ namespace garage87.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Repair", b =>
+                {
+                    b.HasOne("garage87.Data.Entities.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("garage87.Data.Entities.VehicleAssignment", "VehicleAssignment")
+                        .WithMany()
+                        .HasForeignKey("VehicleAssignmentId");
+
+                    b.HasOne("garage87.Data.Entities.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Vehicle");
+
+                    b.Navigation("VehicleAssignment");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.RepairDetail", b =>
+                {
+                    b.HasOne("garage87.Data.Entities.Repair", "Repair")
+                        .WithMany("RepairDetail")
+                        .HasForeignKey("RepairId");
+
+                    b.HasOne("garage87.Data.Entities.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Repair");
+
+                    b.Navigation("Service");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.User", b =>
@@ -594,23 +756,17 @@ namespace garage87.Migrations
                     b.Navigation("Customer");
                 });
 
-            modelBuilder.Entity("garage87.Data.Entities.VehicleServiceAssignment", b =>
+            modelBuilder.Entity("garage87.Data.Entities.VehicleAssignment", b =>
                 {
                     b.HasOne("garage87.Data.Entities.Employee", "Employee")
-                        .WithMany("VehicleServiceAssignment")
+                        .WithMany("VehicleAssignment")
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("garage87.Data.Entities.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId");
-
                     b.HasOne("garage87.Data.Entities.Vehicle", "Vehicle")
-                        .WithMany("VehicleServiceAssignment")
+                        .WithMany("VehicleAssignment")
                         .HasForeignKey("VehicleId");
 
                     b.Navigation("Employee");
-
-                    b.Navigation("Service");
 
                     b.Navigation("Vehicle");
                 });
@@ -627,12 +783,17 @@ namespace garage87.Migrations
 
             modelBuilder.Entity("garage87.Data.Entities.Employee", b =>
                 {
-                    b.Navigation("VehicleServiceAssignment");
+                    b.Navigation("VehicleAssignment");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Repair", b =>
+                {
+                    b.Navigation("RepairDetail");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.Vehicle", b =>
                 {
-                    b.Navigation("VehicleServiceAssignment");
+                    b.Navigation("VehicleAssignment");
                 });
 #pragma warning restore 612, 618
         }

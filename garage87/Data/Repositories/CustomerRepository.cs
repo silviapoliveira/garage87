@@ -1,7 +1,10 @@
 ﻿using garage87.Data.Entities;
+using garage87.Data.Repositories.IRepository;
 using garage87.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -60,6 +63,34 @@ namespace garage87.Data.Repositories
                 .OrderBy(c => c.FirstName);
         }
 
+        public IQueryable<string> GetCustomerEmails()
+        {
+            var customerRoleId = _context.Roles
+                .Where(r => r.Name == "Customer")
+                .Select(r => r.Id)
+                .FirstOrDefault();
+
+            return _context.UserRoles
+                .Where(ur => ur.RoleId == customerRoleId)
+                .Select(ur => ur.UserId)
+                .Join(_context.Users,
+                      userId => userId,
+                      user => user.Id,
+                      (userId, user) => user.Email)
+                .Distinct();
+        }
+        public IQueryable<string> GetReminderEmails()
+        {
+            var userIds = _context.VehicleAssignment
+                .Where(x => x.TaskDate.Date == DateTime.Today.AddDays(1))
+                .Select(x => x.Vehicle.Customer.UserId)
+                .Distinct();
+
+            return _context.Users
+                .Where(u => userIds.Contains(u.Id))
+                .Select(u => u.Email)
+                .Distinct();
+        }
         public async Task<Customer> GetCustomerWithVehiclesAsync(int id)
         {
             return await _context.Customers

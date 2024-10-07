@@ -16,6 +16,10 @@ namespace garage87.Models
         public string LastName { get; set; }
 
 
+        [Display(Name = "Username / Email")]
+        public string Email { get; set; }
+
+
         [MaxLength(100, ErrorMessage = "The field {0} can only contain {1} characters length.")]
         public string Address { get; set; }
 
@@ -32,11 +36,12 @@ namespace garage87.Models
         public IEnumerable<SelectListItem> Cities { get; set; }
 
 
-        [Display(Name = "Country")]
-        [Range(1, int.MaxValue, ErrorMessage = "You must select a country.")]
-        public int CountryId { get; set; }
+        [Display(Name = "ZipCode")]
+        public string ZipCode { get; set; }
 
 
-        public IEnumerable<SelectListItem> Countries { get; set; }
+        [Display(Name = "Vat No")]
+        [MaxLength(15, ErrorMessage = "The field {0} can only contain {1} charaters.")]
+        public string Vat { get; set; }
     }
 }
