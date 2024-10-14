@@ -26,24 +26,27 @@
     <div class="row">
         <div class="col-md-12">
             <div>
-                <form action="CompletedRepairs">
+                <form asp-action="CompletedRepairs" asp-controller="VehicleAssignment">
                     <div class="row">
 
                         <div class="form-group col-md-3">
                             <label class="control-label">Employee</label>
 
-                            <select asp-for="EmployeeId" asp-items="@ViewBag.Employees" class="form-control">
+                            <select asp-for="EmployeeId" asp-items="@ViewBag.Employees" class="form-control" id="employeeSelect">
                                 <option value="">Select Employee</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Date</label>
-                            <input asp-for="Date" type="date" class="form-control" placeholder="Select Date for Repair" />
+                            <input asp-for="Date" type="date" class="form-control" placeholder="Select Date for Repair" id="dateInput" />
                         </div>
                         <div class="form-group col-md-3">
                             <div class="text-left">
                                 <button type="submit" class="btn btn-sm btn-warning" style="background-color:#4b545c;color:white; width: 120px;margin-top:35px;" id="btnSave" name="Save">
                                     Search
+                                </button>
+                                <button type="button" class="btn btn-sm btn-success" style="width: 120px;margin-top:35px;" id="btnClearFilters">
+                                    Clear Filters
                                 </button>
                             </div>
                         </div>
@@ -54,7 +57,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title" style="float: left">List of Completed Repairs</h3>
-              
+
                 </div>
                 <div class="card-body">
 
@@ -69,17 +72,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model.VehicleAssignment)
+                            @if (Model?.VehicleAssignment != null && Model.VehicleAssignment.Any())
+                            {
+
+
+                                @foreach (var item in Model.VehicleAssignment)
+                                {
+                                    <tr>
+                                        <td>@item.Vehicle.Customer.FullName</td>
+                                        <td>@item.Employee.FullName</td>
+                                        <td>@item.Vehicle.Registration</td>
+                                        <td>@item.TaskDate.ToString("dd-MMM-yyyy")</td>
+                                        <td>
+
+                                            <a asp-action="AddRepairInvoice" asp-controller="Repair" asp-route-assignid="@item.Id" class="btn btn-info btn-sm"><i class="fa fa-money"></i></a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
                             {
                                 <tr>
-                                    <td>@item.Vehicle.Customer.FullName</td>
-                                    <td>@item.Employee.FullName</td>
-                                    <td>@item.Vehicle.Registration</td>
-                                    <td>@item.TaskDate</td>
-                                    <td>
-
-                                        <a asp-action="AddRepairInvoice" asp-controller="Repair" asp-route-assignid="@item.Id" class="btn btn-info btn-sm"><i class="fa fa-money"></i></a>
-                                    </td>
+                                    <td colspan="5" class="text-center">No data available</td>
                                 </tr>
                             }
                         </tbody>
@@ -107,5 +121,19 @@
         });
 
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Clear Filters button click event
+            $("#btnClearFilters").click(function () {
+                // Reset the employee select
+                $("#employeeSelect").val("");
+                // Reset the date input
+                $("#dateInput").val("");
+
+                // Submit the form to the action with empty filters
+                $(this).closest("form").submit();
+            });
+        });
     </script>
 }

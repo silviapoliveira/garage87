@@ -14,7 +14,6 @@ namespace garage87.Models
 
         }
 
-
         public int? EmployeeId { get; set; }
 
 

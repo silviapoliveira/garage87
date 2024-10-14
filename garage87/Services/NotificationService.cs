@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using System.Threading;
-using System;
+﻿using garage87.Data.Repositories.IRepository;
 using Microsoft.Extensions.DependencyInjection;
-using garage87.Data.Repositories.IRepository;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 namespace garage87.Services

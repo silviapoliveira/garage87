@@ -79,26 +79,27 @@
                         <div class="col-md-4 col-sm-6">
                             <div class="uni-shortcode-icons-box-5-default">
                                 <div class="item-icons-title" style="height:80px">
-                                    @*  <div class="col-md-4 uni-clear-padding">
-                                <div class="item-icons">
-                                <img src="@item.ImageFullPath" alt="">
-                                </div>
-                                </div> *@
                                     <div class="col-md-8 uni-clear-padding">
                                         <div class="item-title">
-                                            <h4>@item.Name</h4>
+                                            <!-- Make the name clickable -->
+                                            <a href="@Url.Action("ServiceDetail", "Home", new { id = item.Id })">
+                                                <h4>@item.Name</h4>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Make the image clickable -->
                                 <div class="item-caption" style="padding:0px">
-                                    <img style="height: 200px;width:100%;" src="@item.ImageFullPath" alt="">
+                                    <a href="@Url.Action("ServiceDetail", "Home", new { id = item.Id })">
+                                        <img style="height: 200px; width:100%;" src="@item.ImageFullPath" alt="">
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     }
-
-
                 </div>
+
 
                 <div class="btn-all-services">
                     <a href="@Url.Action("Services","")">All services +</a>
@@ -117,7 +118,7 @@
                             <ul>
                                 <li class="counter-icons"><i class="fa fa-user-md" aria-hidden="true"></i></li>
                                 <li class="counter-number counter"> @ViewBag.mechanics </li>
-                                <li class="counter-text"> mechanics</li>
+                                <li class="counter-text"> Mechanic</li>
                             </ul>
                         </div>
                     </div>
@@ -205,7 +206,11 @@
                                 </tr>
                                 <tr>
                                     <td>Saturday</td>
-                                    <td>8:00 - 12:00</td>
+                                    <td>8:00 - 17:00</td>
+                                </tr>
+                                <tr>
+                                    <td>Sunday</td>
+                                    <td>Closed</td>
                                 </tr>
                             </table>
                             <a href="@Url.Action("Contact", "Home")" class="book-appointment">Consult Our Team</a>
@@ -246,7 +251,7 @@
         </div>
     </div>
 
-    <!--HOME 2 Gallery-->
+    <!--HOME 2 GAllery-->
     <div class="uni-home-2-latest-post">
         <div class="container">
             <div class="uni-home-title">
@@ -261,7 +266,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="/Customer/images/1st.jpg" alt="" style="height: 200px" title="" class="img-responsive">
+                                            <img class="gallery-image" src="/Customer/images/1st.jpg" alt="" style="height: 200px" title="" class="img-responsive">
                                         </a>
 
                                     </div>
@@ -277,7 +282,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/dep2.png" alt="" style="height: 200px" title="" class="img-responsive">
+                                            <img class="gallery-image" src="~/customer/images/home1/lastestpost/dep2.png" alt="" style="height: 200px" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -292,7 +297,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/Gallery3.jpeg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img class="gallery-image" src="~/customer/images/home1/lastestpost/Gallery3.jpeg" style="height: 200px" alt="" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -310,7 +315,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/Gallery4.jpeg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img class="gallery-image" src="~/customer/images/home1/lastestpost/Gallery4.jpeg" style="height: 200px" alt="" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -326,7 +331,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/Gallery5.jpeg" alt="" style="height: 200px" title="" class="img-responsive">
+                                            <img class="gallery-image" src="~/customer/images/home1/lastestpost/Gallery5.jpeg" alt="" style="height: 200px" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -341,7 +346,7 @@
                                 <div class="uni-entry-top">
                                     <div class="thumbnail-img">
                                         <a href="#" title="">
-                                            <img src="~/customer/images/home1/lastestpost/Gallery6.jpg" style="height: 200px" alt="" title="" class="img-responsive">
+                                            <img class="gallery-image" src="~/customer/images/home1/lastestpost/Gallery6.jpg" style="height: 200px" alt="" title="" class="img-responsive">
                                         </a>
                                     </div>
                                 </div>
@@ -356,5 +361,38 @@
 
 
 </section>
+<div class="modal" id="imageModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header" style="background-color:#212529;color:White">
+                <h4 class="modal-title">Gallery Image</h4>
+                <button type="button" style="color:white" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.gallery-image').click(function () {
+            // Get the source of the clicked image
+            var imgSrc = $(this).attr('src');
+            // Update the modal body with the image
+            $('#imageModal .modal-body').html('<img src="' + imgSrc + '" class="img-fluid" alt="Gallery Image" />');
+            // Show the modal
+            $('#imageModal').modal('show');
+
+        });
+
+
+    });
+</script>
 
 

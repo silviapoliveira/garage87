@@ -1,10 +1,9 @@
 ﻿using garage87.Data.Entities;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace garage87.Models
 {
@@ -14,8 +13,6 @@ namespace garage87.Models
         {
             this.RepairDetail = new List<RepairDetailVM>();
         }
-
-
         public int Id { get; set; }
 
 
@@ -59,9 +56,10 @@ namespace garage87.Models
 
         public virtual List<RepairDetailVM> RepairDetail { get; set; }
 
+
         public Repair GetEntity(Repair obj)
         {
-            // If the Repair object is null, create a new instance
+
             if (obj == null) obj = new Repair();
 
             obj.LabourHours = this.LabourHours;
@@ -79,39 +77,17 @@ namespace garage87.Models
 
             if (this.RepairDetail != null)
             {
-                foreach (var rd in this.RepairDetail)
+                foreach (var rd in this.RepairDetail.Where(x => !x.IsDeleted))
                 {
-                    var existingDetails = obj.RepairDetail.FirstOrDefault(e => e.Id == rd.Id);
 
+                    var newDetail = new RepairDetail
+                    {
+                        ServiceId = rd.ServiceId,
+                        ServiceCost = rd.ServiceCost,
 
-                    if (rd.IsDeleted)
-                    {
-                        if (existingDetails != null)
-                        {
-                            obj.RepairDetail.Remove(existingDetails);
-                        }
-                    }
-                    else
-                    {
-                        if (existingDetails != null)
-                        {
-                            // Update the existing detail
-                            existingDetails.ServiceId = rd.ServiceId;
-                            existingDetails.ServiceCost = rd.ServiceCost;
-                        }
-                        else
-                        {
-                            if (!rd.IsDeleted)
-                            {
-                                // Add a new detail
-                                obj.RepairDetail.Add(new RepairDetail
-                                {
-                                    ServiceId = rd.ServiceId,
-                                    ServiceCost = rd.ServiceCost,
-                                });
-                            }
-                        }
-                    }
+                    };
+
+                    obj.RepairDetail.Add(newDetail);
                 }
             }
 

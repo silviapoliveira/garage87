@@ -80,24 +80,34 @@
                                 <div class="item-icons-title" style="height:80px">
                                     <div class="col-md-8 uni-clear-padding">
                                         <div class="item-title">
-                                            <h4>@item.Name</h4>
+                                            <!-- Make the name clickable -->
+                                            <a href="@Url.Action("ServiceDetail", "Home", new { id = item.Id })">
+                                                <h4>@item.Name</h4>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Item Image -->
+                                <!-- Make the image clickable -->
                                 <div class="item-caption" style="padding:0px">
-                                    <img style="height: 200px;width:100%;" src="@item.ImageFullPath" alt="">
+                                    <a href="@Url.Action("ServiceDetail", "Home", new { id = item.Id })">
+                                        <img style="height: 200px;width:100%;" src="@item.ImageFullPath" alt="">
+                                    </a>
                                 </div>
 
-                                <!-- Price Section -->
+                                <!-- Make the price clickable -->
                                 <div class="item-price" style="text-align:center; padding-top:10px;">
-                                    <h5 style="color:#333; font-weight:bold;"><span>Price: </span>@item.Price</h5>
+                                    <a href="@Url.Action("ServiceDetail", "Home", new { id = item.Id })">
+                                        <h5 style="color:#333; font-weight:bold;">
+                                            <span>Price: </span>@item.Price<span>€</span>
+                                        </h5>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     }
                 </div>
+
             </div>
         </div>
     </div>

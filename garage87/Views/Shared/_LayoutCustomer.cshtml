@@ -35,6 +35,9 @@
     <script src="https://cdn.syncfusion.com/ej2/20.2.43/dist/ej2.min.js"></script>
     <link href="~/admin/dist/js/toastr/toastr.min.css" rel="stylesheet" />
     <script src="~/js/ej2/ej2.min.js"></script>
+    <link rel="stylesheet" href="~/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
     <style>
         .field-validation-error {
             color: red;
@@ -66,7 +69,7 @@
                             <div class="uni-header-top-left">
                                 <!--LOGO-->
                                 <div class="wrapper-logo" style="min-height:0px">
-                                    <a class="logo-default" href="#"><img src="~/Customer/images/logo2.png" style="height:70px;width:100px" alt="" class="img-responsive"></a>
+                                    <a class="logo-default" href="@Url.Action("Index","Home")"><img src="~/Customer/images/logo2.png" style="height:70px;width:100px" alt="" class="img-responsive"></a>
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
@@ -122,6 +125,18 @@
                                                 {
                                                     <li><a href="@Url.Action("RepairHistory","Home")">Repair History</a></li>
                                                 }
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <li><a href="@Url.Action("Index","Admin")">Go to Dashboard</a></li>
+                                                }
+                                                @if (User.IsInRole("Employee"))
+                                                {
+                                                    <li><a href="@Url.Action("EmployeeDashboard","Employees")">Go to Dashboard</a></li>
+                                                }
+                                                @if (User.IsInRole("Mechanic"))
+                                                {
+                                                    <li><a href="@Url.Action("Index","Mechanic")">Go to Dashboard</a></li>
+                                                }
                                             </ul>
                                         </div>
                                     </nav>
@@ -155,25 +170,10 @@
             <div id="main-content" class="site-main-content">
                 @RenderBody()
             </div>
-
-            @*<footer class="site-footer footer-default" style="position: fixed; bottom: 0; width: 100%; background-color: #f8f9fa;">
-            <div class="copyright-area">
-            <div class="container">
-            <div class="copyright-content">
-            <div class="row">
-            <div class="col-sm-12" style="display: flex; justify-content: center; align-items: center;">
-            <p class="copyright-text" style="margin: 0; text-align: center;">
-            <a href="@Url.Action("Index","Home")">© 2024 - Garage 87 </a>
-            </p>
-            </div>
-
-            </div>
-            </div>
-            </div>
-            </div>
-            </footer>*@
         </div>
     </div>
+
+
     <script src="~/Customer/plugin/jquery/jquery-2.0.2.min.js"></script>
     <script src="~/Customer/plugin/jquery-ui/jquery-ui.min.js"></script>
     <script src="~/Customer/plugin/bootstrap/js/bootstrap.js"></script>
@@ -200,10 +200,60 @@
     <script src="~/Customer/plugin/sticky/jquery.sticky.js"></script>
     <script src="~/js/notify/notify.min.js"></script>
     <script src="~/Customer/js/main.js"></script>
+    <script src="~/Admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script>
+        var url = 'https://wati-integration-service.clare.ai/ShopifyWidget/shopifyWidget.js?39002';
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = url;
+
+        var options = {
+            "enabled": true,
+            "chatButtonSetting": {
+                "backgroundColor": "#4dc247",
+                "ctaText": "",
+                "borderRadius": "25",
+                "marginLeft": "25",
+                "marginBottom": "50",
+                "marginRight": "50",
+                "position": "left"
+            },
+            "brandSetting": {
+                "brandName": "Garage 87",
+                "brandSubTitle": "Typically replies within an hour",
+                "welcomeText": "Hi, there!\nHow can I help you?",
+                "messageText": "Hello, I have a question!",
+                "backgroundColor": "#0a5f54",
+                "ctaText": "Start Chat",
+                "borderRadius": "25",
+                "autoShow": false,
+                "phoneNumber": "351912345678"
+            }
+        };
+
+        // Check if the widget has already been created
+        if (typeof window.whatsappChatWidgetInitialized === 'undefined') {
+            window.whatsappChatWidgetInitialized = true;
+
+            s.onload = function () {
+                CreateWhatsappChatWidget(options);
+            };
+
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+        }
+    </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("SyncfusionScripts", required: false)
     <ejs-scripts></ejs-scripts>
     @await Component.InvokeAsync("Notyf")
+
 
 </body>
 

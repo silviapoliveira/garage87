@@ -1,18 +1,15 @@
 ﻿using garage87.Data.Entities;
-using garage87.Data.Repositories;
+using garage87.Data.Repositories.IRepository;
 using garage87.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using System;
-using Vereyon.Web;
-using System.Linq;
-using Syncfusion.EJ2.Base;
-using Microsoft.AspNetCore.JsonPatch.Operations;
-using Syncfusion.EJ2.Linq;
-using Microsoft.EntityFrameworkCore;
-using garage87.Data.Repositories.IRepository;
 using Microsoft.Data.SqlClient;
+using Syncfusion.EJ2.Base;
+using Syncfusion.EJ2.Linq;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Vereyon.Web;
 
 namespace garage87.Controllers
 {
@@ -96,6 +93,15 @@ namespace garage87.Controllers
         {
             if (ModelState.IsValid)
             {
+                var countries = _countryRepository.GetAll().Where(x => x.Id != country.Id);
+                bool exists = countries.Any(c => c.Name.ToLower() == country.Name.ToLower() ||
+                                c.CountryCode.ToLower() == country.CountryCode.ToLower());
+
+                if (exists)
+                {
+                    ModelState.AddModelError("Name", "A country with the same name or code already exists.");
+                    return View(country);
+                }
                 await _countryRepository.UpdateAsync(country);
                 return RedirectToAction(nameof(Index));
             }
@@ -208,6 +214,15 @@ namespace garage87.Controllers
 
             if (ModelState.IsValid)
             {
+                var cities = _countryRepository.GetCities();
+                bool exists = cities.Any(c => c.Name.ToLower() == model.Name.ToLower() &&
+                                c.CountryId == model.CountryId);
+
+                if (exists)
+                {
+                    ModelState.AddModelError("Name", "A city with the same name and country already exists.");
+                    return View(model);
+                }
                 await _countryRepository.AddCityAsync(model);
                 return RedirectToAction("Cities", "Countries");
             }
@@ -240,6 +255,15 @@ namespace garage87.Controllers
             }
             if (ModelState.IsValid)
             {
+                var cities = _countryRepository.GetCities().Where(x => x.Id != city.Id);
+                bool exists = cities.Any(c => c.Name.ToLower() == city.Name.ToLower() &&
+                                c.CountryId == city.CountryId);
+
+                if (exists)
+                {
+                    ModelState.AddModelError("Name", "A city with the same name and country already exists.");
+                    return View(city);
+                }
                 var countryId = await _countryRepository.UpdateCityAsync(city);
                 if (countryId != 0)
                 {

@@ -12,7 +12,9 @@
               <a class="btn-remove-redirect btn btn-danger" onclick="Delete(${id})"><i class="fa fa-trash"></i></a>
            </div>
 </script>
-
+<script id="monthColumn" type="text/x-template">
+    <span>${getMonthName(data.month)}</span>
+</script>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -52,12 +54,12 @@
                             <e-grid-searchsettings fields="@(new string[] { "Name","CountryCode"})"></e-grid-searchsettings>
                             <e-grid-columns>
                                 <e-grid-column field="Type" headerText="Vehicle Type" width="150"></e-grid-column>
-                                <e-grid-column field="Customer.FullName" headerText="Customer"   width="auto"></e-grid-column>
-                                <e-grid-column field="Brand" headerText="Brand" allowSearching="true" allowSorting="true" width="auto"></e-grid-column>
+                                <e-grid-column field="Customer.FullName" headerText="Customer" width="auto"></e-grid-column>
+                                <e-grid-column field="brand.name" headerText="Brand" allowFiltering="false" allowSearching="false" allowSorting="true" width="auto"></e-grid-column>
                                 <e-grid-column field="Registration" headerText="Registration" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column field="Model" headerText="Model" allowSorting="true" width="auto"></e-grid-column>
+                                <e-grid-column field="model.modelNumber" headerText="Model" allowFiltering="false" allowSorting="false" width="auto"></e-grid-column>
                                 <e-grid-column field="Year" headerText="Year" allowSorting="true" width="auto"></e-grid-column>
-                                <e-grid-column field="Month" headerText="Month" allowSorting="true" width="auto"></e-grid-column>
+                                <e-grid-column field="Month" headerText="Month" allowSorting="true" template="#monthColumn" width="auto"></e-grid-column>
                                 <e-grid-column headerText="Action" freeze="Right" allowFiltering="false" allowSorting="false" allowSearching="false" textAlign="Center" width="150" template="#actionColumn"></e-grid-column>
                             </e-grid-columns>
                         </ejs-grid>
@@ -101,6 +103,15 @@
                     })
                 }
             })
+        }
+    </script>
+    <script>
+        function getMonthName(monthNumber) {
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            return monthNames[monthNumber - 1] || "";
         }
     </script>
 }

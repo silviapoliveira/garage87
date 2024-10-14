@@ -20,7 +20,7 @@ namespace garage87.Models
 
 
         [Required]
-        [Display(Name = "Phone No")]
+        [Display(Name = "Phone Number")]
         public string PhoneNo { get; set; }
 
 

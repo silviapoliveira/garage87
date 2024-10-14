@@ -1,7 +1,6 @@
 ﻿using garage87.Data.Entities;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 
 namespace garage87.Models
 {
@@ -26,7 +25,7 @@ namespace garage87.Models
 
 
         [Required]
-        [Display(Name = "Repair Staus")]
+        [Display(Name = "Repair Status")]
         public int? Status { get; set; }
 
 

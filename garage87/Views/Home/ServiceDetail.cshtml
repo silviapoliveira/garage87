@@ -1,0 +1,60 @@
+﻿@model garage87.Data.Entities.Service
+
+<section class="site-content-area">
+
+
+    <div class="uni-doctor-details-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="uni-our-doctor-item-default">
+                        <div class="item-img">
+                            <img src="@Model.ImageFullPath" alt="@Model.Name" class="img-responsive">
+                        </div>
+                        <div class="item-caption">
+                            <div class="item-caption-head">
+
+                                <div class="col-md-9 col-sm-9 col-xs-9 uni-clear-padding" style="padding:13px">
+                                    <div class="item-title">
+                                        <h4>@Model.Name</h4>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item-caption-info">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <td>Price</td>
+                                            <td>@Model.Price<span>€</span></td>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="uni-doctor-details-right">
+
+                        <!--SUMMARY-->
+                        <div class="uni-doctor-details-summary">
+                            <div class="uni-doctor-details-title">
+                                <h3>Service Detail</h3>
+                                <div class="uni-divider"></div>
+                            </div>
+                            <p>
+                                @Model.Description
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>

@@ -4,7 +4,6 @@ using garage87.Data.Repositories.IRepository;
 using garage87.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Vereyon.Web;
@@ -51,15 +50,15 @@ namespace garage87.Controllers
                 foreach (var email in customerEmails)
                 {
                     // Compose the email message body
-                    string messageBody = $"<h1>Autoshop Closure Notice</h1>" +
-                                         $"<p>Dear user,</p>" +
-                                         $"<p>This is to inform you that the autoshop remains closed for today.</p>" +
+                    string messageBody = $"<h1>Auto Repair Shop Closure Notice</h1>" +
+                                         $"<p>Dear customer,</p>" +
+                                         $"<p>We regret to inform you that the Auto Repair Shop will be closed today.</p>" +
                                          $"<p>Thank you for your understanding!</p>";
 
                     try
                     {
                         // Send the email
-                        Response response = _mailHelper.SendEmail(email, "Autoshop Closure Notice", messageBody);
+                        Response response = _mailHelper.SendEmail(email, "Auto Repair Shop Closure Notice", messageBody);
                         if (!response.IsSuccess)
                         {
                             _notyf.Error($"Email sending failed to customer: {email}");
@@ -89,7 +88,7 @@ namespace garage87.Controllers
                 {
                     // Compose the email message body
                     string messageBody = $"<h1>Appointment Reminder</h1>" +
-                                         $"<p>Dear user,</p>" +
+                                         $"<p>Dear customer,</p>" +
                                          $"<p>This is a friendly reminder that you have an appointment scheduled for tomorrow.</p>" +
                                          $"<p>Thank you!</p>";
 

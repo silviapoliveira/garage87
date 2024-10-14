@@ -5,9 +5,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Garage87</title>
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <link rel="stylesheet" href="~/Admin/plugins/fontawesome-free/css/all.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/Admin/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <link rel="stylesheet" href="~/Admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <link rel="stylesheet" href="~/Admin/dist/css/adminlte.min.css">
@@ -82,6 +84,31 @@
                                     <i class="nav-icon fas fa-building"></i>
                                     <p>
                                         Manage Cities
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Brand">
+                                    <i class="nav-icon fas fa-car"></i>
+                                    <p>
+                                        Manage Brands
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Model">
+                                    <i class="nav-icon fas fa-car"></i>
+                                    <p>
+                                        Manage Models
+                                    </p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Specialities">
+                                    <i class="nav-icon fas fa-star"></i>
+                                    <p>
+                                        Manage Specialities
                                     </p>
                                 </a>
                             </li>
@@ -179,14 +206,6 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-action="Messages" asp-controller="Employees">
-                                    <i class="nav-icon fa fa-envelope"></i>
-                                    <p>
-                                        Manage Queries
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" asp-action="Index" asp-controller="Email">
                                     <i class="nav-icon fa fa-envelope"></i>
                                     <p>
@@ -194,6 +213,7 @@
                                     </p>
                                 </a>
                             </li>
+
                         }
                         else if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Mechanic"))
                         {
@@ -206,6 +226,22 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Customers">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>
+                                        Manage Customers
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Vehicles">
+                                    <i class="nav-icon fas fa-car"></i>
+                                    <p>
+                                        Manage Vehicles
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" asp-action="MyTasks" asp-controller="Mechanic">
                                     <i class="nav-icon fas fa-wrench"></i>
                                     <p>
@@ -213,7 +249,6 @@
                                     </p>
                                 </a>
                             </li>
-
                         }
                     </ul>
                 </nav>
@@ -236,6 +271,7 @@
         </aside>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="~/Admin/plugins/jquery/jquery.js"></script>
     <!-- jQuery UI 1.11.4 -->
@@ -256,7 +292,7 @@
     <script src="~/admin/dist/js/toastr/toastr.js"></script>
     <ejs-scripts></ejs-scripts>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         $(document).ready(function () {
             // Function to fetch notifications
@@ -270,15 +306,15 @@
                             $.each(data, function (index, item) {
                                 $('.dropdown-menu').append(
                                     `<div style="margin:5px">
-                                                                <div class="media-body">
-                                                                    <p class="text-sm">${item.message}</p>
-                                                                             <p class="text-sm text-muted">
-                                                                        <i class="far fa-check mr-1"></i>
-                                                                        <a href="#" class="mark-as-read text-end" style="color:red;" data-id="${item.id}">Mark as Read</a>
-                                                                    </p>
+                                                                        <div class="media-body">
+                                                                            <p class="text-sm">${item.message}</p>
+                                                                                     <p class="text-sm text-muted">
+                                                                                <i class="far fa-check mr-1"></i>
+                                                                                <a href="#" class="mark-as-read text-end" style="color:red;" data-id="${item.id}">Mark as Read</a>
+                                                                            </p>
+                                                                        </div>
                                                                 </div>
-                                                        </div>
-                                                        <div class="dropdown-divider"></div>`
+                                                                <div class="dropdown-divider"></div>`
                                 );
                             });
                         } else {
@@ -317,7 +353,7 @@
     @await RenderSectionAsync("Scripts", required: false)
     @RenderSection("SyncfusionScripts", required: false)
     @await Component.InvokeAsync("Notyf")
-    ;
+
 </body>
 
 </html>

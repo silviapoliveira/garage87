@@ -12,38 +12,14 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-12">
-                <div>
-                    <form asp-action="RepairHistory" asp-controller="Home">
-                        <div class="row">
-                            <div class="form-group col-md-3">
-                                <label class="control-label">Vehicle</label>
-                                <select asp-for="VehicleId" asp-items="@ViewBag.Vehicles" class="form-control">
-                                    <option value="">Select Vehicle</option>
-                                </select>
-                            </div>
-                            
-                            <div class="form-group col-md-3">
-                                <label class="control-label">Date</label>
-                                <input asp-for="Date" type="date" class="form-control" placeholder="Select Date" />
-                            </div>
-                            <div class="form-group col-md-3">
-                                <div class="text-left">
-                                    <button type="submit" class="btn btn-sm btn-warning" style="background-color:#4b545c;color:white; width: 120px;margin-top:35px;" id="btnSave" name="Save">
-                                        Search
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
 
-                    </form>
-                </div>
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title" style="float: left">Repair History</h3>
-            
+                        <button class="btn btn-info" style="float: right;" id="vehiclebn">Select Vehicle</button>
                     </div>
                     <div class="card-body">
-                        <table id="holidayTable" width="100%" class="table table-bordered table-striped">
+                        <table id="tblData" width="100%" class="table table-bordered table-striped">
                             <thead>
                                 <tr>
                                     <th>Date</th>
@@ -53,26 +29,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @if (Model?.RepairVM != null && Model.RepairVM.Any())
-                                {
-                                    @foreach (var item in Model.RepairVM)
-                                    {
-                                        <tr>
-                                            <td>@item.RepairDate.ToString("dd-MMM-yyyy")</td>
-                                            <td>@item.Vehicle.Registration</td>
-                                            <td>@item.Employee.FullName</td>
-                                            <td>@item.Total</td>
-                                            <td>
-                                                <a href="javascript:void(0)" onclick="Detail(@item.Id)" class="btn btn-info btn-sm">
-                                                    <i class="fa fa-book"></i>
-                                                </a>
-              
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
+
 
                         </table>
                     </div>
@@ -110,56 +67,34 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal" id="userIdModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userIdModalLabel">Select Vehicle </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <select id="userIdInput" class="form-control">
+                    <option value="" disabled selected>Select Vehicle</option>
+                    @foreach (var vehicle in ViewBag.Vehicles)
+                    {
+                        <option value="@vehicle.Value">@vehicle.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitUserId">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script>
-        $('#holidayTable').DataTable({
-            autoWidth: false,
-            columnDefs: [
-                {
-                    targets: ['_all'],
-                    className: 'mdc-data-table__cell',
-                },
-            ],
-
-        });
-
-
-    </script>
-    <script>
-        function Detail(repairId) {
-            $.ajax({
-                url: '@Url.Action("GetRepairDetails", "Home")',
-                type: 'GET',
-                data: { repairId: repairId },
-                success: function (data) {
-                    $('#vehicleRegistration').text(data.vehicleRegistration);
-                    // Clear previous table content
-                    $('#bookingDetailsBody').empty();
-
-                    // Loop through repair details and append rows
-                    if (data.details.length > 0) {
-                        data.details.forEach(function (item) {
-                            $('#bookingDetailsBody').append(`
-                                                    <tr>
-                                                        <td>${item.name}</td>
-                                                        <td>${item.serviceCost}</td>
-                                                    </tr>
-                                                `);
-                        });
-                    } else {
-                        $('#bookingDetailsBody').append('<tr><td colspan="2">No details available.</td></tr>');
-                    }
-
-                    // Show the modal
-                    $('#bookingModal').modal('show');
-                },
-                error: function () {
-                    swal("Error", "Failed to load repair details", "error");
-                }
-            });
-        }
-    </script>
-
+    <script src="~/js/repairhistory.js"></script>
 }

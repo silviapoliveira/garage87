@@ -5,7 +5,11 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
+<style>
+    #datepicker {
+        margin-top: 20px; /* Space between input and calendar */
+    }
+</style>
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -43,9 +47,9 @@
 
                             };
                             }
-                            <ejs-combobox id="vehicleComboBox" name="VehicleId" placeholder="Select Vehicle" cssClass="e-multi-column form-control" htmlAttributes="vehicleAttribute"
+                            <ejs-combobox id="vehicleComboBox" ejs-for="VehicleId" placeholder="Select Vehicle" cssClass="e-multi-column form-control" htmlAttributes="vehicleAttribute"
                                           headerTemplate="@Html.Raw("<table><tr><th class='wp-33 text-wrap'>Customer</th><th class='wp-34 text-wrap'>Type</th><th class='wp-33 text-wrap'>Brand</th><th class='wp-33 text-wrap'>Model</th></th><th class='wp-33 text-wrap'>Registration</th></tr></table>")"
-                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${customer.fullName}</td><td class='wp-34 text-wrap'>${type}</td><td class='wp-33 text-wrap'>${brand}</td><td class='wp-33 text-wrap'>${model}</td><td class='wp-33 text-wrap'>${registration}</td></tr> </tbody></table>")">
+                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${customer.fullName}</td><td class='wp-34 text-wrap'>${type}</td><td class='wp-33 text-wrap'>${brand.name}</td><td class='wp-33 text-wrap'>${model.modelNumber}</td><td class='wp-33 text-wrap'>${registration}</td></tr> </tbody></table>")">
                                 <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("VehicleDropdown", "VehicleAssignment")" crossDomain="true"></e-data-manager>
                                 <e-combobox-fields value="id" text="registration"></e-combobox-fields>
                             </ejs-combobox>
@@ -60,9 +64,9 @@
 
                             };
                             }
-                            <ejs-combobox id="employeeComboBox" name="EmployeeId" placeholder="Select Employee" cssClass="e-multi-column form-control" htmlAttributes="employeeAttribute"
-                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone No</th></tr></table>")"
-                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-33 text-wrap'>${user.email}</td><td class='wp-33 text-wrap'>${user.phoneNumber}</td></tr> </tbody></table>")">
+                            <ejs-combobox id="employeeComboBox" ejs-for="EmployeeId" placeholder="Select Employee" cssClass="e-multi-column form-control" htmlAttributes="employeeAttribute"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-34 text-wrap'>Speciality</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone Number</th></tr></table>")"
+                                          itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-34 text-wrap'>${specialities.name}</td><td class='wp-33 text-wrap'>${user.email}</td><td class='wp-33 text-wrap'>${user.phoneNumber}</td></tr> </tbody></table>")">
                                 <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("EmployeeDropdown", "VehicleAssignment")" crossDomain="true"></e-data-manager>
                                 <e-combobox-fields value="id" text="fullName"></e-combobox-fields>
                             </ejs-combobox>
@@ -73,9 +77,12 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label asp-for="TaskDate" class="control-label"></label>
-                            <input asp-for="TaskDate" type="date" class="form-control" placeholder="Select Date for Repair" />
+                            <input asp-for="TaskDate" id="taskDate" type="text" class="form-control datepicker" placeholder="Select Date for Repair" />
                             <span asp-validation-for="TaskDate" class="text-danger"></span>
                         </div>
+                        @* <div class="form-group col-md-6">
+                            <div id="datepicker"></div> <!-- Flat calendar -->
+                        </div> *@
                     </div>
                     <div class="form-group">
                         <div class="text-right">
@@ -96,4 +103,37 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script>
+        $(document).ready(function () {
+            // Get today's date
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            // Initialize the input datepicker
+            $(".datepicker").datepicker({
+                dateFormat: "mm/dd/yy", 
+                beforeShowDay: function (date) {
+                    return [date.getDay() !== 0, ""]; 
+                },
+                minDate: today, 
+                onSelect: function (dateText) {
+                    $(this).val(dateText); 
+                }
+            });
+
+            // Initialize the flat calendar (if needed)
+            $("#datepicker").datepicker({
+                dateFormat: "mm/dd/yy", 
+                beforeShowDay: function (date) {
+                    return [date.getDay() !== 0, ""]; 
+                },
+                minDate: today,
+                onSelect: function (dateText) {
+                    $("#taskDate").val(dateText);
+                }
+            });
+        });
+    </script>
 }
+

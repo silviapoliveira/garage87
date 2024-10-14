@@ -1,5 +1,4 @@
 ﻿using garage87.Data.Entities;
-using garage87.Data.Repositories;
 using garage87.Data.Repositories.IRepository;
 using garage87.Helpers;
 using garage87.Models;
@@ -45,8 +44,11 @@ namespace garage87.Controllers
             _countryRepository = countryRepository;
 
         }
+        #region Vehicles
 
-        [Authorize(Roles = "Employee")]
+
+
+        [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> DeleteVehicle(int? id)
         {
             if (id == null)
@@ -63,7 +65,7 @@ namespace garage87.Controllers
             var customerId = await _customerRepository.DeleteVehicleAsync(vehicle);
             return this.RedirectToAction($"Details", new { id = customerId });
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> EditVehicle(int? id)
         {
             if (id == null)
@@ -79,7 +81,7 @@ namespace garage87.Controllers
 
             return View(vehicle);
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> EditVehicle(Vehicle vehicle)
         {
@@ -94,7 +96,7 @@ namespace garage87.Controllers
 
             return this.View(vehicle);
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> AddVehicle(int? id)
         {
             if (id == null)
@@ -110,7 +112,7 @@ namespace garage87.Controllers
             var model = new VehicleViewModel { CustomerId = customer.Id };
             return View(model);
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> AddVehicle(VehicleViewModel model)
         {
@@ -123,22 +125,22 @@ namespace garage87.Controllers
             return this.View(model);
         }
 
-
+        #endregion
 
         #region Customer Crud
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin,Employee,Mechanic")]
         public IActionResult Index()
         {
             var customer = _customerRepository.GetAll().Include(x => x.City);
             return View(customer);
         }
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin,Employee,Mechanic")]
         public IActionResult Create()
         {
             return View();
         }
 
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin,Employee,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CustomerViewModel model)
@@ -147,6 +149,19 @@ namespace garage87.Controllers
             {
                 try
                 {
+                    if (model.CityId <= 0)
+                    {
+                        ModelState.AddModelError("CityId", "Please Select City.");
+                        return View(model);
+                    }
+                    var customers = _customerRepository.GetAll();
+                    bool exists = customers.Any(c => c.VatNumber == model.VatNumber);
+
+                    if (exists)
+                    {
+                        ModelState.AddModelError("VatNumber", "A customer with the same VAT Number already exists.");
+                        return View(model);
+                    }
                     var path = string.Empty;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
@@ -188,7 +203,6 @@ namespace garage87.Controllers
                     }, protocol: HttpContext.Request.Scheme);
 
                     Response response = _mailHelper.SendEmail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                       $"<strong>Your Password: </strong> {model.Password}" +
                         $"To allow the user, " +
                         $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
                     customer.UserId = user.Id;
@@ -208,7 +222,7 @@ namespace garage87.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin,Employee,Mechanic")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -227,7 +241,7 @@ namespace garage87.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin,Employee,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CustomerViewModel model)
@@ -236,13 +250,25 @@ namespace garage87.Controllers
             {
                 try
                 {
+                    if (model.CityId <= 0)
+                    {
+                        ModelState.AddModelError("CityId", "Please Select City.");
+                        return View(model);
+                    }
                     var path = model.ImageUrl;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
                     {
                         path = await _imageHelper.UploadImageAsync(model.ImageFile, "customers");
                     }
+                    var customers = _customerRepository.GetAll();
+                    bool exists = customers.Any(c => c.Id != model.Id && c.VatNumber == model.VatNumber);
 
+                    if (exists)
+                    {
+                        ModelState.AddModelError("VatNumber", "A customer with the same VAT Number already exists.");
+                        return View(model);
+                    }
                     var customer = _converterHelper.ToCustomer(model, path, false);
                     customer.UserId = model.UserId;
                     var existingUser = await _userManager.FindByEmailAsync(model.Email);
@@ -282,7 +308,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
-        [Authorize(Roles = "Admin,Employee")]
+        [Authorize(Roles = "Admin,Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
@@ -291,9 +317,18 @@ namespace garage87.Controllers
                 var getData = await _customerRepository.GetByIdAsync(id);
                 if (getData != null)
                 {
+                    var userId = getData.UserId;
                     var success = await _customerRepository.DeleteAsync(getData);
                     if (success == true)
+                    {
+                        var user = await _userManager.FindByIdAsync(userId);
+                        if (user != null)
+                        {
+                            var result = await _userManager.DeleteAsync(user);
+
+                        }
                         return Json(new { success = true, message = "Customer deleted successfully" });
+                    }
                     else
                         return Json(new { success = false, message = "The Customer cannot be deleted because it is associated with other records." });
 

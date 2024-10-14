@@ -28,6 +28,12 @@ namespace garage87.Data
 
         public DbSet<Notifications> Notifications { get; set; }
 
+        public DbSet<Brand> Brand { get; set; }
+
+        public DbSet<Model> Model { get; set; }
+
+        public DbSet<Specialities> Specialities { get; set; }
+
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
 
@@ -58,17 +64,6 @@ namespace garage87.Data
             modelBuilder.Entity<Country>()
                 .HasIndex(c => c.Name)
                 .IsUnique();
-
-            //// Habilitar a regra de apagar em cascata(Cascade Delete Rule)
-            //var cascadeFKs = modelBuilder.Model
-            //    .GetEntityTypes()
-            //    .SelectMany(t => t.GetForeignKeys())
-            //    .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
-
-            //foreach (var fk in cascadeFKs)
-            //{
-            //    fk.DeleteBehavior = DeleteBehavior.Restrict;
-            //}
 
             base.OnModelCreating(modelBuilder);
         }

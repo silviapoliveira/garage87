@@ -1,9 +1,6 @@
-﻿using garage87.Data.Repositories;
-using garage87.Data.Repositories.IRepository;
+﻿using garage87.Data.Repositories.IRepository;
 using garage87.Helpers;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Syncfusion.EJ2.Linq;
 using System.Linq;
 using System.Threading.Tasks;

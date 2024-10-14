@@ -89,16 +89,18 @@
                                         </div>
                                     }
                                 </div>
-                                @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
-                                {
-                                    <div class="row">
-                                        <div class="form-group">
-                                            <label asp-for="ZipCode" style="text-align: left; display: block; margin-bottom: 5px;"></label>
-                                            <input type="number" class="form-control" asp-for="ZipCode">
-                                            <span asp-validation-for="ZipCode" class="field-validation-error"></span>
+                                <div class="row">
+                                    @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Customer"))
+                                    {
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label asp-for="ZipCode" style="text-align: left; display: block; margin-bottom: 5px;"></label>
+                                                <input type="number" class="form-control" asp-for="ZipCode">
+                                                <span asp-validation-for="ZipCode" class="field-validation-error"></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                }
+                                    }
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">

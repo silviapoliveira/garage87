@@ -41,17 +41,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var item in Model)
+                                @if (Model != null && Model.Any())
+                                {
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.Name</td>
+                                            <td><img src="@item.ImageFullPath" style="height:70px;width:70px" /></td>
+                                            <td>@item.Price <span>€</span> </td>
+                                            <td>
+                                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
+                                                <a href="javascript:void(0)" onclick="Delete(@item.Id)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
                                 {
                                     <tr>
-                                        <td>@item.Name</td>
-                                        <td><img src="@item.ImageFullPath" style="height:70px;width:70px" /></td>
-                                        <td>@item.Price</td>
-                                        <td>
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm"><i class="fa fa-edit"></i></a>
-                                            <a href="javascript:void(0)" onclick="Delete(@item.Id)" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-
-                                        </td>
+                                        <td colspan="4" class="text-center">No data available</td>
                                     </tr>
                                 }
                             </tbody>

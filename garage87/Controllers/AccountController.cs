@@ -1,8 +1,5 @@
-﻿
-
-using AspNetCoreHero.ToastNotification.Abstractions;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using garage87.Data.Entities;
-using garage87.Data.Repositories;
 using garage87.Data.Repositories.IRepository;
 using garage87.Helpers;
 using garage87.Models;
@@ -104,97 +101,100 @@ namespace garage87.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public IActionResult Register()
-        {
-            var model = new RegisterNewUserViewModel
-            {
-                Countries = _countryRepository.GetComboCountries(),
-                Cities = _countryRepository.GetComboCities(0)
-            };
+        #region Register 
+        //public IActionResult Register()
+        //{
+        //    var model = new RegisterNewUserViewModel
+        //    {
+        //        Countries = _countryRepository.GetComboCountries(),
+        //        Cities = _countryRepository.GetComboCities(0)
+        //    };
 
-            return View(model);
-        }
+        //    return View(model);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterNewUserViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userHelper.GetUserByEmailAsync(model.Username);
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterNewUserViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await _userHelper.GetUserByEmailAsync(model.Username);
 
-                if (user == null)
-                {
-                    var city = await _countryRepository.GetCityAsync(model.CityId);
+        //        if (user == null)
+        //        {
+        //            var city = await _countryRepository.GetCityAsync(model.CityId);
 
-                    user = new User
-                    {
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Email = model.Username,
-                        UserName = model.Username,
-                        Address = model.Address,
-                        PhoneNumber = model.PhoneNumber,
-                        CityId = model.CityId,
-                        City = city,
-                    };
+        //            user = new User
+        //            {
+        //                FirstName = model.FirstName,
+        //                LastName = model.LastName,
+        //                Email = model.Username,
+        //                UserName = model.Username,
+        //                Address = model.Address,
+        //                PhoneNumber = model.PhoneNumber,
+        //                CityId = model.CityId,
+        //                City = city,
+        //            };
 
-                    var result = await _userHelper.AddUserAsync(user, model.Password);
-                    if (result != IdentityResult.Success)
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                        ModelState.AddModelError(string.Empty, "The user couldn't be created.");
-                        return View(model);
-                    }
-                    var customer = new Customer
-                    {
-                        FirstName = model.FirstName,
-                        LastName = model.LastName,
-                        Email = model.Username,
-                        Address = model.Address,
-                        PhoneNumber = model.PhoneNumber,
-                        CityId = model.CityId,
-                        UserId = user.Id,
-                        VatNumber = model.Vat,
-                        ZipCode = model.ZipCode,
-                        AddedBy = null,
-                    };
-                    await _customerRepo.CreateAsync(customer);
+        //            var result = await _userHelper.AddUserAsync(user, model.Password);
+        //            if (result != IdentityResult.Success)
+        //            {
+        //                foreach (var error in result.Errors)
+        //                {
+        //                    ModelState.AddModelError(string.Empty, error.Description);
+        //                }
+        //                ModelState.AddModelError(string.Empty, "The user couldn't be created.");
+        //                return View(model);
+        //            }
+        //            var customer = new Customer
+        //            {
+        //                FirstName = model.FirstName,
+        //                LastName = model.LastName,
+        //                Email = model.Username,
+        //                Address = model.Address,
+        //                PhoneNumber = model.PhoneNumber,
+        //                CityId = model.CityId,
+        //                UserId = user.Id,
+        //                VatNumber = model.Vat,
+        //                ZipCode = model.ZipCode,
+        //                AddedBy = null,
+        //            };
+        //            await _customerRepo.CreateAsync(customer);
 
-                    var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
-                    if (!roleResult.Succeeded)
-                    {
-                        foreach (var error in roleResult.Errors)
-                        {
-                            ModelState.AddModelError(string.Empty, error.Description);
-                        }
-                        ModelState.AddModelError(string.Empty, "The user couldn't be assigned to the Customer role.");
-                        return View(model);
-                    }
-                    string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                    string tokenLink = Url.Action("ConfirmEmail", "Account", new
-                    {
-                        userId = user.Id,
-                        token = myToken
-                    }, protocol: HttpContext.Request.Scheme);
+        //            var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
+        //            if (!roleResult.Succeeded)
+        //            {
+        //                foreach (var error in roleResult.Errors)
+        //                {
+        //                    ModelState.AddModelError(string.Empty, error.Description);
+        //                }
+        //                ModelState.AddModelError(string.Empty, "The user couldn't be assigned to the Customer role.");
+        //                return View(model);
+        //            }
+        //            string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+        //            string tokenLink = Url.Action("ConfirmEmail", "Account", new
+        //            {
+        //                userId = user.Id,
+        //                token = myToken
+        //            }, protocol: HttpContext.Request.Scheme);
 
-                    Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                        $"To allow the user, " +
-                        $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
+        //            Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
+        //                $"To allow the user, " +
+        //                $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
 
-                    if (response.IsSuccess)
-                    {
-                        _notyf.Success("The instructions to allow user have been sent to the email.");
-                        return RedirectToAction("Index", "Home");
-                    }
+        //            if (response.IsSuccess)
+        //            {
+        //                _notyf.Success("The instructions to allow user have been sent to the email.");
+        //                return RedirectToAction("Index", "Home");
+        //            }
 
-                    ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
-                }
-            }
-            return View(model);
-        }
+        //            ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
+        //        }
+        //    }
+        //    return View(model);
+        //}
+
+        #endregion
 
         public async Task<IActionResult> ChangeUser()
         {
@@ -409,21 +409,28 @@ namespace garage87.Controllers
             }
 
             var result = await _userHelper.ConfirmEmailAsync(user, token);
-            // Check the user's role after successful email confirmation
+
+            // Check the user's roles after successful email confirmation
             var isEmployee = await _userHelper.IsUserInRoleAsync(user, "Employee");
             var isMechanic = await _userHelper.IsUserInRoleAsync(user, "Mechanic");
+
             var customer = _customerRepo.GetAll().Where(x => x.UserId == user.Id).FirstOrDefault();
-            if (customer != null)
+            bool isCustomer = false;
+
+            if (customer != null && customer.AddedBy != null)
             {
-                if (customer.AddedBy != null)
-                {
-                    var isCustomer = await _userHelper.IsUserInRoleAsync(user, "Customer");
-                    ViewBag.IsCustomer = isCustomer;
-                }
+                isCustomer = await _userHelper.IsUserInRoleAsync(user, "Customer");
+                ViewBag.IsCustomer = isCustomer;
+            }
+
+            // Check if any of the conditions are true
+            if (isEmployee || isMechanic || isCustomer)
+            {
+                return RedirectToAction("NewPassword", "Account");
             }
             // Pass the role information to the view
-            ViewBag.IsEmployee = isEmployee;
-            ViewBag.IsMechanic = isMechanic;
+            //ViewBag.IsEmployee = isEmployee;
+            //ViewBag.IsMechanic = isMechanic;
 
             if (!result.Succeeded)
             {
@@ -431,6 +438,44 @@ namespace garage87.Controllers
             }
 
             return View();
+        }
+        public IActionResult NewPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> NewPassword(NewPasswordVM model)
+        {
+            var user = await _userHelper.GetUserByEmailAsync(model.Email);
+            if (user != null)
+            {
+                // Remove the current password (if the user has one)
+                var removeResult = await _userManager.RemovePasswordAsync(user);
+                if (removeResult.Succeeded)
+                {
+                    // Set the new password
+                    var addResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+                    if (addResult.Succeeded)
+                    {
+                        _notyf.Success("Password reset successful.");
+                        return RedirectToAction("Login", "Account");
+                    }
+                    else
+                    {
+                        _notyf.Error("Error while setting the new password.");
+                    }
+                }
+                else
+                {
+                    _notyf.Error("Error occoured.Please Try Again Later!");
+                }
+
+                return View(model);
+            }
+
+            _notyf.Error("User not found.");
+            return View(model);
         }
 
         public IActionResult RecoverPassword()
@@ -461,8 +506,8 @@ namespace garage87.Controllers
                 // Send email with reset link
                 var response = _mailHelper.SendEmail(
                     model.Email,
-                    "Shop Password Reset",
-                    $"<h1>Shop Password Reset</h1>" +
+                    "Auto Repair Shop Password Reset",
+                    $"<h1>Auto Repair Shop Password Reset</h1>" +
                     $"To reset your password, click on this link:</br></br>" +
                     $"<a href=\"{link}\">Reset Password</a>");
 

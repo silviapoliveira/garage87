@@ -11,23 +11,33 @@ namespace garage87.Data.Repositories.IRepository
     {
         IQueryable GetCustomersWithVehicles();
 
+
         Task<Customer> GetCustomerWithVehiclesAsync(int id);
+
 
         IQueryable<string> GetCustomerEmails();
 
+
         IQueryable<string> GetReminderEmails();
+
 
         Task<Vehicle> GetVehicleAsync(int id);
 
+
         Task AddVehicleAsync(VehicleViewModel model);
+
 
         Task<int> UpdateVehicleAsync(Vehicle vehicle);
 
+
         Task<int> DeleteVehicleAsync(Vehicle vehicle);
+
 
         IEnumerable<SelectListItem> GetComboCustomers();
 
+
         IEnumerable<SelectListItem> GetComboVehicles(int customerId);
+
 
         Task<Customer> GetCustomerAsync(Vehicle vehicle);
     }

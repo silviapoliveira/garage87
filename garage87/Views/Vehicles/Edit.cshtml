@@ -39,16 +39,20 @@
                         </div>
 
                         <div class="form-group col-md-6">
-                            <label asp-for="Brand" class="control-label"></label>
-                            <input asp-for="Brand" placeholder="Vehicle Brand" class="form-control" />
-                            <span asp-validation-for="Brand" class="text-danger"></span>
+                            <label asp-for="BrandId" class="control-label"></label>
+                            <select asp-for="BrandId" asp-items="ViewBag.Brands" id="BrandId" class="form-control">
+                                <option value="">Select a brand</option> <!-- Optional default option -->
+                            </select>
+                            <span asp-validation-for="BrandId" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label asp-for="Model" class="control-label"></label>
-                            <input asp-for="Model" placeholder="Vehicle Model" class="form-control" />
-                            <span asp-validation-for="Model" class="text-danger"></span>
+                            <label asp-for="ModelId" class="control-label"></label>
+                            <select asp-for="ModelId" id="ModelId" class="form-control">
+                                <option value="">Select a Model</option> <!-- Optional default option -->
+                            </select>
+                            <span asp-validation-for="ModelId" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-6">
                             <label asp-for="Registration" class="control-label"></label>
@@ -60,7 +64,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label asp-for="Year" class="control-label"></label>
-                            <select asp-for="Year" class="form-control">
+                            <select asp-for="Year" class="form-control" id="YearDropdown">
                                 @for (int year = DateTime.Now.Year; year >= 1900; year--)
                                 {
                                     <option value="@year">@year</option>
@@ -68,16 +72,18 @@
                             </select>
                             <span asp-validation-for="Year" class="text-danger"></span>
                         </div>
+
                         <div class="form-group col-md-6">
                             <label asp-for="Month" class="control-label"></label>
                             @{
                                 var months = Enum.GetValues(typeof(garage87.Enums.MonthsEnum)).Cast<garage87.Enums.MonthsEnum>();
                             }
-                            <select asp-for="Month" class="form-control">
+                            <select asp-for="Month" class="form-control" id="MonthDropdown">
                                 <option value="">Select Month</option>
                                 @foreach (var month in months)
                                 {
-                                    <option value="@((int)month)">@month.ToString()</option>
+                                    int monthValue = (int)month;
+                                    <option value="@monthValue" data-month="@monthValue">@month.ToString()</option>
                                 }
                             </select>
                             <span asp-validation-for="Month" class="text-danger"></span>
@@ -95,7 +101,7 @@
                             };
                             }
                             <ejs-combobox ejs-for="CustomerId" placeholder="Select Customer" cssClass="e-multi-column" htmlAttributes="customAttribute"
-                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone No</th></tr></table>")"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone Number</th></tr></table>")"
                                           itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-33 text-wrap'>${email}</td><td class='wp-33 text-wrap'>${phoneNumber}</td></tr> </tbody></table>")">
                                 <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("Dropdown", "Customers")" crossDomain="true"></e-data-manager>
                                 <e-combobox-fields value="id" text="fullName"></e-combobox-fields>
@@ -124,4 +130,88 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        document.getElementById('YearDropdown').addEventListener('change', function () {
+            const currentYear = new Date().getFullYear();
+            const selectedYear = parseInt(this.value);
+            const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-indexed
+
+            const monthDropdown = document.getElementById('MonthDropdown');
+            const monthOptions = monthDropdown.querySelectorAll('option[data-month]');
+
+            monthOptions.forEach(monthOption => {
+                const monthValue = parseInt(monthOption.getAttribute('data-month'));
+
+                if (selectedYear === currentYear) {
+                    // Show only months up to the current month
+                    monthOption.style.display = monthValue <= currentMonth ? 'block' : 'none';
+                } else {
+                    // Show all months
+                    monthOption.style.display = 'block';
+                }
+            });
+        });
+
+        document.getElementById('YearDropdown').dispatchEvent(new Event('change'));
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Pre-populate models when editing an existing item
+            var brandId = $('#BrandId').val();
+            var selectedModelId = '@Model.ModelId';
+
+            if (brandId) {
+                // Load models for the selected brand
+                $.ajax({
+                    url: '@Url.Action("GetModelsByBrand")',
+                    type: 'GET',
+                    data: { brandId: brandId },
+                    success: function (models) {
+                        var modelDropdown = $('#ModelId');
+                        modelDropdown.empty();
+                        modelDropdown.append('<option value="">Select a Model</option>'); // Default option
+
+                        $.each(models, function (index, model) {
+                            var option = $('<option/>', {
+                                value: model.value,  // JSON keys are lowercase here
+                                text: model.text
+                            });
+
+                            // Set the selected attribute manually based on ModelId
+                            if (model.value == selectedModelId) {
+                                option.prop('selected', true);
+                            }
+
+                            modelDropdown.append(option);
+                        });
+                    }
+                });
+            }
+
+            // Brand dropdown change handler (for brand changes after the page loads)
+            $('#BrandId').change(function () {
+                var brandId = $(this).val();
+
+                $.ajax({
+                    url: '@Url.Action("GetModelsByBrand")',
+                    type: 'GET',
+                    data: { brandId: brandId },
+                    success: function (models) {
+                        var modelDropdown = $('#ModelId');
+                        modelDropdown.empty();
+                        modelDropdown.append('<option value="">Select a Model</option>'); // Default option
+
+                        $.each(models, function (index, model) {
+                            modelDropdown.append($('<option/>', {
+                                value: model.value,
+                                text: model.text
+                            }));
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
 }

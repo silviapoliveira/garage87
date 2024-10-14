@@ -37,11 +37,6 @@ namespace garage87.Models
         public IEnumerable<SelectListItem> Cities { get; set; }
 
 
-        //[Display(Name = "Country")]
-        //[Range(1, int.MaxValue, ErrorMessage = "You must select a country.")]
-        //public int CountryId { get; set; }
-
-
         public IEnumerable<SelectListItem> Countries { get; set; }
 
 
@@ -55,12 +50,12 @@ namespace garage87.Models
         public string Confirm { get; set; }
 
 
-        [Display(Name = "ZipCode")]
+        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
 
 
         [Required]
-        [Display(Name = "Vat No")]
+        [Display(Name = "VAT Number")]
         [MaxLength(15, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         public string Vat { get; set; }
     }

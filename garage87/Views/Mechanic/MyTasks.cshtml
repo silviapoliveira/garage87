@@ -61,7 +61,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title" style="float: left">List of Assigned Services</h3>
-                    <a asp-action="AddVehicleAssignment" style="float: right;" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i>Add New</a>
+
                 </div>
                 <div class="card-body">
 
@@ -105,6 +105,12 @@
                                         </td>
                                     </tr>
                                 }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center">No data available</td>
+                                </tr>
                             }
                         </tbody>
 

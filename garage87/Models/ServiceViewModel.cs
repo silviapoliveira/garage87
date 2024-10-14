@@ -20,12 +20,12 @@ namespace garage87.Models
         public decimal Price { get; set; }
 
 
-        [Required]
-        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
-        public decimal Vat { get; set; }
-
-
         public string ImageUrl { get; set; }
+
+
+        [Required]
+        [Display(Name = "Service Detail")]
+        public string Description { get; set; }
 
 
         public string ImageFullPath { get; set; }
@@ -40,7 +40,7 @@ namespace garage87.Models
             obj.Name = this.Name;
             obj.Price = this.Price;
             obj.ImageUrl = path;
-            obj.Vat = this.Vat;
+            obj.Description = this.Description;
             return obj;
 
         }
@@ -54,7 +54,7 @@ namespace garage87.Models
                 ServiceId = service.Id,
                 Name = service.Name,
                 Price = service.Price,
-                Vat = service.Vat,
+                Description = service.Description,
                 ImageUrl = service.ImageUrl,
                 ImageFullPath = service.ImageFullPath
             };

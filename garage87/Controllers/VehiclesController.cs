@@ -1,6 +1,4 @@
-﻿using garage87.Data;
-using garage87.Data.Entities;
-using garage87.Data.Repositories;
+﻿using garage87.Data.Entities;
 using garage87.Data.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,37 +14,62 @@ namespace garage87.Controllers
     public class VehiclesController : Controller
     {
         private readonly IVehicleRepository _vehicleRepository;
-        public VehiclesController(IVehicleRepository vehicleRepository)
+        private readonly IBrandRepository _brandRepository;
+        private readonly IModelRepository _modelRepository;
+        public VehiclesController(IVehicleRepository vehicleRepository, IBrandRepository brandRepository, IModelRepository modelRepository)
         {
             _vehicleRepository = vehicleRepository;
+            _brandRepository = brandRepository;
+            _modelRepository = modelRepository;
+
         }
 
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         public IActionResult Index()
         {
             return View();
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         public IActionResult Create()
         {
+            ViewBag.Brands = new SelectList(_brandRepository.GetAll(), "Id", "Name");
+            ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
             return View();
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
 
         public async Task<IActionResult> Create(Vehicle vehicle)
         {
+            ViewBag.Brands = new SelectList(_brandRepository.GetAll(), "Id", "Name");
+            ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
+            if (vehicle.CustomerId <= 0)
+            {
+                ModelState.AddModelError("CustomerId", "Please Select Customer.");
+                return View(vehicle);
+            }
+
             if (ModelState.IsValid)
             {
+                var vehicles = _vehicleRepository.GetAll();
+                bool exists = vehicles.Any(c => c.Registration.ToLower() == vehicle.Registration.ToLower());
+
+                if (exists)
+                {
+                    ModelState.AddModelError("Registration", "A Vehicle with the same registration already exists.");
+                    return View(vehicle);
+                }
                 await _vehicleRepository.CreateAsync(vehicle);
                 return RedirectToAction(nameof(Index));
             }
             return View(vehicle);
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Brands = new SelectList(_brandRepository.GetAll(), "Id", "Name");
+            ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
             if (id == null)
             {
                 return NotFound();
@@ -59,11 +82,19 @@ namespace garage87.Controllers
             }
             return View(vehicle);
         }
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Vehicle vehicle)
         {
+            ViewBag.Brands = new SelectList(_brandRepository.GetAll(), "Id", "Name");
+            ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
+            if (vehicle.CustomerId <= 0)
+            {
+                ModelState.AddModelError("CustomerId", "Please Select Customer.");
+                return View(vehicle);
+            }
+
             if (id != vehicle.Id)
             {
                 return NotFound();
@@ -73,6 +104,14 @@ namespace garage87.Controllers
             {
                 try
                 {
+                    var vehicles = _vehicleRepository.GetAll().Where(x => x.Id != vehicle.Id);
+                    bool exists = vehicles.Any(c => c.Registration.ToLower() == vehicle.Registration.ToLower());
+
+                    if (exists)
+                    {
+                        ModelState.AddModelError("Registration", "A Vehicle with the same registration already exists.");
+                        return View(vehicle);
+                    }
                     await _vehicleRepository.UpdateAsync(vehicle);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -91,7 +130,7 @@ namespace garage87.Controllers
             return View(vehicle);
         }
 
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> DeleteVehicle(int id)
         {
@@ -148,7 +187,7 @@ namespace garage87.Controllers
         }
         public IActionResult GetList([FromBody] DataManagerRequest dm)
         {
-            IQueryable<Vehicle> Data = _vehicleRepository.GetAll().Include(x => x.Customer);
+            IQueryable<Vehicle> Data = _vehicleRepository.GetAll().Include(x => x.Customer).Include(b => b.Brand).Include(m => m.Model);
             DataOperations operation = new DataOperations();
             var count = Data.Count();
             if (dm.Search != null && dm.Search.Count > 0)
@@ -176,5 +215,18 @@ namespace garage87.Controllers
         }
 
         #endregion
+
+        public IActionResult GetModelsByBrand(int brandId)
+        {
+            // Fetch models based on brandId
+            var models = _modelRepository.GetAll().Where(x => x.BrandId == brandId); // Adjust to your service/repository layer
+
+            // Return as JSON
+            return Json(models.Select(m => new SelectListItem
+            {
+                Value = m.Id.ToString(),
+                Text = m.ModelNumber
+            }));
+        }
     }
 }

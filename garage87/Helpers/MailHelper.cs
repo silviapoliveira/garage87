@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using MailKit.Net.Smtp;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
-using MailKit.Net.Smtp;
 using System;
 
 namespace garage87.Helpers

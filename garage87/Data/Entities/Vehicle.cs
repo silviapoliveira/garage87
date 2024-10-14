@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Security.Principal;
 
 namespace garage87.Data.Entities
 {
@@ -15,14 +14,17 @@ namespace garage87.Data.Entities
 
 
         [Required]
-        public string Brand { get; set; }
+        [Display(Name = "Brand")]
+        public int? BrandId { get; set; }
 
 
         [Required]
-        public string Model { get; set; }
+        [Display(Name = "Model")]
+        public int? ModelId { get; set; }
 
 
         [Required]
+        [Display(Name = "Registration")]
         public string Registration { get; set; }
 
 
@@ -35,6 +37,7 @@ namespace garage87.Data.Entities
 
 
         [Required]
+        [Display(Name = "Customer")]
         public int CustomerId { get; set; }
 
 
@@ -42,8 +45,12 @@ namespace garage87.Data.Entities
         public virtual Customer Customer { get; set; }
 
 
-        [Display(Name = "Vehicle With Registration")]
-        public string VehicleWithRegistration => $"{Brand} {Model} {Registration}";
+        [ForeignKey("BrandId")]
+        public virtual Brand Brand { get; set; }
+
+
+        [ForeignKey("ModelId")]
+        public virtual Model Model { get; set; }
 
 
         public ICollection<VehicleAssignment> VehicleAssignment { get; set; }

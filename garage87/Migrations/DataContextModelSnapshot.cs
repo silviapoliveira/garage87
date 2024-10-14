@@ -150,6 +150,22 @@ namespace garage87.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("garage87.Data.Entities.Brand", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Brand");
+                });
+
             modelBuilder.Entity("garage87.Data.Entities.City", b =>
                 {
                     b.Property<int>("Id")
@@ -287,6 +303,9 @@ namespace garage87.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("SpecialityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
@@ -295,6 +314,8 @@ namespace garage87.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SpecialityId");
 
                     b.HasIndex("UserId");
 
@@ -333,6 +354,27 @@ namespace garage87.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Model", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ModelNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Model");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.Notifications", b =>
@@ -433,6 +475,9 @@ namespace garage87.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -444,15 +489,27 @@ namespace garage87.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Vat")
-                        .HasColumnType("decimal(18,2)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .IsUnique();
 
                     b.ToTable("Services");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Specialities", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Specialities");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.User", b =>
@@ -544,16 +601,16 @@ namespace garage87.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Brand")
+                    b.Property<int?>("BrandId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Model")
+                    b.Property<int?>("ModelId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
@@ -571,7 +628,11 @@ namespace garage87.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BrandId");
+
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("ModelId");
 
                     b.HasIndex("Registration")
                         .IsUnique();
@@ -689,11 +750,26 @@ namespace garage87.Migrations
 
             modelBuilder.Entity("garage87.Data.Entities.Employee", b =>
                 {
+                    b.HasOne("garage87.Data.Entities.Specialities", "Specialities")
+                        .WithMany()
+                        .HasForeignKey("SpecialityId");
+
                     b.HasOne("garage87.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
+                    b.Navigation("Specialities");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("garage87.Data.Entities.Model", b =>
+                {
+                    b.HasOne("garage87.Data.Entities.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId");
+
+                    b.Navigation("Brand");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.Repair", b =>
@@ -747,13 +823,29 @@ namespace garage87.Migrations
 
             modelBuilder.Entity("garage87.Data.Entities.Vehicle", b =>
                 {
+                    b.HasOne("garage87.Data.Entities.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("garage87.Data.Entities.Customer", "Customer")
                         .WithMany("Vehicles")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("garage87.Data.Entities.Model", "Model")
+                        .WithMany()
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Model");
                 });
 
             modelBuilder.Entity("garage87.Data.Entities.VehicleAssignment", b =>

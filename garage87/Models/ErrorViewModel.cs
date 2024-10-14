@@ -1,5 +1,3 @@
-using System;
-
 namespace garage87.Models
 {
     public class ErrorViewModel

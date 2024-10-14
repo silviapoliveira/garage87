@@ -6,10 +6,8 @@ using garage87.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualBasic;
 using Syncfusion.EJ2.Base;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -83,6 +81,19 @@ namespace garage87.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.TaskDate < DateTime.Now.Date)
+                {
+                    ModelState.AddModelError("TaskDate", "Task date cannot be in the past.");
+                    _notyf.Warning("Repair not Assigned!");
+                    return View(model);
+                }
+
+                if (model.TaskDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    ModelState.AddModelError("TaskDate", "Task date cannot be on a Sunday.");
+                    _notyf.Warning("Repair not Assigned!");
+                    return View(model);
+                }
                 var obj = model.GetEntity(null);
                 await _vehicleAssignmentRepository.CreateAsync(obj);
                 _notyf.Success("Repair Assigned successfully!");
@@ -117,6 +128,19 @@ namespace garage87.Controllers
 
             if (ModelState.IsValid)
             {
+                if (model.TaskDate < DateTime.Now.Date)
+                {
+                    ModelState.AddModelError("TaskDate", "Task date cannot be in the past.");
+                    _notyf.Warning("Assigned Service not updated!");
+                    return View(model);
+                }
+
+                if (model.TaskDate.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    ModelState.AddModelError("TaskDate", "Task date cannot be on a Sunday.");
+                    _notyf.Warning("Assigned Service not updated!");
+                    return View(model);
+                }
                 var data = await _vehicleAssignmentRepository.GetByIdAsync((int)id);
                 var obj = model.GetEntity(data);
                 await _vehicleAssignmentRepository.UpdateAsync(obj);
@@ -239,9 +263,17 @@ namespace garage87.Controllers
 
         public ActionResult VehicleDropdown([FromBody] DataManagerRequest dm)
         {
-            var Data = _vehicleRepository.GetAll().Include(c => c.Customer).AsQueryable();
+            var Data = _vehicleRepository.GetAll()
+                .Include(c => c.Customer)
+                .Include(b => b.Brand)
+                .Include(m => m.Model)
+                .AsQueryable();
+
+            Data = Data.OrderBy(v => v.Customer.FirstName);
+
             var count = Data.Count();
             DataOperations operation = new DataOperations();
+
             if (dm.Where != null && dm.Where.Count > 0)
             {
                 // Perform filtering only if there are conditions
@@ -256,14 +288,17 @@ namespace garage87.Controllers
             {
                 Data = operation.PerformTake(Data, dm.Take);
             }
+
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
 
         public ActionResult ServicesDropdown([FromBody] DataManagerRequest dm)
         {
             var Data = _serviceRepository.GetAll();
             var count = Data.Count();
+            Data = Data.OrderBy(v => v.Name);
             DataOperations operation = new DataOperations();
             if (dm.Where != null && dm.Where.Count > 0)
             {
@@ -285,7 +320,7 @@ namespace garage87.Controllers
 
         public ActionResult EmployeeDropdown([FromBody] DataManagerRequest dm)
         {
-            var Data = _employeeRepository.GetAll().AsQueryable().Include(x => x.User).Where(x => x.Function == (int)Enums.EmployeeFunctionEnum.Mechanic);
+            var Data = _employeeRepository.GetAll().Include(s => s.Specialities).Include(x => x.User).Where(x => x.Function == (int)Enums.EmployeeFunctionEnum.Mechanic);
             var count = Data.Count();
             DataOperations operation = new DataOperations();
             if (dm.Where != null && dm.Where.Count > 0)

@@ -1,5 +1,4 @@
 ﻿using garage87.Enums.Attributes;
-using System.ComponentModel;
 
 namespace garage87.Enums
 {
@@ -17,5 +16,8 @@ namespace garage87.Enums
 
         [Heading("Cancelled")]
         Cancelled = 4,
+
+        [Heading("Invoiced")]
+        Invoiced = 5,
     }
 }

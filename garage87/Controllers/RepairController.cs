@@ -31,7 +31,7 @@ namespace garage87.Controllers
         public async Task<IActionResult> Index(RepairList obj)
         {
             ViewBag.Employees = new SelectList(_employeeRepo.GetAll().Where(x => x.Function == (int)Enums.EmployeeFunctionEnum.Mechanic), "Id", "FullName");
-            ViewBag.Vehicles = new SelectList(_vehicleRepo.GetAll(), "Id", "Registration");
+            ViewBag.Vehicles = new SelectList(_vehicleRepo.GetAll().OrderBy(s => s.Registration), "Id", "Registration");
 
             var data = _repairRepo.GetAll();
             var repair = data.Include(x => x.VehicleAssignment).Include(x => x.Vehicle).Include(x => x.Employee).Include(x => x.RepairDetail).ThenInclude(x => x.Service).ToList();
@@ -111,7 +111,7 @@ namespace garage87.Controllers
 
             }
 
-            ViewBag.Services = new SelectList(_serviceRepo.GetAll(), "Id", "Name");
+            ViewBag.Services = new SelectList(_serviceRepo.GetAll().OrderBy(s => s.Name), "Id", "Name");
 
             return View(model);
         }
@@ -164,10 +164,23 @@ namespace garage87.Controllers
             // Save the changes or new entity based on the condition
             if (Id.HasValue && Id.Value != 0)
             {
+                var assignment = await _assignmentRepo.GetByIdAsync((int)data.VehicleAssignmentId);
+                if (assignment != null)
+                {
+
+                    assignment.Status = (int)Enums.RepairStatusEnum.Invoiced;
+                    await _assignmentRepo.UpdateAsync(assignment);
+                }
                 await _repairRepo.UpdateAsync(repairEntity);
             }
             else
             {
+                var assignment = await _assignmentRepo.GetByIdAsync((int)data.VehicleAssignmentId);
+                if (assignment != null)
+                {
+                    assignment.Status = (int)Enums.RepairStatusEnum.Invoiced;
+                    await _assignmentRepo.UpdateAsync(assignment);
+                }
                 await _repairRepo.CreateAsync(repairEntity);
             }
 
@@ -189,6 +202,7 @@ namespace garage87.Controllers
             var result = new
             {
                 VehicleRegistration = repair.Vehicle.Registration,
+                Total = repair.Total,
                 details = repair.RepairDetail.Select(rd => new
                 {
                     rd.Service.Name,

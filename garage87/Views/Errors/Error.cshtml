@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "";
+    ViewData["Title"] = "Error";
+    var statusCode = ViewData["StatusCode"];
+    var errorMessage = ViewData["ErrorMessage"];
+}
+<div style="display:flex; justify-content:center; align-items:center; height:100vh; text-align:center;">
+    <div>
+        <img style="height:200px" src="~/Customer/Images/oops.png" />
+        <h1>Error - @statusCode</h1>
+        <p style="color:red;">@errorMessage</p>
+        <a class="btn" style="background-color:#4496C6;padding:10px;margin-top:10px ;color:white;text-decoration:none;" href="@Url.Action("Index","Home")">Go Back Home</a>
+    </div>
+</div>

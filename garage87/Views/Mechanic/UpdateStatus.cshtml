@@ -1,4 +1,5 @@
-﻿@model garage87.Data.Entities.VehicleAssignment
+﻿@using garage87.Enums
+@model garage87.Data.Entities.VehicleAssignment
 
 @{
     ViewData["Title"] = "EditVehicleAssignment";
@@ -38,17 +39,17 @@
                         <div class="form-group col-md-6">
                             <label asp-for="Status" class="control-label"></label>
                             @{
-                                var status = Enum.GetValues(typeof(garage87.Enums.RepairStatusEnum)).Cast<garage87.Enums.RepairStatusEnum>();
+                                var status = Enum.GetValues(typeof(garage87.Enums.RepairStatusEnum))
+                                .Cast<garage87.Enums.RepairStatusEnum>();
                             }
                             <select asp-for="Status" class="form-control">
                                 @foreach (var item in status)
                                 {
-                                    <option value="@((int)item)">@item.ToString()</option>
+                                    <option value="@((int)item)">@EnumHelper.GetHeading(typeof(garage87.Enums.RepairStatusEnum), item.ToString())</option>
                                 }
                             </select>
                             <span asp-validation-for="Status" class="text-danger"></span>
                         </div>
-
                     </div>
 
                     <div class="form-group">

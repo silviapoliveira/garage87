@@ -372,7 +372,7 @@ $(document).ready(function () {
             }
         });
         $('.uni-owl-four-item').owlCarousel({
-            loop:true,
+            loop:false,
             margin:30,
             responsiveClass:true,
             nav:true,

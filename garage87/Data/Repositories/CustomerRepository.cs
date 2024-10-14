@@ -1,7 +1,6 @@
 ﻿using garage87.Data.Entities;
 using garage87.Data.Repositories.IRepository;
 using garage87.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,8 +30,8 @@ namespace garage87.Data.Repositories
             customer.Vehicles.Add(new Vehicle
             {
                 Type = model.Type,
-                Brand = model.Brand,
-                Model = model.Model,
+                BrandId = model.BrandId,
+                ModelId = model.ModelId,
                 Registration = model.Registration,
                 Year = model.Year,
                 Month = model.Month
@@ -151,7 +150,7 @@ namespace garage87.Data.Repositories
             {
                 list = _context.Vehicles.Select(c => new SelectListItem
                 {
-                    Text = c.VehicleWithRegistration,
+                    Text = c.Registration,
                     Value = c.Id.ToString()
 
                 }).OrderBy(l => l.Text).ToList();

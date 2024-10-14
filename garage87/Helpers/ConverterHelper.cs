@@ -47,6 +47,7 @@ namespace garage87.Helpers
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ImageUrl = path,
+                SpecialityId = model.SpecialityId,
                 Function = model.Function,
                 Salary = model.Salary,
                 VatNumber = model.VatNumber
@@ -62,6 +63,7 @@ namespace garage87.Helpers
                 LastName = employee.LastName,
                 ImageUrl = employee.ImageUrl,
                 Function = employee.Function,
+                SpecialityId = employee.SpecialityId ?? 0,
                 Salary = employee.Salary,
                 VatNumber = employee.VatNumber,
                 CityId = employee.User.CityId,

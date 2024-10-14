@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using garage87.Data.Entities;
+using garage87.Data.Repositories.IRepository;
+using garage87.Helpers;
+using garage87.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using garage87.Data;
-using garage87.Data.Entities;
-using Microsoft.AspNetCore.Authorization;
-using Vereyon.Web;
-using garage87.Models;
-using garage87.Helpers;
 using Syncfusion.EJ2.Base;
-using Microsoft.AspNetCore.Identity;
-using garage87.Data.Repositories.IRepository;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Vereyon.Web;
 
 namespace garage87.Controllers
 {
     public class EmployeesController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ISpecialitiesRepository _SpecialitiesRepository;
         private readonly IMessageRepository _messageRepository;
         private readonly IImageHelper _imageHelper;
         private readonly IConverterHelper _converterHelper;
@@ -29,6 +27,7 @@ namespace garage87.Controllers
         private readonly UserManager<User> _userManager;
         public EmployeesController
             (IEmployeeRepository employeeRepository,
+            ISpecialitiesRepository SpecialitiesRepository,
             IImageHelper imageHelper,
             IConverterHelper converterHelper,
             IFlashMessage flashMessage, IUserHelper userHelper, IMailHelper mailHelper, UserManager<User> userManager, IMessageRepository messageRepository)
@@ -41,6 +40,7 @@ namespace garage87.Controllers
             _mailHelper = mailHelper;
             _userManager = userManager;
             _messageRepository = messageRepository;
+            _SpecialitiesRepository = SpecialitiesRepository;
         }
         public IActionResult EmployeeDashboard()
         {
@@ -58,6 +58,7 @@ namespace garage87.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+            ViewBag.Specialities = new SelectList(_SpecialitiesRepository.GetAll(), "Id", "Name");
             return View();
         }
         [Authorize(Roles = "Admin")]
@@ -65,10 +66,28 @@ namespace garage87.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(EmployeeViewModel model)
         {
+            ViewBag.Specialities = new SelectList(_SpecialitiesRepository.GetAll(), "Id", "Name");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (model.CityId <= 0)
+                    {
+                        ModelState.AddModelError("CityId", "Please Select City.");
+                        return View(model);
+                    }
+                    if (model.VatNumber == null || model.VatNumber == "")
+                    {
+                        ModelState.AddModelError("VatNumber", "VAT Number is required.");
+                        return View(model);
+                    }
+                    var employees = _employeeRepository.GetAll();
+                    bool exists = employees.Any(c => c.VatNumber == model.VatNumber);
+                    if (exists)
+                    {
+                        ModelState.AddModelError("VatNumber", "An Employee with the same VAT Number already exists.");
+                        return View(model);
+                    }
                     var path = string.Empty;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
@@ -116,7 +135,7 @@ namespace garage87.Controllers
                     }, protocol: HttpContext.Request.Scheme);
 
                     Response response = _mailHelper.SendEmail(model.Email, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-                       $"<strong>Your Password: </strong> {model.Password}" +
+                       $"<strong>Your Password: </strong> {model.Password}</br></br>" +
                         $"To allow the user, " +
                         $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
                     employee.UserId = user.Id;
@@ -138,6 +157,7 @@ namespace garage87.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
+            ViewBag.Specialities = new SelectList(_SpecialitiesRepository.GetAll(), "Id", "Name");
             if (id == null)
             {
                 return NotFound();
@@ -159,10 +179,29 @@ namespace garage87.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EmployeeViewModel model)
         {
+            ViewBag.Specialities = new SelectList(_SpecialitiesRepository.GetAll(), "Id", "Name");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    if (model.CityId <= 0)
+                    {
+                        ModelState.AddModelError("CityId", "Please Select City.");
+                        return View(model);
+                    }
+                    if (model.VatNumber == null || model.VatNumber == "")
+                    {
+                        ModelState.AddModelError("VatNumber", "VAT Number is required.");
+                        return View(model);
+                    }
+                    var employees = _employeeRepository.GetAll();
+                    bool exists = employees.Any(c => c.Id != model.Id && c.VatNumber == model.VatNumber);
+
+                    if (exists)
+                    {
+                        ModelState.AddModelError("VatNumber", "An Employee with the same VAT Number already exists.");
+                        return View(model);
+                    }
                     var path = model.ImageUrl;
 
                     if (model.ImageFile != null && model.ImageFile.Length > 0)
@@ -171,8 +210,12 @@ namespace garage87.Controllers
                     }
 
                     var employee = _converterHelper.ToEmployee(model, path, false);
-                    employee.UserId = model.UserId;
-                    employee.AddedBy = model.AddedBy;
+                    var data = await _employeeRepository.GetByIdAsync(model.Id, e => e.User);
+                    if (data != null)
+                    {
+                        employee.UserId = data.UserId;
+                        employee.AddedBy = data.AddedBy;
+                    }
                     var existingUser = await _userManager.FindByEmailAsync(model.Email);
                     if (existingUser != null)
                     {
@@ -218,9 +261,18 @@ namespace garage87.Controllers
                 var getData = await _employeeRepository.GetByIdAsync(id);
                 if (getData != null)
                 {
+                    var userId = getData.UserId;
                     var success = await _employeeRepository.DeleteAsync(getData);
                     if (success == true)
+                    {
+                        var user = await _userManager.FindByIdAsync(userId);
+                        if (user != null)
+                        {
+                            var result = await _userManager.DeleteAsync(user);
+
+                        }
                         return Json(new { success = true, message = "Employee deleted successfully" });
+                    }
                     else
                         return Json(new { success = false, message = "The Employee cannot be deleted because it is associated with other records." });
 
@@ -240,7 +292,23 @@ namespace garage87.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> MessageDetail(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var data = await _messageRepository.GetByIdAsync(id);
+
+            if (data == null)
+            {
+                return NotFound();
+            }
+
+            return View(data);
+
+        }
         #region API method
         public IActionResult GetEmployeesList([FromBody] DataManagerRequest dm)
         {

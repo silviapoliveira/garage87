@@ -1,16 +1,8 @@
 ﻿using garage87.Data.Entities;
 using garage87.Data.Repositories.IRepository;
-using garage87.Helpers;
-using garage87.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using System.Threading.Tasks;
 
 namespace garage87.Data.Repositories
 {
@@ -55,10 +47,10 @@ namespace garage87.Data.Repositories
                         _context.Notifications.Add(notification);
                     }
                 }
+
                 // Save all changes to the database
                 _context.SaveChanges();
             }
         }
     }
 }
-

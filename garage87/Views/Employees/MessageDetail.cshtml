@@ -1,0 +1,66 @@
+﻿@model garage87.Data.Entities.Message
+@{
+    ViewData["Title"] = "Query Detail";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Quries</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Messages","Employees")">Quries</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <div>
+        <div class="card">
+            <div style="background-color:#4b545c;" class="card-header">
+                <p style="font-size:larger;color:white" class="text-left">Query Detail</p>
+            </div>
+            <div class="card-body">
+                <input asp-for="Id" hidden />
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" readonly class="form-control" />
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label asp-for="Phone" class="control-label"></label>
+                        <input asp-for="Phone" class="form-control" readonly />
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" readonly />
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label asp-for="MessageDetail" class="control-label"></label>
+                        <textarea asp-for="MessageDetail" rows="5" class="form-control" readonly></textarea>
+
+                    </div>
+
+
+                </div>
+                <div class="form-group">
+                    <div class="text-right">
+                        <a class="btn btn-warning" type="button" asp-action="Messages" asp-controller="Employees" class="btn btn-comfly-secondary" style="width: 120px;">Back</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

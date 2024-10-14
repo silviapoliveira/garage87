@@ -36,11 +36,11 @@ namespace garage87.Models
         public IEnumerable<SelectListItem> Cities { get; set; }
 
 
-        [Display(Name = "ZipCode")]
+        [Display(Name = "Zip Code")]
         public string ZipCode { get; set; }
 
 
-        [Display(Name = "Vat No")]
+        [Display(Name = "VAT Number")]
         [MaxLength(15, ErrorMessage = "The field {0} can only contain {1} charaters.")]
         public string Vat { get; set; }
     }

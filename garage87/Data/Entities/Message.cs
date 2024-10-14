@@ -16,7 +16,7 @@ namespace garage87.Data.Entities
         public string Email { get; set; }
 
 
-        [Display(Name = "Phone No")]
+        [Display(Name = "Phone Number")]
         public string Phone { get; set; }
 
 

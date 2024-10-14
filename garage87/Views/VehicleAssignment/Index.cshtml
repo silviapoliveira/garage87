@@ -26,42 +26,46 @@
     <div class="row">
         <div class="col-md-12">
             <div>
-                <form action="Index">
+                <form asp-action="Index" asp-controller="VehicleAssignment" method="get">
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Status</label>
 
+
                             @{
-                                var status = Enum.GetValues(typeof(garage87.Enums.RepairStatusEnum)).Cast<garage87.Enums.RepairStatusEnum>();
+                                var status = Enum.GetValues(typeof(garage87.Enums.RepairStatusEnum))
+                                .Cast<garage87.Enums.RepairStatusEnum>();
                             }
-                            <select asp-for="Status" class="form-control">
+                            <select asp-for="Status" class="form-control" id="statusSelect">
                                 <option value="">Select Status</option>
                                 @foreach (var item in status)
                                 {
-                                    <option value="@((int)item)">@item.ToString()</option>
+                                    <option value="@((int)item)">@EnumHelper.GetHeading(typeof(garage87.Enums.RepairStatusEnum), item.ToString())</option>
                                 }
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Employee</label>
 
-                            <select asp-for="EmployeeId" asp-items="@ViewBag.Employees" class="form-control">
+                            <select asp-for="EmployeeId" asp-items="@ViewBag.Employees" class="form-control" id="employeeSelect">
                                 <option value="">Select Employee</option>
                             </select>
                         </div>
                         <div class="form-group col-md-3">
                             <label class="control-label">Date</label>
-                            <input asp-for="Date" type="date" class="form-control" placeholder="Select Date for Repair" />
+                            <input asp-for="Date" type="date" class="form-control" placeholder="Select Date for Repair" id="dateInput" />
                         </div>
                         <div class="form-group col-md-3">
                             <div class="text-left">
                                 <button type="submit" class="btn btn-sm btn-warning" style="background-color:#4b545c;color:white; width: 120px;margin-top:35px;" id="btnSave" name="Save">
                                     Search
                                 </button>
+                                <button type="button" class="btn btn-sm btn-success" style="width: 120px;margin-top:35px;" id="btnClearFilters">
+                                    Clear Filters
+                                </button>
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="card">
@@ -126,6 +130,12 @@
                                     </tr>
                                 }
                             }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center">No data available</td>
+                                </tr>
+                            }
                         </tbody>
 
                     </table>
@@ -137,7 +147,23 @@
 
 
 @section Scripts {
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            // Clear Filters button click event
+            $("#btnClearFilters").click(function () {
+                // Reset the status select
+                $("#statusSelect").val("");
+                // Reset the employee select
+                $("#employeeSelect").val("");
+                // Reset the date input
+                $("#dateInput").val("");
+
+                // Submit the form to the action with empty filters
+                $(this).closest("form").submit();
+            });
+        });
+    </script>
     <script>
         $('#holidayTable').DataTable({
             autoWidth: false,

@@ -11,15 +11,15 @@
 
 <script src="~/js/ej2/ej2.min.js"></script>
 <script id="actionColumn" type="text/x-template">
-       <div class="btn-group">
-                 ${if(status!= @((int)RepairStatusEnum.NotStarted))}
-               <span>---</span>
-                 ${else}
-                   <a class=" btn btn-warning mr-2" href="@Url.Action("EditVehicleAssignment")/${id}"><i class="fa fa-pencil"></i></a>
-           <a class="btn-remove-redirect btn btn-danger" onclick="Delete(${id})"><i class="fa fa-trash"></i></a>
-               ${/if}
+    <div class="btn-group">
+              ${if(status!= @((int)RepairStatusEnum.NotStarted))}
+            <span>---</span>
+              ${else}
+                <a class=" btn btn-warning mr-2" href="@Url.Action("EditVehicleAssignment")/${id}"><i class="fa fa-pencil"></i></a>
+        <a class="btn-remove-redirect btn btn-danger" onclick="Delete(${id})"><i class="fa fa-trash"></i></a>
+            ${/if}
 
-           </div>
+        </div>
 
 </script>
 
@@ -66,7 +66,7 @@
                                 <e-grid-column field="Employee.FullName" headerText="Employee/Mechanic" foreignKeyField="Id" foreignKeyValue="Heading" width="auto"></e-grid-column>
                                 <e-grid-column field="Service.Name" headerText="Service" foreignKeyField="Id" foreignKeyValue="Heading" width="auto"></e-grid-column>
                                 <e-grid-column field="Vehicle.Registration" headerText="Vehicle" foreignKeyField="Id" foreignKeyValue="Heading"></e-grid-column>
-                                <e-grid-column field="Status" headerText="Repair Status"  foreignKeyField="Id" foreignKeyValue="Heading" dataSource="@repairStatuses" filter="@(new { type="CheckBox"})"></e-grid-column>
+                                <e-grid-column field="Status" headerText="Repair Status" foreignKeyField="Id" foreignKeyValue="Heading" dataSource="@repairStatuses" filter="@(new { type="CheckBox"})"></e-grid-column>
                                 <e-grid-column field="TaskDate" headerText="Repair Date" format="dd-MMM-yyyy" width="auto"></e-grid-column>
                                 <e-grid-column headerText="Action" freeze="Right" allowFiltering="false" allowSorting="false" allowSearching="false" textAlign="Center" width="150" template="#actionColumn"></e-grid-column>
                             </e-grid-columns>

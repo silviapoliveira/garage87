@@ -46,8 +46,6 @@ namespace garage87
                 .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<DataContext>();
 
-
-
             services.AddAuthentication()
                 .AddCookie()
                 .AddJwtBearer(cfg =>
@@ -61,15 +59,10 @@ namespace garage87
                     };
                 });
 
-
-
             services.AddDbContext<DataContext>(cfg =>
             {
                 cfg.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"));
             });
-
-
-
 
             services.AddFlashMessage();
 
@@ -90,6 +83,9 @@ namespace garage87
             services.AddScoped<IRepairDetailRepository, RepairDetailRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<INotificationRepository, NotificationRepository>();
+            services.AddScoped<ISpecialitiesRepository, SpecialitiesRepository>();
+            services.AddScoped<IBrandRepository, BrandRepository>();
+            services.AddScoped<IModelRepository, ModelRepository>();
 
             services.AddHostedService<NotificationService>();
 

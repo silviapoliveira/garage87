@@ -15,11 +15,11 @@ namespace garage87.Models
 
 
         [Required]
-        public string Brand { get; set; }
+        public int BrandId { get; set; }
 
 
         [Required]
-        public string Model { get; set; }
+        public int ModelId { get; set; }
 
 
         [Required]
