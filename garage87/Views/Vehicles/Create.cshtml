@@ -101,7 +101,7 @@
                             };
                             }
                             <ejs-combobox id="customerComboBox" name="CustomerId" placeholder="Select Customer" cssClass="e-multi-column" htmlAttributes="customAttribute"
-                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone Number</th></tr></table>")"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone No</th></tr></table>")"
                                           itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-33 text-wrap'>${email}</td><td class='wp-33 text-wrap'>${phoneNumber}</td></tr> </tbody></table>")">
                                 <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("Dropdown", "Customers")" crossDomain="true"></e-data-manager>
                                 <e-combobox-fields value="id" text="fullName"></e-combobox-fields>

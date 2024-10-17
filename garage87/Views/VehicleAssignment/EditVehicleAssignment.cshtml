@@ -62,7 +62,7 @@
                             };
                             }
                             <ejs-combobox ejs-for="EmployeeId" placeholder="Select Employee" cssClass="e-multi-column form-control" htmlAttributes="employeeAttribute"
-                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone Number</th></tr></table>")"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone No</th></tr></table>")"
                                           itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-33 text-wrap'>${user.email}</td><td class='wp-33 text-wrap'>${user.phoneNumber}</td></tr> </tbody></table>")">
                                 <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("EmployeeDropdown", "VehicleAssignment")" crossDomain="true"></e-data-manager>
                                 <e-combobox-fields value="id" text="fullName"></e-combobox-fields>

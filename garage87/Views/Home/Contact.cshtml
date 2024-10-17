@@ -48,8 +48,8 @@
                                         <span asp-validation-for="Name" class="field-validation-error"></span>
                                     </div>
                                     <div class="form-group">
-                                        <label style="text-align: left; display: block; margin-bottom: 5px;">Phone Number</label>
-                                        <input type="tel" asp-for=Phone class="form-control" placeholder="Enter Your Phone">
+                                        <label style="text-align: left; display: block; margin-bottom: 5px;">Phone No</label>
+                                        <input type="tel" asp-for=Phone class="form-control" placeholder="Enter Your Phone Number">
                                         <span asp-validation-for="Phone" class="field-validation-error"></span>
                                     </div>
                                     <div class="form-group">
@@ -59,7 +59,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label style="text-align: left; display: block; margin-bottom: 5px;">Message</label>
-                                        <textarea id="message" asp-for="MessageDetail" style="height:150px" class="form-control" placeholder="Enter you query"></textarea>
+                                        <textarea id="message" asp-for="MessageDetail" style="height:150px" class="form-control" placeholder="Enter Your Query"></textarea>
                                         <span asp-validation-for="MessageDetail" class="field-validation-error"></span>
                                     </div>
 
@@ -87,6 +87,11 @@
 
                                 <!--Receive records-->
                                 <div class="uni-receive-records">
+                                    <div class="uni-contact-info-title">
+                                        <h4>Receive records</h4>
+                                        <div class="uni-divider"></div>
+                                    </div>
+
                                     <div class="item">
                                         <div class="icon-holder">
                                             <i class="fa fa-phone" aria-hidden="true"></i>
@@ -124,34 +129,33 @@
                                 <table class="table">
                                     <tr>
                                         <td>monday</td>
-                                        <td>8:00 - 17:00</td>
+                                        <td>8:00 - 19:00</td>
                                     </tr>
                                     <tr>
                                         <td>tuesday</td>
-                                        <td>8:00 - 17:00</td>
+                                        <td>8:00 - 19:00</td>
                                     </tr>
                                     <tr>
                                         <td>wednesday</td>
-                                        <td>8:00 - 17:00</td>
+                                        <td>8:00 - 19:00</td>
                                     </tr>
                                     <tr>
                                         <td>thursday</td>
-                                        <td>8:00 - 17:00</td>
+                                        <td>8:00 - 19:00</td>
                                     </tr>
                                     <tr>
                                         <td>friday</td>
-                                        <td>8:00 - 17:00</td>
+                                        <td>8:00 - 19:00</td>
                                     </tr>
                                     <tr>
                                         <td>saturday</td>
-                                        <td>8:00 - 17:00</td>
+                                        <td>8:00 - 13:00</td>
                                     </tr>
                                     <tr>
                                         <td>sunday</td>
                                         <td>closed</td>
                                     </tr>
                                 </table>
-
                             </div>
                         </div>
                     </div>

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using garage87.Data;
-using garage87.Data.Entities;
-using garage87.Data.Repositories;
-using garage87.Models;
-using garage87.Helpers;
+﻿using garage87.Data.Entities;
 using garage87.Data.Repositories.IRepository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace garage87.Controllers
 {
@@ -48,7 +42,7 @@ namespace garage87.Controllers
 
                 if (exists)
                 {
-                    ModelState.AddModelError("Name", "A Speciality with the same name already exists.");
+                    ModelState.AddModelError("Name", "A speciality with the same name already exists.");
                     return View(obj);
                 }
                 await _SpecialitiesRepository.CreateAsync(obj);
@@ -56,6 +50,7 @@ namespace garage87.Controllers
             }
             return View(obj);
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             if (id == null || id <= 0)
@@ -89,7 +84,7 @@ namespace garage87.Controllers
 
                     if (exists)
                     {
-                        ModelState.AddModelError("Name", "A Speciality with the same name already exists.");
+                        ModelState.AddModelError("Name", "A speciality with the same name already exists.");
                         return View(data);
                     }
                     var obj = await _SpecialitiesRepository.GetByIdAsync(id);
@@ -124,7 +119,7 @@ namespace garage87.Controllers
                     if (success == true)
                         return Json(new { success = true, message = "Speciality deleted successfully" });
                     else
-                        return Json(new { success = false, message = "The Speciality cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The speciality cannot be deleted because it is associated with other records." });
 
                 }
                 else
@@ -134,7 +129,7 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Speciality. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the speciality. Please try again." });
             }
         }
 

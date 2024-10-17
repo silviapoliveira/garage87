@@ -2,7 +2,6 @@
 
 namespace garage87.Enums
 {
-
     public enum MonthsEnum
     {
         [Heading("January")]

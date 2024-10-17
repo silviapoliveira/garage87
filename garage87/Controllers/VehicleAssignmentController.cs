@@ -33,6 +33,7 @@ namespace garage87.Controllers
             _mailHelper = mailHelper;
 
         }
+
         public IActionResult Index(VehicleAssignmentListVM obj)
         {
 
@@ -53,6 +54,7 @@ namespace garage87.Controllers
 
             return View(obj);
         }
+
         public IActionResult CompletedRepairs(VehicleAssignmentListVM obj)
         {
             // Start with the base query without chaining Includes
@@ -76,6 +78,7 @@ namespace garage87.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> AddVehicleAssignment(VehicleAssignmentVM model)
         {
@@ -102,6 +105,7 @@ namespace garage87.Controllers
             _notyf.Warning("Repair not Assigned!");
             return View(model);
         }
+
         public async Task<IActionResult> EditVehicleAssignment(int id)
         {
             if (id == null)
@@ -118,6 +122,7 @@ namespace garage87.Controllers
             var ViewModel = VehicleAssignmentVM.FromEntity(data);
             return View(ViewModel);
         }
+
         [HttpPost]
         public async Task<IActionResult> EditVehicleAssignment(int id, VehicleAssignmentVM model)
         {
@@ -165,6 +170,7 @@ namespace garage87.Controllers
             }
             return View(data);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, VehicleAssignment model)
         {
@@ -222,7 +228,7 @@ namespace garage87.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Error! record not deleted" });
+                    return Json(new { success = false, message = "Error! Record not deleted" });
                 }
             }
             catch (Exception e)
@@ -230,7 +236,6 @@ namespace garage87.Controllers
                 return Json(new { success = false, message = "An error occurred while deleting the record. Please try again." });
             }
         }
-
 
         public IActionResult GetList([FromBody] DataManagerRequest dm)
         {
@@ -292,7 +297,6 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
-
 
         public ActionResult ServicesDropdown([FromBody] DataManagerRequest dm)
         {

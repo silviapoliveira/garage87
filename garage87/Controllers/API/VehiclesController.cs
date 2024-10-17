@@ -1,5 +1,4 @@
 ﻿using garage87.Data.Repositories.IRepository;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -35,7 +34,5 @@ namespace garage87.Controllers.API
                 return StatusCode(500, new { success = false, data = ex.Message.ToString() });
             }
         }
-
-
     }
 }

@@ -65,7 +65,7 @@
                             };
                             }
                             <ejs-combobox id="employeeComboBox" ejs-for="EmployeeId" placeholder="Select Employee" cssClass="e-multi-column form-control" htmlAttributes="employeeAttribute"
-                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-34 text-wrap'>Speciality</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone Number</th></tr></table>")"
+                                          headerTemplate="@Html.Raw("<table><tr><th class='wp-34 text-wrap'>Full Name</th><th class='wp-34 text-wrap'>Speciality</th><th class='wp-33 text-wrap'>Email</th><th class='wp-33 text-wrap'>Phone No</th></tr></table>")"
                                           itemTemplate="@Html.Raw("<table><tbody><tr><td class='wp-34 text-wrap'>${fullName}</td><td class='wp-34 text-wrap'>${specialities.name}</td><td class='wp-33 text-wrap'>${user.email}</td><td class='wp-33 text-wrap'>${user.phoneNumber}</td></tr> </tbody></table>")">
                                 <e-data-manager adaptor="UrlAdaptor" url="@Url.Action("EmployeeDropdown", "VehicleAssignment")" crossDomain="true"></e-data-manager>
                                 <e-combobox-fields value="id" text="fullName"></e-combobox-fields>
@@ -81,7 +81,7 @@
                             <span asp-validation-for="TaskDate" class="text-danger"></span>
                         </div>
                         @* <div class="form-group col-md-6">
-                            <div id="datepicker"></div> <!-- Flat calendar -->
+                        <div id="datepicker"></div> <!-- Flat calendar -->
                         </div> *@
                     </div>
                     <div class="form-group">
@@ -112,21 +112,21 @@
 
             // Initialize the input datepicker
             $(".datepicker").datepicker({
-                dateFormat: "mm/dd/yy", 
+                dateFormat: "mm/dd/yy",
                 beforeShowDay: function (date) {
-                    return [date.getDay() !== 0, ""]; 
+                    return [date.getDay() !== 0, ""];
                 },
-                minDate: today, 
+                minDate: today,
                 onSelect: function (dateText) {
-                    $(this).val(dateText); 
+                    $(this).val(dateText);
                 }
             });
 
             // Initialize the flat calendar (if needed)
             $("#datepicker").datepicker({
-                dateFormat: "mm/dd/yy", 
+                dateFormat: "mm/dd/yy",
                 beforeShowDay: function (date) {
-                    return [date.getDay() !== 0, ""]; 
+                    return [date.getDay() !== 0, ""];
                 },
                 minDate: today,
                 onSelect: function (dateText) {

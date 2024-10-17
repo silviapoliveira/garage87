@@ -94,8 +94,8 @@ namespace garage87.Data
                     PhoneNumber = "912345678",
                     VatNumber = "912345678",
                     CityId = 1,
-                    Address = "Rua da Alegria",
-                    ZipCode = "2176",
+                    Address = "Rua da Alegria, 89",
+                    ZipCode = "2376",
                 };
 
                 // Create a user associated with this customer
@@ -109,7 +109,6 @@ namespace garage87.Data
                     CityId = customer.CityId,
                     Address = customer.Address,
                     EmailConfirmed = true,
-
                 };
 
                 var result = await _userHelper.AddUserAsync(Customeruser, "123456");
@@ -144,7 +143,7 @@ namespace garage87.Data
                     UserName = "marianamagalhaes@yopmail.com",
                     PhoneNumber = "123456789",
                     CityId = 1,
-                    Address = "Rua das Flores, 17",
+                    Address = "Rua das Flores, 54",
                     EmailConfirmed = true,
                 };
 

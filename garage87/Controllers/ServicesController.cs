@@ -119,7 +119,7 @@ namespace garage87.Controllers
                     if (success == true)
                         return Json(new { success = true, message = "Service deleted successfully" });
                     else
-                        return Json(new { success = false, message = "The Service cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The service cannot be deleted because it is associated with other records." });
 
                 }
                 else
@@ -129,7 +129,7 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Service. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the service. Please try again." });
             }
         }
 

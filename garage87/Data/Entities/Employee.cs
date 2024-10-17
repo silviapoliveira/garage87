@@ -77,7 +77,6 @@ namespace garage87.Data.Entities
             }
         }
 
-
         public ICollection<VehicleAssignment> VehicleAssignment { get; set; }
     }
 }

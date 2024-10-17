@@ -78,6 +78,7 @@ namespace garage87.Data.Repositories
                       (userId, user) => user.Email)
                 .Distinct();
         }
+
         public IQueryable<string> GetReminderEmails()
         {
             var userIds = _context.VehicleAssignment
@@ -90,6 +91,7 @@ namespace garage87.Data.Repositories
                 .Select(u => u.Email)
                 .Distinct();
         }
+
         public async Task<Customer> GetCustomerWithVehiclesAsync(int id)
         {
             return await _context.Customers

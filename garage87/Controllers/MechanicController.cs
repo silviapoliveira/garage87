@@ -27,6 +27,7 @@ namespace garage87.Controllers
             _notyf = notyf;
             _userHelper = userHelper;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -47,12 +48,12 @@ namespace garage87.Controllers
             if (obj.Status.HasValue)
                 services = services.Where(x => x.Status == obj.Status.Value);
 
-            // You can apply additional filters like Date if needed
             if (obj.Date.HasValue)
                 services = services.Where(x => x.TaskDate.Date == obj.Date.Value.Date);
             obj = VehicleAssignmentListVM.FromEntity(services);
             return View(obj);
         }
+
         public async Task<IActionResult> UpdateStatus(int id)
         {
             if (id == null)
@@ -68,6 +69,7 @@ namespace garage87.Controllers
             }
             return View(data);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateStatus(int id, VehicleAssignment model)
         {

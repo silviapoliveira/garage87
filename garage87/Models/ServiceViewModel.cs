@@ -59,6 +59,5 @@ namespace garage87.Models
                 ImageFullPath = service.ImageFullPath
             };
         }
-
     }
 }

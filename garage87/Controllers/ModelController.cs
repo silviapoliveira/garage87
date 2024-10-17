@@ -44,7 +44,7 @@ namespace garage87.Controllers
             {
                 if (obj.BrandId <= 0)
                 {
-                    ModelState.AddModelError("BrandId", "Please Select brand.");
+                    ModelState.AddModelError("BrandId", "Please select brand.");
                     return View(obj);
                 }
                 var models = _modelRepository.GetAll();
@@ -53,7 +53,7 @@ namespace garage87.Controllers
 
                 if (exists)
                 {
-                    ModelState.AddModelError("ModelNumber", "A Model with the same Brand already exists.");
+                    ModelState.AddModelError("ModelNumber", "A model with the same brand already exists.");
                     return View(obj);
                 }
                 await _modelRepository.CreateAsync(obj);
@@ -61,6 +61,7 @@ namespace garage87.Controllers
             }
             return View(obj);
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             ViewBag.Brands = new SelectList(_brandRepository.GetAll(), "Id", "Name");
@@ -97,7 +98,7 @@ namespace garage87.Controllers
 
                     if (exists)
                     {
-                        ModelState.AddModelError("ModelNumber", "A Model with the same Brand already exists.");
+                        ModelState.AddModelError("ModelNumber", "A model with the same brand already exists.");
                         return View(obj);
                     }
                     var data = await _modelRepository.GetByIdAsync(id);
@@ -138,7 +139,7 @@ namespace garage87.Controllers
                     if (success == true)
                         return Json(new { success = true, message = "Model deleted successfully" });
                     else
-                        return Json(new { success = false, message = "The Model cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The model cannot be deleted because it is associated with other records." });
 
                 }
                 else
@@ -148,7 +149,7 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Model. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the model. Please try again." });
             }
         }
 

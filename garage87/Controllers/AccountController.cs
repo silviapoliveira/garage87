@@ -101,105 +101,10 @@ namespace garage87.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        #region Register 
-        //public IActionResult Register()
-        //{
-        //    var model = new RegisterNewUserViewModel
-        //    {
-        //        Countries = _countryRepository.GetComboCountries(),
-        //        Cities = _countryRepository.GetComboCities(0)
-        //    };
-
-        //    return View(model);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Register(RegisterNewUserViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = await _userHelper.GetUserByEmailAsync(model.Username);
-
-        //        if (user == null)
-        //        {
-        //            var city = await _countryRepository.GetCityAsync(model.CityId);
-
-        //            user = new User
-        //            {
-        //                FirstName = model.FirstName,
-        //                LastName = model.LastName,
-        //                Email = model.Username,
-        //                UserName = model.Username,
-        //                Address = model.Address,
-        //                PhoneNumber = model.PhoneNumber,
-        //                CityId = model.CityId,
-        //                City = city,
-        //            };
-
-        //            var result = await _userHelper.AddUserAsync(user, model.Password);
-        //            if (result != IdentityResult.Success)
-        //            {
-        //                foreach (var error in result.Errors)
-        //                {
-        //                    ModelState.AddModelError(string.Empty, error.Description);
-        //                }
-        //                ModelState.AddModelError(string.Empty, "The user couldn't be created.");
-        //                return View(model);
-        //            }
-        //            var customer = new Customer
-        //            {
-        //                FirstName = model.FirstName,
-        //                LastName = model.LastName,
-        //                Email = model.Username,
-        //                Address = model.Address,
-        //                PhoneNumber = model.PhoneNumber,
-        //                CityId = model.CityId,
-        //                UserId = user.Id,
-        //                VatNumber = model.Vat,
-        //                ZipCode = model.ZipCode,
-        //                AddedBy = null,
-        //            };
-        //            await _customerRepo.CreateAsync(customer);
-
-        //            var roleResult = await _userManager.AddToRoleAsync(user, "Customer");
-        //            if (!roleResult.Succeeded)
-        //            {
-        //                foreach (var error in roleResult.Errors)
-        //                {
-        //                    ModelState.AddModelError(string.Empty, error.Description);
-        //                }
-        //                ModelState.AddModelError(string.Empty, "The user couldn't be assigned to the Customer role.");
-        //                return View(model);
-        //            }
-        //            string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-        //            string tokenLink = Url.Action("ConfirmEmail", "Account", new
-        //            {
-        //                userId = user.Id,
-        //                token = myToken
-        //            }, protocol: HttpContext.Request.Scheme);
-
-        //            Response response = _mailHelper.SendEmail(model.Username, "Email confirmation", $"<h1>Email Confirmation</h1>" +
-        //                $"To allow the user, " +
-        //                $"please click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>");
-
-        //            if (response.IsSuccess)
-        //            {
-        //                _notyf.Success("The instructions to allow user have been sent to the email.");
-        //                return RedirectToAction("Index", "Home");
-        //            }
-
-        //            ModelState.AddModelError(string.Empty, "The user couldn't be logged.");
-        //        }
-        //    }
-        //    return View(model);
-        //}
-
-        #endregion
-
         public async Task<IActionResult> ChangeUser()
         {
             var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-            //var customer = _customerRepo.GetAll().Where(x => x.UserId == user.Id).FirstOrDefault();
+
             var model = new ChangeUserViewModel();
             if (user != null)
             {
@@ -224,7 +129,6 @@ namespace garage87.Controllers
                     if (employee != null)
                     {
                         model.Vat = employee.VatNumber;
-                        //model.ZipCode = employee.ZipCode;
                     }
                 }
                 else if (User.IsInRole("Mechanic"))
@@ -233,7 +137,6 @@ namespace garage87.Controllers
                     if (employee != null)
                     {
                         model.Vat = employee.VatNumber;
-                        //model.ZipCode = employee.ZipCode;
                     }
                 }
 
@@ -428,9 +331,6 @@ namespace garage87.Controllers
             {
                 return RedirectToAction("NewPassword", "Account");
             }
-            // Pass the role information to the view
-            //ViewBag.IsEmployee = isEmployee;
-            //ViewBag.IsMechanic = isMechanic;
 
             if (!result.Succeeded)
             {
@@ -468,7 +368,7 @@ namespace garage87.Controllers
                 }
                 else
                 {
-                    _notyf.Error("Error occoured.Please Try Again Later!");
+                    _notyf.Error("Error occoured. Please try again later!");
                 }
 
                 return View(model);
@@ -506,8 +406,8 @@ namespace garage87.Controllers
                 // Send email with reset link
                 var response = _mailHelper.SendEmail(
                     model.Email,
-                    "Auto Repair Shop Password Reset",
-                    $"<h1>Auto Repair Shop Password Reset</h1>" +
+                    "Shop Password Reset",
+                    $"<h1>Shop Password Reset</h1>" +
                     $"To reset your password, click on this link:</br></br>" +
                     $"<a href=\"{link}\">Reset Password</a>");
 
@@ -524,7 +424,6 @@ namespace garage87.Controllers
             }
             return View(model);
         }
-
 
         public IActionResult ResetPassword(string token)
         {
@@ -579,5 +478,4 @@ namespace garage87.Controllers
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
     }
-
 }

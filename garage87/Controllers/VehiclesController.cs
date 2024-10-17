@@ -36,6 +36,7 @@ namespace garage87.Controllers
             ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
             return View();
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -46,7 +47,7 @@ namespace garage87.Controllers
             ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
             if (vehicle.CustomerId <= 0)
             {
-                ModelState.AddModelError("CustomerId", "Please Select Customer.");
+                ModelState.AddModelError("CustomerId", "Please select customer.");
                 return View(vehicle);
             }
 
@@ -57,7 +58,7 @@ namespace garage87.Controllers
 
                 if (exists)
                 {
-                    ModelState.AddModelError("Registration", "A Vehicle with the same registration already exists.");
+                    ModelState.AddModelError("Registration", "A vehicle with the same registration already exists.");
                     return View(vehicle);
                 }
                 await _vehicleRepository.CreateAsync(vehicle);
@@ -65,6 +66,7 @@ namespace garage87.Controllers
             }
             return View(vehicle);
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -82,6 +84,7 @@ namespace garage87.Controllers
             }
             return View(vehicle);
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -91,7 +94,7 @@ namespace garage87.Controllers
             ViewBag.Models = new SelectList(_modelRepository.GetAll(), "Id", "ModelNumber");
             if (vehicle.CustomerId <= 0)
             {
-                ModelState.AddModelError("CustomerId", "Please Select Customer.");
+                ModelState.AddModelError("CustomerId", "Please select customer.");
                 return View(vehicle);
             }
 
@@ -109,7 +112,7 @@ namespace garage87.Controllers
 
                     if (exists)
                     {
-                        ModelState.AddModelError("Registration", "A Vehicle with the same registration already exists.");
+                        ModelState.AddModelError("Registration", "A vehicle with the same registration already exists.");
                         return View(vehicle);
                     }
                     await _vehicleRepository.UpdateAsync(vehicle);
@@ -143,24 +146,24 @@ namespace garage87.Controllers
                     if (success == true)
                         return Json(new { success = true, message = "Vehicle deleted successfully" });
                     else
-                        return Json(new { success = false, message = "The Vehicle cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The vehicle cannot be deleted because it is associated with other records." });
 
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Error! Vehicle not deleted" });
+                    return Json(new { success = false, message = "Error! vehicle not deleted" });
                 }
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Vehicle. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the vehicle. Please try again." });
             }
         }
+
         private bool VehicleExists(int id)
         {
             return _vehicleRepository.GetAll().Any(e => e.Id == id);
         }
-
 
         #region Vechicle API methods
         public ActionResult VehiclesDropdown([FromBody] DataManagerRequest dm)
@@ -185,6 +188,7 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
         public IActionResult GetList([FromBody] DataManagerRequest dm)
         {
             IQueryable<Vehicle> Data = _vehicleRepository.GetAll().Include(x => x.Customer).Include(b => b.Brand).Include(m => m.Model);
@@ -219,7 +223,7 @@ namespace garage87.Controllers
         public IActionResult GetModelsByBrand(int brandId)
         {
             // Fetch models based on brandId
-            var models = _modelRepository.GetAll().Where(x => x.BrandId == brandId); // Adjust to your service/repository layer
+            var models = _modelRepository.GetAll().Where(x => x.BrandId == brandId);
 
             // Return as JSON
             return Json(models.Select(m => new SelectListItem

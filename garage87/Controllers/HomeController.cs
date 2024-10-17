@@ -61,6 +61,7 @@ namespace garage87.Controllers
 
             return View(services);
         }
+
         public async Task<IActionResult> ServiceDetail(int id)
         {
             var service = await _serviceService.GetByIdAsync(id);
@@ -72,10 +73,12 @@ namespace garage87.Controllers
 
             return View(service);
         }
+
         public IActionResult Contact()
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Contact(Message obj)
         {
@@ -86,31 +89,11 @@ namespace garage87.Controllers
                 // Await the async method to ensure it completes before proceeding
                 await _messageService.CreateAsync(obj);
 
-                _notyf.Success("Message Sent Successfully!");
+                _notyf.Success("Message sent successfully!");
                 return RedirectToAction("Contact", "Home");
             }
-
-            // Optionally handle the case where the model is invalid
-            // You may want to return the same view with the validation messages
             return View(obj);
         }
-        //[Authorize]
-        //public async Task<IActionResult> RepairHistory(RepairList obj)
-        //{
-
-        //    var user = await _userHelper.GetUserByEmailAsync(this.User.Identity.Name);
-        //    var customer=_customerService.GetAll().Where(x=>x.UserId==user.Id).FirstOrDefault();
-        //    var data = _repairService.GetAll();
-        //    var repair = data.Include(x => x.VehicleAssignment).Include(x => x.Vehicle).Include(x => x.Employee).Include(x => x.RepairDetail).ThenInclude(x => x.Service).ToList();
-        //    repair = repair.Where(x => x.Vehicle.CustomerId == customer.Id).ToList();
-        //    if (obj.VehicleId.HasValue)
-        //        repair = repair.Where(x => x.VehicleId == obj.VehicleId).ToList();
-        //    if (obj.Date.HasValue)
-        //        repair = repair.Where(x => x.RepairDate == obj.Date).ToList();
-        //    obj = RepairList.FromEntity(repair);
-        //    ViewBag.Vehicles = new SelectList(_vehicleService.GetAll().Where(x => x.CustomerId == customer.Id), "Id", "Registration");
-        //    return View(obj);
-        //}
 
         [Authorize]
         public async Task<IActionResult> RepairHistory()
@@ -120,7 +103,7 @@ namespace garage87.Controllers
             ViewBag.Vehicles = new SelectList(_vehicleService.GetAll().Where(x => x.CustomerId == customer.Id), "Id", "Registration");
             return View();
         }
-        //[Authorize]
+
         [HttpGet]
 
         public IActionResult GetRepairDetails(int repairId)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,24 +9,17 @@ namespace garage87.Data.Entities
     {
         public int Id { get; set; }
 
-
         public int LabourHours { get; set; }
-
 
         public int? EmployeeId { get; set; }
 
-
         public int? VehicleId { get; set; }
-
 
         public int? VehicleAssignmentId { get; set; }
 
-
         public decimal Total { get; set; }
 
-
         public DateTime RepairDate { get; set; }
-
 
         public string Detail { get; set; }
 

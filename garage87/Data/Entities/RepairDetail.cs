@@ -6,6 +6,7 @@ namespace garage87.Data.Entities
     {
         public int Id { get; set; }
 
+
         public int ServiceId { get; set; }
 
 

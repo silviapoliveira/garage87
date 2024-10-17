@@ -46,8 +46,6 @@ namespace garage87.Controllers
         }
         #region Vehicles
 
-
-
         [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> DeleteVehicle(int? id)
         {
@@ -65,6 +63,7 @@ namespace garage87.Controllers
             var customerId = await _customerRepository.DeleteVehicleAsync(vehicle);
             return this.RedirectToAction($"Details", new { id = customerId });
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> EditVehicle(int? id)
         {
@@ -81,6 +80,7 @@ namespace garage87.Controllers
 
             return View(vehicle);
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> EditVehicle(Vehicle vehicle)
@@ -96,6 +96,7 @@ namespace garage87.Controllers
 
             return this.View(vehicle);
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         public async Task<IActionResult> AddVehicle(int? id)
         {
@@ -112,6 +113,7 @@ namespace garage87.Controllers
             var model = new VehicleViewModel { CustomerId = customer.Id };
             return View(model);
         }
+
         [Authorize(Roles = "Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> AddVehicle(VehicleViewModel model)
@@ -128,12 +130,14 @@ namespace garage87.Controllers
         #endregion
 
         #region Customer Crud
+
         [Authorize(Roles = "Admin,Employee,Mechanic")]
         public IActionResult Index()
         {
             var customer = _customerRepository.GetAll().Include(x => x.City);
             return View(customer);
         }
+
         [Authorize(Roles = "Admin,Employee,Mechanic")]
         public IActionResult Create()
         {
@@ -151,7 +155,7 @@ namespace garage87.Controllers
                 {
                     if (model.CityId <= 0)
                     {
-                        ModelState.AddModelError("CityId", "Please Select City.");
+                        ModelState.AddModelError("CityId", "Please select city.");
                         return View(model);
                     }
                     var customers = _customerRepository.GetAll();
@@ -252,7 +256,7 @@ namespace garage87.Controllers
                 {
                     if (model.CityId <= 0)
                     {
-                        ModelState.AddModelError("CityId", "Please Select City.");
+                        ModelState.AddModelError("CityId", "Please select city.");
                         return View(model);
                     }
                     var path = model.ImageUrl;
@@ -308,6 +312,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
+
         [Authorize(Roles = "Admin,Employee,Mechanic")]
         [HttpPost]
         public async Task<IActionResult> DeleteCustomer(int id)
@@ -330,7 +335,7 @@ namespace garage87.Controllers
                         return Json(new { success = true, message = "Customer deleted successfully" });
                     }
                     else
-                        return Json(new { success = false, message = "The Customer cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The customer cannot be deleted because it is associated with other records." });
 
                 }
                 else
@@ -340,10 +345,12 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Customer. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the customer. Please try again." });
             }
         }
+
         #region API method
+
         public IActionResult GetCustomersList([FromBody] DataManagerRequest dm)
         {
             IQueryable<Customer> Data = _customerRepository.GetAll().Include(x => x.City);
@@ -395,6 +402,7 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
         public ActionResult CitiesDropdown([FromBody] DataManagerRequest dm)
         {
             var Data = _countryRepository.GetCities();

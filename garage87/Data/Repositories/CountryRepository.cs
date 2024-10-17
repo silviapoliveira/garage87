@@ -61,6 +61,7 @@ namespace garage87.Data.Repositories
                 .Include(c => c.Cities)
                 .OrderBy(c => c.Name);
         }
+
         public IQueryable<City> GetCities()
         {
             return _context.Cities.Include(c => c.Country);

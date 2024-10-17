@@ -10,7 +10,6 @@ namespace garage87.Enums
         [Heading("In Progress")]
         InProgress = 2,
 
-
         [Heading("Completed")]
         Completed = 3,
 

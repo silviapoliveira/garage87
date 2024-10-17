@@ -27,6 +27,7 @@ namespace garage87.Controllers
             _flashMessage = flashMessage;
         }
         #region Country
+
         public IActionResult Index()
         {
             return View();
@@ -70,7 +71,6 @@ namespace garage87.Controllers
             return View(country);
         }
 
-
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -109,9 +109,8 @@ namespace garage87.Controllers
             return View();
         }
 
-
-
         #region  Country API
+
         public ActionResult DropDown([FromBody] DataManagerRequest dm)
         {
             var Data = _countryRepository.GetAll();
@@ -134,6 +133,7 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteCountry(int id)
         {
@@ -156,7 +156,7 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the vountry. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the country. Please try again." });
             }
         }
 
@@ -194,6 +194,7 @@ namespace garage87.Controllers
         #endregion
 
         #region Cities
+
         public IActionResult Cities()
         {
             return View();
@@ -203,6 +204,7 @@ namespace garage87.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> AddCity(CityViewModel model)
         {
@@ -229,6 +231,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
+
         public async Task<IActionResult> EditCity(int? id)
         {
             if (id == null)
@@ -250,7 +253,7 @@ namespace garage87.Controllers
         {
             if (city.CountryId <= 0)
             {
-                ModelState.AddModelError("CountryId", "Please Select Country.");
+                ModelState.AddModelError("CountryId", "Please select country.");
                 return View(city);
             }
             if (ModelState.IsValid)
@@ -273,6 +276,7 @@ namespace garage87.Controllers
 
             return View(city);
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteCity(int id)
         {
@@ -299,8 +303,8 @@ namespace garage87.Controllers
             }
         }
 
-
         #region Cities API
+
         public ActionResult CitiesDropdown([FromBody] DataManagerRequest dm)
         {
             var Data = _countryRepository.GetCities();
@@ -323,6 +327,7 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
         public IActionResult GetCitiesList([FromBody] DataManagerRequest dm)
         {
             IQueryable<City> Data = _countryRepository.GetCities();

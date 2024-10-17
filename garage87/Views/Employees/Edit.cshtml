@@ -4,7 +4,6 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -55,7 +54,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label asp-for="PhoneNo" class="control-label"></label>
-                            <input asp-for="PhoneNo" placeholder="Phone Number" class="form-control" />
+                            <input asp-for="PhoneNo" type="number" placeholder="Phone Number" class="form-control" />
                             <span asp-validation-for="PhoneNo" class="text-danger"></span>
                         </div>
                         <div class="form-group col-md-4">

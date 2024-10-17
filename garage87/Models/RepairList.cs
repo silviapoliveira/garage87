@@ -14,6 +14,7 @@ namespace garage87.Models
 
         }
 
+
         public int? EmployeeId { get; set; }
 
 
@@ -24,7 +25,6 @@ namespace garage87.Models
 
 
         public DateTime? Date { get; set; }
-
 
         public List<RepairVM> RepairVM { get; set; }
 

@@ -41,7 +41,7 @@ namespace garage87.Controllers
 
                 if (exists)
                 {
-                    ModelState.AddModelError("Name", "A Brand with same Name already exists.");
+                    ModelState.AddModelError("Name", "A brand with same name already exists.");
                     return View(obj);
                 }
                 await _brandRepository.CreateAsync(obj);
@@ -49,6 +49,7 @@ namespace garage87.Controllers
             }
             return View(obj);
         }
+
         public async Task<IActionResult> Edit(int id)
         {
             if (id == null || id <= 0)
@@ -82,7 +83,7 @@ namespace garage87.Controllers
 
                     if (exists)
                     {
-                        ModelState.AddModelError("Name", "A Brand with same Name already exists.");
+                        ModelState.AddModelError("Name", "A brand with same name already exists.");
                         return View(obj);
                     }
                     var data = await _brandRepository.GetByIdAsync(id);
@@ -123,7 +124,7 @@ namespace garage87.Controllers
                     if (success == true)
                         return Json(new { success = true, message = "Brand deleted successfully" });
                     else
-                        return Json(new { success = false, message = "The Brand cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The brand cannot be deleted because it is associated with other records." });
 
                 }
                 else
@@ -133,7 +134,7 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Brand. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the brand. Please try again." });
             }
         }
 

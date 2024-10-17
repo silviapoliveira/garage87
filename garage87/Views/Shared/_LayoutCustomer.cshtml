@@ -7,7 +7,6 @@
 <!doctype html>
 <html lang="en">
 
-<!-- 01_03_home_3.html  [XR&CO'2014], Tue, 22 Oct 2019 11:54:52 GMT -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -145,7 +144,6 @@
                                 <!--SEARCH-->
                                 <div class="uni-search-yop-home-3">
                                     <div id="custom-search-input" style="margin-top:15px">
-                                        @*   <partial name="_LoginPartial" /> *@
                                         @if (User.IsInRole("Customer") || User.IsInRole("Employee") || User.IsInRole("Admin") || User.IsInRole("Mechanic"))
                                         {
                                             <div class="row align-items-center justify-content-between">
@@ -172,7 +170,6 @@
             </div>
         </div>
     </div>
-
 
     <script src="~/Customer/plugin/jquery/jquery-2.0.2.min.js"></script>
     <script src="~/Customer/plugin/jquery-ui/jquery-ui.min.js"></script>
@@ -223,8 +220,8 @@
                 "position": "left"
             },
             "brandSetting": {
-                "brandName": "Garage 87",
-                "brandSubTitle": "Typically replies within an hour",
+                "brandName": "garage87",
+                "brandSubTitle": "Typically replies within a hour",
                 "welcomeText": "Hi, there!\nHow can I help you?",
                 "messageText": "Hello, I have a question!",
                 "backgroundColor": "#0a5f54",

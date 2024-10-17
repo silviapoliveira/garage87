@@ -10,7 +10,7 @@ namespace garage87.Enums
         public static string GetHeading(Type type, string value)
         {
             if (!string.IsNullOrWhiteSpace(value))
-            {//Type type = en.GetType();
+            {
                 MemberInfo[] memInfo = type.GetMember(value);
 
                 if (memInfo != null && memInfo.Length > 0)
@@ -44,7 +44,6 @@ namespace garage87.Enums
 
                 list.Add(obj);
             }
-
 
             return list;
         }

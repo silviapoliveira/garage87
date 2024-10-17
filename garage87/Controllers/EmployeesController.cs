@@ -47,20 +47,22 @@ namespace garage87.Controllers
             return View();
         }
 
-
         #region Employee Crud
+
         [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             var obj = _employeeRepository.GetAll();
             return View(obj);
         }
+
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewBag.Specialities = new SelectList(_SpecialitiesRepository.GetAll(), "Id", "Name");
             return View();
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -73,7 +75,7 @@ namespace garage87.Controllers
                 {
                     if (model.CityId <= 0)
                     {
-                        ModelState.AddModelError("CityId", "Please Select City.");
+                        ModelState.AddModelError("CityId", "Please select city.");
                         return View(model);
                     }
                     if (model.VatNumber == null || model.VatNumber == "")
@@ -154,6 +156,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
+
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -174,6 +177,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -186,7 +190,7 @@ namespace garage87.Controllers
                 {
                     if (model.CityId <= 0)
                     {
-                        ModelState.AddModelError("CityId", "Please Select City.");
+                        ModelState.AddModelError("CityId", "Please select city.");
                         return View(model);
                     }
                     if (model.VatNumber == null || model.VatNumber == "")
@@ -199,7 +203,7 @@ namespace garage87.Controllers
 
                     if (exists)
                     {
-                        ModelState.AddModelError("VatNumber", "An Employee with the same VAT Number already exists.");
+                        ModelState.AddModelError("VatNumber", "An employee with the same VAT Number already exists.");
                         return View(model);
                     }
                     var path = model.ImageUrl;
@@ -252,6 +256,7 @@ namespace garage87.Controllers
             }
             return View(model);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteEmployee(int id)
@@ -274,7 +279,7 @@ namespace garage87.Controllers
                         return Json(new { success = true, message = "Employee deleted successfully" });
                     }
                     else
-                        return Json(new { success = false, message = "The Employee cannot be deleted because it is associated with other records." });
+                        return Json(new { success = false, message = "The employee cannot be deleted because it is associated with other records." });
 
                 }
                 else
@@ -284,7 +289,7 @@ namespace garage87.Controllers
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = "An error occurred while deleting the Employee. Please try again." });
+                return Json(new { success = false, message = "An error occurred while deleting the employee. Please try again." });
             }
         }
 
@@ -292,6 +297,7 @@ namespace garage87.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> MessageDetail(int id)
         {
             if (id == null)
@@ -309,7 +315,9 @@ namespace garage87.Controllers
             return View(data);
 
         }
+
         #region API method
+
         public IActionResult GetEmployeesList([FromBody] DataManagerRequest dm)
         {
             IQueryable<Employee> Data = _employeeRepository.GetAll();
@@ -338,6 +346,7 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
         public IActionResult GetMessages([FromBody] DataManagerRequest dm)
         {
             IQueryable<Message> Data = _messageRepository.GetAll();
@@ -366,6 +375,7 @@ namespace garage87.Controllers
             var list = Data.ToList();
             return dm.RequiresCounts ? Json(new { items = list, result = list, count = count }) : Json(list);
         }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteMessage(int id)

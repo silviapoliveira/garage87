@@ -115,6 +115,7 @@ namespace garage87.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public async Task<IActionResult> AddRepairInvoice(int? Id, RepairVM data)
         {
@@ -135,7 +136,7 @@ namespace garage87.Controllers
             }
             if (data.LabourHours == 0)
             {
-                ModelState.AddModelError("LabourHours", "LabourHours can't be 0.");
+                ModelState.AddModelError("LabourHours", "Labour Hours can't be 0.");
             }
 
             ViewBag.Services = new SelectList(_serviceRepo.GetAll(), "Id", "Name");
@@ -158,8 +159,6 @@ namespace garage87.Controllers
             }
 
             repairEntity = data.GetEntity(repairEntity);
-
-
 
             // Save the changes or new entity based on the condition
             if (Id.HasValue && Id.Value != 0)
@@ -186,6 +185,7 @@ namespace garage87.Controllers
 
             return RedirectToAction("Index", "Repair");
         }
+
         [HttpGet]
         public IActionResult GetRepairDetails(int repairId)
         {
@@ -212,6 +212,7 @@ namespace garage87.Controllers
 
             return Json(result);
         }
+
         public async Task<IActionResult> AddDetail(int ind, int serviceId, string servicename, int? RepairId, int? Id = null)
         {
             var data = await _serviceRepo.GetByIdAsync(serviceId);

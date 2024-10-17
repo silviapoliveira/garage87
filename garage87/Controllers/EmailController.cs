@@ -37,6 +37,7 @@ namespace garage87.Controllers
             _messageRepository = messageRepository;
             _notyf = notyf;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -51,8 +52,8 @@ namespace garage87.Controllers
                 {
                     // Compose the email message body
                     string messageBody = $"<h1>Auto Repair Shop Closure Notice</h1>" +
-                                         $"<p>Dear customer,</p>" +
-                                         $"<p>We regret to inform you that the Auto Repair Shop will be closed today.</p>" +
+                                         $"<p>Dear user,</p>" +
+                                         $"<p>This is to inform you that the Auto Repair Shop remains closed for today.</p>" +
                                          $"<p>Thank you for your understanding!</p>";
 
                     try
@@ -88,7 +89,7 @@ namespace garage87.Controllers
                 {
                     // Compose the email message body
                     string messageBody = $"<h1>Appointment Reminder</h1>" +
-                                         $"<p>Dear customer,</p>" +
+                                         $"<p>Dear user,</p>" +
                                          $"<p>This is a friendly reminder that you have an appointment scheduled for tomorrow.</p>" +
                                          $"<p>Thank you!</p>";
 

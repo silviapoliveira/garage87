@@ -15,6 +15,7 @@ namespace garage87.Data.Repositories
             _context = context;
 
         }
+
         public void AddNotification()
         {
             var assigns = _context.VehicleAssignment
@@ -47,10 +48,10 @@ namespace garage87.Data.Repositories
                         _context.Notifications.Add(notification);
                     }
                 }
-
                 // Save all changes to the database
                 _context.SaveChanges();
             }
         }
     }
 }
+
