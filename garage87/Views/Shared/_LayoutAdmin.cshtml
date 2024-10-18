@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -35,15 +34,17 @@
             </ul>
 
             <ul class="navbar-nav ml-auto">
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="#">
-                        <i class="far fa-comments"></i>
-                        <span class="badge badge-danger navbar-badge"></span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    </div>
-                </li>
+                @if (this.User.Identity.IsAuthenticated && this.User.IsInRole("Mechanic"))
+                {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" data-toggle="dropdown" href="#">
+                            <i class="far fa-comments"></i>
+                            <span class="badge badge-danger navbar-badge"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        </div>
+                    </li>
+                }
                 <partial name="_LoginPartial" />
 
             </ul>
@@ -303,15 +304,15 @@
                             $.each(data, function (index, item) {
                                 $('.dropdown-menu').append(
                                     `<div style="margin:5px">
-                                                                        <div class="media-body">
-                                                                            <p class="text-sm">${item.message}</p>
-                                                                                     <p class="text-sm text-muted">
-                                                                                <i class="far fa-check mr-1"></i>
-                                                                                <a href="#" class="mark-as-read text-end" style="color:red;" data-id="${item.id}">Mark as Read</a>
-                                                                            </p>
+                                                                                <div class="media-body">
+                                                                                    <p class="text-sm">${item.message}</p>
+                                                                                             <p class="text-sm text-muted">
+                                                                                        <i class="far fa-check mr-1"></i>
+                                                                                        <a href="#" class="mark-as-read text-end" style="color:red;" data-id="${item.id}">Mark as Read</a>
+                                                                                    </p>
+                                                                                </div>
                                                                         </div>
-                                                                </div>
-                                                                <div class="dropdown-divider"></div>`
+                                                                        <div class="dropdown-divider"></div>`
                                 );
                             });
                         } else {
